@@ -10,10 +10,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SideShooter;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -26,7 +28,7 @@ public class RobotContainer {
   private final XboxController m_controller = new XboxController(0);
 
   // The robot's subsystems and commands are defined here...
-  private final Shooter m_shooter = new Shooter();
+  private final SideShooter m_shooter = new SideShooter();
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -44,10 +46,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    SmartDashboard.putNumber("shooterSpeed", 0.3f);
+
     // make command
     new JoystickButton(m_controller, XboxController.Button.kA.value)
-      .whenPressed(new RunCommand(() -> m_shooter.fire(m_controller.getTriggerAxis(Hand.kRight) * .6f), m_shooter))
-      .whenReleased(new RunCommand(() -> m_shooter.fire(0.f), m_shooter));
+      .whenPressed(new RunCommand(() -> { m_shooter.enable(); m_shooter.setSpeed(SmartDashboard.getNumber("shooterSpeed", 0.3f)); }, m_shooter))
+      .whenReleased(new InstantCommand(m_shooter::disable, m_shooter)
+    );
   }
 
 
