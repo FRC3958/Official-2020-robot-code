@@ -15,7 +15,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.SideShooter;
+import frc.robot.commands.ShootAtRpm;
+import frc.robot.subsystems.HoodedShooter;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -28,7 +29,7 @@ public class RobotContainer {
   private final XboxController m_controller = new XboxController(0);
 
   // The robot's subsystems and commands are defined here...
-  private final SideShooter m_shooter = new SideShooter();
+  private final HoodedShooter m_shooter = new HoodedShooter();
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -46,13 +47,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    SmartDashboard.putNumber("shooterSpeed", 0.3f);
+    SmartDashboard.putNumber("rpm", 100d);
 
-    // make command
     new JoystickButton(m_controller, XboxController.Button.kA.value)
-      .whenPressed(new RunCommand(() -> { m_shooter.enable(); m_shooter.setSpeed(SmartDashboard.getNumber("shooterSpeed", 0.3f)); }, m_shooter))
-      .whenReleased(new InstantCommand(m_shooter::disable, m_shooter)
-    );
+      .whenHeld(new ShootAtRpm(SmartDashboard.getNumber("rpm", 0d), m_shooter));
   }
 
 
