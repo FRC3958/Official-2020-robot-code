@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.ShootAtRpm;
 import frc.robot.subsystems.HoodedShooter;
 
 /**
@@ -26,6 +25,7 @@ import frc.robot.subsystems.HoodedShooter;
  */
 public class RobotContainer {
 
+  // OI
   private final XboxController m_controller = new XboxController(0);
 
   // The robot's subsystems and commands are defined here...
@@ -47,10 +47,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    SmartDashboard.putNumber("rpm", 100d);
+    SmartDashboard.putNumber("targetRPM", 500);
 
     new JoystickButton(m_controller, XboxController.Button.kA.value)
-      .whenHeld(new ShootAtRpm(SmartDashboard.getNumber("rpm", 0d), m_shooter));
+      .whenHeld(new RunCommand(() -> m_shooter.setRPM(SmartDashboard.getNumber("targetRPM", 0)), m_shooter));
   }
 
 
