@@ -53,6 +53,7 @@ public final class Constants {
                 * kWheelCircumference * 10.0;
         }
 
+        // TODO: use slots and name properly. refer to https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop_AuxStraightQuadrature/src/main/java/frc/robot/Constants.java
         public static final int kDistancePIDLoopIdx = 0;
 
         public static final Gains kDistanceGains = new Gains(0.0, 0.0, 0.0, 0.0);
