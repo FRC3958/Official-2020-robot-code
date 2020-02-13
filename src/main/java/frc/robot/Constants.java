@@ -43,8 +43,14 @@ public final class Constants {
                 / 10.0);
         }
 
+        /**
+         * Convert from native units per 100ms to meters per second
+         * @param velocityNative
+         * @return
+         */
         public static double getVelocityMPS(int velocityNative) {
-            // return (double)(velocityNative / kEncoderResolution)
+            return ((double)velocityNative / (double)kEncoderResolution)
+                * kWheelCircumference * 10.0;
         }
 
         public static final int kDistancePIDLoopIdx = 0;
