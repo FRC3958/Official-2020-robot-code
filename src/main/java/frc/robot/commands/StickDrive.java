@@ -10,8 +10,9 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.SlewRateLimiter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.Util;
 import frc.robot.subsystems.Drivetrain;
 
 public class StickDrive extends CommandBase {
@@ -43,8 +44,11 @@ public class StickDrive extends CommandBase {
   @Override
   public void execute() {
 
+    SmartDashboard.putNumber("fwd", m_forward.getAsDouble());
+    SmartDashboard.putNumber("trn", m_turn.getAsDouble());
+
     m_drive.arcadeDrive(
-      m_forwardLimiter.calculate(m_forward.getAsDouble()), 
+      -m_forwardLimiter.calculate(m_forward.getAsDouble()), 
       m_turnLimiter.calculate(m_turn.getAsDouble())
     );
   }

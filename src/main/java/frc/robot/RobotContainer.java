@@ -30,7 +30,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drive = new Drivetrain();
-  private final HoodedShooter m_shooter = new HoodedShooter();
+  //private final HoodedShooter m_shooter = new HoodedShooter();
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -40,8 +40,8 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_drive.setDefaultCommand(new StickDrive(m_drive,
-      () -> Util.deadband(-m_controller.getY(Hand.kRight), 0.1),
-      () -> Util.deadband(-m_controller.getX(Hand.kLeft), 0.1)
+      () -> Util.deadband(m_controller.getY(Hand.kRight), 0.2),
+      () -> Util.deadband(m_controller.getX(Hand.kLeft), 0.2)
     ));
   }
 
@@ -63,5 +63,5 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return null;
-  }
+  } 
 }

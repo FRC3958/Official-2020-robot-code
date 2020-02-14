@@ -56,74 +56,143 @@ public class Drivetrain extends SubsystemBase {
     m_rightMaster.setNeutralMode(NeutralMode.Brake);
     m_rightSlave.setNeutralMode(NeutralMode.Brake);
 
+    // // /**
+    // //  * 2 closed loop pids
+    // //  * id 0 (primary): average reading of both sides of drivetrain, used for distance & velocity
+    // //  * id 1 (aux): difference between both sides of drivetrain, used for turning
+    // //  */
+
+    // // // config sensor for right, will be used as remote sensor
+    // // m_rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0 /*irrelevant*/, Constants.kTimeout);
+
+    // // // config remote talon's sensor (right talon's sensor) as remote sensor for the left talon
+    // // m_leftMaster.configRemoteFeedbackFilter(
+    // //   m_rightMaster.getDeviceID(),
+    // //   RemoteSensorSource.TalonSRX_SelectedSensor, 
+    // //   1
+    // // );
+
+    // // // config sum to be used for velocity (we will avg them out later)
+    // // m_leftMaster.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1);
+    // // m_leftMaster.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative);
+
+    // // // config difference to be used for turn
+    // // m_leftMaster.configSensorTerm(SensorTerm.Diff0, FeedbackDevice.CTRE_MagEncoder_Relative);
+    // // m_leftMaster.configSensorTerm(SensorTerm.Diff1, FeedbackDevice.RemoteSensor1);
+
+    // // // config sum to be used for velocity pid (they mult by .5, so effectively an avg)
+    // // m_leftMaster.configSelectedFeedbackSensor(
+    // //   FeedbackDevice.SensorSum,
+    // //   DriveConstants.kPrimaryPIDLoopIdx,
+    // //   Constants.kTimeout
+    // // );
+
+    // // // must get half the sum, aka average, of both sides by setting the coeff to .5
+    // // m_leftMaster.configSelectedFeedbackCoefficient(0.5, DriveConstants.kPrimaryPIDLoopIdx, Constants.kTimeout);
+
+    // // // config difference to be used for turn pid
+    // // m_leftMaster.configSelectedFeedbackSensor(
+    // //   FeedbackDevice.SensorDifference,
+    // //   DriveConstants.kTurnPIDLoopIdx,
+    // //   Constants.kTimeout
+    // // );
+
+    // // // config motor direction & sensor phases
+    // // m_leftMaster.setInverted(false);
+    // // m_leftSlave.setInverted(false);
+    // // m_leftMaster.setSensorPhase(false);
+
+    // // m_rightMaster.setInverted(true);
+    // // m_rightSlave.setInverted(true);
+    // // m_rightMaster.setSensorPhase(true);
+    
+    // // /**
+    // //  * Gains config for both loops
+    // //  */
+    // // m_leftMaster.config_kF(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kF);
+    // // m_leftMaster.config_kP(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kP);
+    // // m_leftMaster.config_kI(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kI); 
+    // // m_leftMaster.config_kD(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kD);
+
+    // // m_leftMaster.config_kF(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kF);
+    // // m_leftMaster.config_kP(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kP);
+    // // m_leftMaster.config_kI(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kI);
+    // // m_leftMaster.config_kD(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kD);
+
+    // // // follow masters. make rightMaster follow leftMaster AuxOutput follow mode when using the turn pid
+    // // // do that after setting the leftMaster... not anywhere else
+    // // m_leftSlave.follow(m_leftMaster);
+    // // m_rightSlave.follow(m_rightMaster);
+
     /**
      * 2 closed loop pids
      * id 0 (primary): average reading of both sides of drivetrain, used for distance & velocity
      * id 1 (aux): difference between both sides of drivetrain, used for turning
      */
 
-    // // config sensor for right, will be used as remote sensor
-    // m_rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0 /*irrelevant*/, Constants.kTimeout);
+    // config sensor for right, will be used as remote sensor
+    m_leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0 /*irrelevant*/, Constants.kTimeout);
 
-    // // config remote talon's sensor (right talon's sensor) as remote sensor for the left talon
-    // m_leftMaster.configRemoteFeedbackFilter(
-    //   m_rightMaster.getDeviceID(),
-    //   RemoteSensorSource.TalonSRX_SelectedSensor, 
-    //   1
-    // );
+    // config remote talon's sensor (right talon's sensor) as remote sensor for the left talon
+    m_rightMaster.configRemoteFeedbackFilter(
+      m_leftMaster.getDeviceID(),
+      RemoteSensorSource.TalonSRX_SelectedSensor, 
+      1
+    );
 
-    // // config sum to be used for velocity (we will avg them out later)
-    // m_leftMaster.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.QuadEncoder);
-    // m_leftMaster.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.RemoteSensor1);
+    // config sum to be used for velocity (we will avg them out later)
+    m_rightMaster.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1);
+    m_rightMaster.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative);
 
-    // // config difference to be used for turn
-    // m_leftMaster.configSensorTerm(SensorTerm.Diff0, FeedbackDevice.QuadEncoder);
-    // m_leftMaster.configSensorTerm(SensorTerm.Diff1, FeedbackDevice.RemoteSensor1);
+    // config difference to be used for turn
+    m_rightMaster.configSensorTerm(SensorTerm.Diff0, FeedbackDevice.CTRE_MagEncoder_Relative);
+    m_rightMaster.configSensorTerm(SensorTerm.Diff1, FeedbackDevice.RemoteSensor1);
 
-    // // config sum to be used for velocity pid (they mult by .5, so effectively an avg)
-    // m_leftMaster.configSelectedFeedbackSensor(
-    //   FeedbackDevice.SensorSum,
-    //   DriveConstants.kPrimaryPIDLoopIdx,
-    //   Constants.kTimeout
-    // );
+    // config sum to be used for velocity pid (they mult by .5, so effectively an avg)
+    m_rightMaster.configSelectedFeedbackSensor(
+      FeedbackDevice.SensorSum,
+      DriveConstants.kPrimaryPIDLoopIdx,
+      Constants.kTimeout
+    );
 
-    // // must get half the sum, aka average, of both sides by setting the coeff to .5
-    // m_leftMaster.configSelectedFeedbackCoefficient(0.5, DriveConstants.kPrimaryPIDLoopIdx, Constants.kTimeout);
+    // must get half the sum, aka average, of both sides by setting the coeff to .5
+    m_rightMaster.configSelectedFeedbackCoefficient(0.5, DriveConstants.kPrimaryPIDLoopIdx, Constants.kTimeout);
 
-    // // config difference to be used for turn pid
-    // m_leftMaster.configSelectedFeedbackSensor(
-    //   FeedbackDevice.SensorDifference,
-    //   DriveConstants.kTurnPIDLoopIdx,
-    //   Constants.kTimeout
-    // );
+    // config difference to be used for turn pid
+    m_rightMaster.configSelectedFeedbackSensor(
+      FeedbackDevice.SensorDifference,
+      DriveConstants.kTurnPIDLoopIdx,
+      Constants.kTimeout
+    );
 
-    // // config motor direction & sensor phases
-    // // TODO: actually get these
-    // m_leftMaster.setInverted(false);
-    // m_leftSlave.setInverted(false);
-    // m_leftMaster.setSensorPhase(true);
+    // config motor direction & sensor phases
+    m_leftMaster.setInverted(false);
+    m_leftSlave.setInverted(false);
+    m_rightMaster.setInverted(true);
+    m_rightSlave.setInverted(true);
 
-    // m_rightMaster.setInverted(true);
-    // m_rightSlave.setInverted(true);
-    // m_rightMaster.setSensorPhase(true);
+    m_leftMaster.setSensorPhase(true);
+    m_rightMaster.setSensorPhase(true);
     
-    // /**
-    //  * Gains config for both loops
-    //  */
-    // m_leftMaster.config_kF(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kF);
-    // m_leftMaster.config_kP(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kP);
-    // m_leftMaster.config_kI(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kI);
-    // m_leftMaster.config_kD(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kD);
+    /**
+     * Gains config for both loops
+     */
+    m_rightMaster.config_kF(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kF);
+    m_rightMaster.config_kP(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kP);
+    m_rightMaster.config_kI(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kI); 
+    m_rightMaster.config_kD(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kD);
 
-    // m_leftMaster.config_kF(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kF);
-    // m_leftMaster.config_kP(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kP);
-    // m_leftMaster.config_kI(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kI);
-    // m_leftMaster.config_kD(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kD);
+    m_rightMaster.config_kF(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kF);
+    m_rightMaster.config_kP(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kP);
+    m_rightMaster.config_kI(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kI);
+    m_rightMaster.config_kD(DriveConstants.kSlotTurning, DriveConstants.kGainsTurn.kD);
 
     // follow masters. make rightMaster follow leftMaster AuxOutput follow mode when using the turn pid
     // do that after setting the leftMaster... not anywhere else
     m_leftSlave.follow(m_leftMaster);
     m_rightSlave.follow(m_rightMaster);
+
+    m_rightMaster.follow(m_leftMaster, FollowerType.AuxOutput1);
 
     resetEncoders();
   }
@@ -135,7 +204,7 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Encoder info
      */
-    int leftNative = m_leftMaster.getSensorCollection().getQuadratureVelocity();
+    int leftNative = -m_leftMaster.getSensorCollection().getQuadratureVelocity();
     int rightNative = m_rightMaster.getSensorCollection().getQuadratureVelocity();
 
     SmartDashboard.putNumber("left native", leftNative);
