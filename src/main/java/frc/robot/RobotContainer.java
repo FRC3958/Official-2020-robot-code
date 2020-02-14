@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.StickDrive;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.HoodedShooter;
 
 /**
@@ -29,6 +29,7 @@ public class RobotContainer {
   private final XboxController m_controller = new XboxController(0);
 
   // The robot's subsystems and commands are defined here...
+  private final Drivetrain m_drive = new Drivetrain();
   private final HoodedShooter m_shooter = new HoodedShooter();
 
   /**
@@ -37,6 +38,11 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    m_drive.setDefaultCommand(new StickDrive(m_drive,
+      () -> Util.deadband(-m_controller.getY(Hand.kRight), 0.1),
+      () -> Util.deadband(-m_controller.getX(Hand.kLeft), 0.1)
+    ));
   }
 
   /**
@@ -46,11 +52,6 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
-    SmartDashboard.putNumber("targetRPM", 500);
-
-    new JoystickButton(m_controller, XboxController.Button.kA.value)
-      .whenHeld(new RunCommand(() -> m_shooter.setRPM(SmartDashboard.getNumber("targetRPM", 0)), m_shooter));
   }
 
 

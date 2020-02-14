@@ -68,7 +68,7 @@ public class HoodedShooter extends SubsystemBase {
     m_master.set(ControlMode.Velocity, ShooterConstants.getVelocityNative(rpm));
   }
 
-  public boolean isReadyToShoot() {
+  public boolean isReadyToShoot() {    
 
     return m_master.getSelectedSensorVelocity() > ShooterConstants.kMinFireVelocity
       && m_master.getClosedLoopError() / m_master.getClosedLoopTarget() < ShooterConstants.kAcceptablePercentError;

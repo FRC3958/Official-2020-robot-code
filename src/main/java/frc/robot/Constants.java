@@ -19,6 +19,12 @@ import edu.wpi.first.wpilibj.util.Units;
  */
 public final class Constants {
 
+    /**
+     * Legend:
+     * MPS = meters per second
+     * Native = native talon units, 4096 per rotation
+     */
+
     public static final int kTimeout = 100;
 
     public static final int kEncoderResolution = 4096; // same encoders are used everywhere, so this is ok
@@ -53,14 +59,17 @@ public final class Constants {
                 * kWheelCircumference * 10.0;
         }
 
-        // TODO: use slots and name properly. refer to https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop_AuxStraightQuadrature/src/main/java/frc/robot/Constants.java
-        public static final int kDistancePIDLoopIdx = 0;
+        public static final int kMaxVelocityNative = 20000;
+        public static final double kMaxVelocity = getVelocityMPS(kMaxVelocityNative);
 
-        public static final Gains kDistanceGains = new Gains(0.0, 0.0, 0.0, 0.0);
-
+        public static final int kPrimaryPIDLoopIdx = 0;
         public static final int kTurnPIDLoopIdx = 1;
 
-        public static final Gains kTurnGains = new Gains(0.0, 0.0, 0.0, 0.0);
+        public static final int kSlotVelocity = 0;
+        public static final int kSlotTurning  = 1;
+
+        public static final Gains kGainsVelocity = new Gains(0.0, 0.0, 0.0, 0.0);
+        public static final Gains kGainsTurn     = new Gains(0.0, 0.0, 0.0, 0.0);
     }
 
     public static final class ShooterConstants {
@@ -94,7 +103,7 @@ public final class Constants {
 
         public static final double kMinFireVelocityRPM = 2500;
 
-        public static final int kMinFireVelocity = getNativeVelocity(kMinFireVelocityRPM);
+        public static final int kMinFireVelocity = getVelocityNative(kMinFireVelocityRPM);
         public static final double kAcceptablePercentError = 0.02;
     }
 }
