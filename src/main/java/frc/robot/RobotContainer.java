@@ -30,7 +30,10 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drive = new Drivetrain();
-  //private final HoodedShooter m_shooter = new HoodedShooter();
+  
+  public static  final HoodedShooter m_shooter = new HoodedShooter();
+
+  public static final rpmcalc m_rpm = new rpmcalc();
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -52,6 +55,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton (m_controller,1).whenpressed(m_rpm);
   }
 
 
