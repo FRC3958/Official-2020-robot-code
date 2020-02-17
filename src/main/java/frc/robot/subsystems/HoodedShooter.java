@@ -65,7 +65,7 @@ public class HoodedShooter extends SubsystemBase {
 
   public void setRPM(double rpm) {
 
-    m_master.set(ControlMode.Velocity, ShooterConstants.getVelocityNative(rpm));
+    m_master.set(ControlMode.Velocity, ShooterConstants.getVelocityNativeFromRPM(rpm));
   }
 
   public boolean isReadyToShoot() {    

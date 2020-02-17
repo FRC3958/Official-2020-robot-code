@@ -44,7 +44,7 @@ public final class Constants {
          * @param mps
          * @return
          */
-        public static int getVelocityNative(double mps) {
+        public static int getVelocityNativeFromMPS(double mps) {
             return (int)((mps / kWheelCircumference) * kEncoderResolution
                 / 10.0);
         }
@@ -54,13 +54,13 @@ public final class Constants {
          * @param velocityNative
          * @return
          */
-        public static double getVelocityMPS(int velocityNative) {
+        public static double getVelocityMPSFromNative(int velocityNative) {
             return ((double)velocityNative / (double)kEncoderResolution)
                 * kWheelCircumference * 10.0;
         }
 
         public static final int kMaxVelocityNative = 20000;
-        public static final double kMaxVelocity = getVelocityMPS(kMaxVelocityNative);
+        public static final double kMaxVelocity = getVelocityMPSFromNative(kMaxVelocityNative);
 
         public static final int kPrimaryPIDLoopIdx = 0;
         public static final int kTurnPIDLoopIdx = 1;
@@ -82,7 +82,7 @@ public final class Constants {
          * @param rpm
          * @return
          */
-        public static int getVelocityNative(double rpm) {
+        public static int getVelocityNativeFromRPM(double rpm) {
             return (int)(rpm * (double)Constants.kEncoderResolution
                 / 60.0 / 10.0);
         }
@@ -92,7 +92,7 @@ public final class Constants {
          * @param nativeVelocity
          * @return
          */
-        public static double getRPM(int velocityNative) {
+        public static double getRPMFromVelocityNative(int velocityNative) {
             return (double)((double)velocityNative / (double)Constants.kEncoderResolution
                 * 10.0 * 60.0);
         }
@@ -103,7 +103,7 @@ public final class Constants {
 
         public static final double kMinFireVelocityRPM = 2500;
 
-        public static final int kMinFireVelocity = getVelocityNative(kMinFireVelocityRPM);
+        public static final int kMinFireVelocity = getVelocityNativeFromRPM(kMinFireVelocityRPM);
         public static final double kAcceptablePercentError = 0.02;
     }
 }
