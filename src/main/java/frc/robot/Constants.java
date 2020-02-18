@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.util.Units;
 
 /**
@@ -28,6 +29,15 @@ public final class Constants {
     public static final int kTimeout = 100;
 
     public static final int kEncoderResolution = 4096; // same encoders are used everywhere, so this is ok
+
+    public static final class ControlConstants {
+
+        public static final int kDriverControllerPort = 0;
+        public static final int kOperatorControllerPort = 1;
+
+        public static final int kKeybindToggleIntake = Button.kStart.value;
+        public static final int kKeybindShoot = Button.kA.value;
+    }
 
     public static final class DriveConstants {
 
@@ -76,6 +86,7 @@ public final class Constants {
 
         public static final int kTalonPortLeft = 5;
         public static final int kTalonPortRight = 6;
+        public static final int kTalonPortConveyor = 7;
 
         /**
          * Convert from native units per 100ms to rotations per minute
@@ -105,5 +116,27 @@ public final class Constants {
 
         public static final int kMinFireVelocity = getVelocityNativeFromRPM(kMinFireVelocityRPM);
         public static final double kAcceptablePercentError = 0.02;
+
+        public static final double kShootDipPercent = 0.10;
+        public static final double kTimeToShoot = 0.5;
+    }
+
+    public static final class IntakeConstants {
+
+        // TODO: get these 2 values
+        public static final int kCimChannel = 4;
+        public static final double kEatenThreshold = 0.0;
+
+        public static final int kTalonPort = 8;
+
+        public static final int kSolenoidForwardChannel = 0;
+        public static final int kSolenoidReverseChannel = 1;
+    }
+
+    public static final class IndexerConstants {
+
+        public static final int kTalonPortSideways = 9;
+        public static final int kTalonPortTopWheel = 10;
+		public static final int kTalonPortConveyor = 11;
     }
 }
