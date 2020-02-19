@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.EatBalls;
 import frc.robot.commands.StickDrive;
+import frc.robot.commands.shooting.AlignToTarget;
 import frc.robot.commands.shooting.ShootAtRPM;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.HoodedShooter;
@@ -66,9 +67,9 @@ public class RobotContainer {
       .toggleWhenPressed(new EatBalls(m_intake));
 
     new JoystickButton(m_driverController, ControlConstants.kKeybindShoot)
+      .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
       .whileHeld(new ShootAtRPM(m_shooter, m_indexer, 
-        () -> Util.calculateRPM(m_limelight.getApproximateDistance())
-      ));
+        () -> Util.calculateRPM(m_limelight.getApproximateDistance())));
   }
 
   /**

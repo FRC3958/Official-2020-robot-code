@@ -8,12 +8,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
-import com.ctre.phoenix.motorcontrol.SensorTerm;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -24,12 +20,8 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-
-// if you are confused, look here. then look at ReadTheDocs ctre!!!
-// https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop_AuxStraightQuadrature/src/main/java/frc/robot/Robot.java
 
 public class Drivetrain extends SubsystemBase {
   
@@ -89,6 +81,7 @@ public class Drivetrain extends SubsystemBase {
     m_leftSlave.follow(m_leftMaster);
     m_rightSlave.follow(m_rightMaster);
 
+    // reset measurements
     resetEncoders();
     resetHeading();
 
@@ -97,7 +90,7 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // Serve odometry updates
     m_odometry.update(
       Rotation2d.fromDegrees(getHeading()), 
       getLeftDistanceMeters(),
@@ -120,6 +113,10 @@ public class Drivetrain extends SubsystemBase {
     );
   }
 
+  /**
+   * Set velocity targets according to chassis speeds
+   * @param speeds
+   */
   public void chassisSpeedsDrive(ChassisSpeeds speeds) {
 
     DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
