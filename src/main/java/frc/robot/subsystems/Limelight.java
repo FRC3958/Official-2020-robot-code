@@ -25,6 +25,8 @@ public class Limelight extends SubsystemBase {
   private final NetworkTableEntry m_tv = m_table.getEntry("tv");
   private final NetworkTableEntry m_tx = m_table.getEntry("tx");
   private final NetworkTableEntry m_ty = m_table.getEntry("ty");
+  private final NetworkTableEntry m_ledmode =  m_table.getEntry("ledMode");
+  private final NetworkTableEntry m_cammode  = m_table.getEntry("camMode");
 
 
   private final AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
@@ -36,6 +38,18 @@ public class Limelight extends SubsystemBase {
   public Limelight() {
 
   }
+  //Cam Mode 0 meaning vision processing, and 1 meaning Driver camera
+  public void setcammode(int num){
+
+    m_cammode.setDouble(num);
+
+  }
+  //led mode 1 meaning its off, 2 meaning its blinking, and 3 meaning its on
+  public void setledmode(int num){
+
+    m_ledmode.setDouble(num);
+
+  }
 
   @Override
   public void periodic() {
@@ -45,6 +59,7 @@ public class Limelight extends SubsystemBase {
       m_absoluteTargetAngleX = m_ahrs.getYaw() + getAngleOffsetX();
     }
   }
+
 
   public boolean isValidTargetPresent() {
 
