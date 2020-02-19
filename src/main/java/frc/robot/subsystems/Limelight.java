@@ -20,16 +20,48 @@ import frc.robot.Constants.VisionConstants;
 
 public class Limelight extends SubsystemBase {
 
+  enum LedMode {
+
+    kAuto(0),
+    kForceOff(1),
+    kBlink(2),
+    kForceOn(3);
+
+    private final int value;
+    private LedMode(int value) {
+      this.value = value;
+    }
+
+    public int getInt() {
+      return value;
+    }
+  }
+
+  enum CamMode {
+
+    kVisionProcessor(0),
+    kDriver(1);
+
+    private final int value;
+    private CamMode(int value) {
+      this.value = value;
+    }
+
+    public int getInt() {
+      return value;
+    }
+  }
+
   private final NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");;
   
   private final NetworkTableEntry m_tv = m_table.getEntry("tv");
   private final NetworkTableEntry m_tx = m_table.getEntry("tx");
   private final NetworkTableEntry m_ty = m_table.getEntry("ty");
-  private final NetworkTableEntry m_ledmode =  m_table.getEntry("ledMode");
-  private final NetworkTableEntry m_cammode  = m_table.getEntry("camMode");
-
+  private final NetworkTableEntry m_ledMode =  m_table.getEntry("ledMode");
+  private final NetworkTableEntry m_camMode  = m_table.getEntry("camMode");
 
   private final AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
+
   private double m_absoluteTargetAngleX = 0.0;
 
   /**
@@ -38,17 +70,16 @@ public class Limelight extends SubsystemBase {
   public Limelight() {
 
   }
-  //Cam Mode 0 meaning vision processing, and 1 meaning Driver camera
-  public void setcammode(int num){
 
-    m_cammode.setDouble(num);
+  public void setCamMode(CamMode mode){
 
+    m_camMode.setDouble(mode.getInt());
   }
+
   //led mode 1 meaning its off, 2 meaning its blinking, and 3 meaning its on
-  public void setledmode(int num){
+  public void setLedMode(LedMode mode){
 
-    m_ledmode.setDouble(num);
-
+    m_ledMode.setDouble(mode.getInt());
   }
 
   @Override
