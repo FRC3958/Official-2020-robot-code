@@ -63,13 +63,23 @@ public class RobotContainer {
       () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
     );
 
-    new JoystickButton(m_driverController, ControlConstants.kKeybindToggleIntake)
+    new JoystickButton(m_operatorController, ControlConstants.kKeybindToggleIntake)
       .toggleWhenPressed(new EatBalls(m_intake));
 
-    new JoystickButton(m_driverController, ControlConstants.kKeybindShoot)
+    new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
       .whileHeld(new ShootAtRPM(m_shooter, m_indexer, 
         () -> Util.calculateRPM(m_limelight.getApproximateDistance())));
+        if (m_operatorController.getAButton()){
+            m_limelight.setledmode(3);
+            m_limelight.setcammode(0);
+
+        }
+        else {
+
+          m_limelight.setledmode(1);
+          m_limelight.setcammode(1);
+        }
   }
 
   /**
