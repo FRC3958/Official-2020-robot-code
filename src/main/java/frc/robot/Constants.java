@@ -63,8 +63,29 @@ public final class Constants {
         public static final int kTalonPortBackLeft = 3;
         public static final int kTalonPortBackRight = 4;
 
+        // TODO: measure track width
+        public static final double kTrackWidth = Units.feetToMeters(48.0 / 12.0);
         public static final double kWheelRadiusMeters = Units.feetToMeters(4.0/12.0);
         public static final double kWheelCircumferenceMeters = 2.0 * Math.PI * kWheelRadiusMeters;
+
+        /**
+         * Convert from meters to native untis
+         * @param meters
+         * @return
+         */
+        public static int getNativeFromMeters(double meters) {
+            return (int)((meters / kWheelCircumferenceMeters) * kEncoderResolution);
+        }
+
+        /**
+         * Convert from native units to meters
+         * @param nativeUnits
+         * @return
+         */
+        public static double getMetersFromNative(int nativeUnits) {
+            return ((double)nativeUnits / (double)kEncoderResolution)
+                * kWheelCircumferenceMeters;
+        }
 
         /**
          * Convert from meters per second to native units per 100ms
@@ -72,8 +93,7 @@ public final class Constants {
          * @return
          */
         public static int getVelocityNativeFromMPS(double mps) {
-            return (int)((mps / kWheelCircumferenceMeters) * kEncoderResolution
-                / 10.0);
+            return (int)((double)getNativeFromMeters(mps) / 10.0);
         }
 
         /**
@@ -82,22 +102,20 @@ public final class Constants {
          * @return
          */
         public static double getVelocityMPSFromNative(int velocityNative) {
-            return ((double)velocityNative / (double)kEncoderResolution)
-                * kWheelCircumferenceMeters * 10.0;
+            return getMetersFromNative(velocityNative) * 10.0;
         }
 
         public static final int kMaxVelocityNative = 20000;
         public static final double kMaxVelocityMPS = getVelocityMPSFromNative(kMaxVelocityNative);
 
+        public static final double kMaxTurningVelocityRPS = Units.degreesToRadians(50.0);
+
         public static final int kPrimaryPIDLoopIdx = 0;
-        public static final int kTurnPIDLoopIdx = 1;
 
         public static final int kSlotVelocity = 0;
-        public static final int kSlotTurning  = 1;
 
         // TODO: tune driving PIDs (again, since we are now using the quirky TalonSRX microprocessor)
         public static final Gains kGainsVelocity = new Gains(0.0, 0.0, 0.0, 0.0);
-        public static final Gains kGainsTurn     = new Gains(0.0, 0.0, 0.0, 0.0);
     }
 
     public static final class ShooterConstants {
