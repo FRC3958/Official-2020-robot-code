@@ -37,6 +37,7 @@ public final class Constants {
 
         public static final int kKeybindToggleIntake = Button.kX.value;
         public static final int kKeybindShoot = Button.kA.value;
+		public static int kKeybindToggleRPM = Button.kY.value;
     }
 
     public static final class FieldConstants {
@@ -58,10 +59,10 @@ public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final int kTalonPortFrontLeft = 7;
-        public static final int kTalonPortFrontRight = 6;
-        public static final int kTalonPortBackLeft = 5;
-        public static final int kTalonPortBackRight = 0;
+        public static final int kTalonPortFrontLeft = 1;
+        public static final int kTalonPortFrontRight = 2;
+        public static final int kTalonPortBackLeft = 3;
+        public static final int kTalonPortBackRight = 4;
 
         // TODO: measure track width
         public static final double kTrackWidth = Units.feetToMeters(48.0 / 12.0);
@@ -120,8 +121,8 @@ public final class Constants {
 
     public static final class ShooterConstants {
 
-        public static final int kTalonPortLeft = 7;
-        public static final int kTalonPortRight = 6;
+        public static final int kTalonPortLeft = 6;
+        public static final int kTalonPortRight = 7;
         public static final int kTalonPortConveyor = 5;
 
         // TODO: get actual measurements
@@ -175,10 +176,10 @@ public final class Constants {
 
     public static final class IndexerConstants {
 
-        public static final int kTalonPortSideways = 7;
-        public static final int kTalonPortTopWheel = 6;
+        public static final int kTalonPortSideways = 1;
+        public static final int kTalonPortTopWheel = 2;
 		public static final int kTalonPortConveyor = 5;
     }
 
-	public static double testrpm = 80;
+	public static double testrpm = 1000;
 }

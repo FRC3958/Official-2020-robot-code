@@ -17,14 +17,14 @@ import frc.robot.subsystems.HoodedShooter;
 public class SpinUntilShot extends CommandBase {
 
   private final HoodedShooter m_shooter;
-  private final DoubleSupplier m_rpm;
+  private final Double m_rpm;
 
   private final Timer m_timer = new Timer();
 
   /**
    * Creates a new TriggerShooter.
    */
-  public SpinUntilShot(HoodedShooter shooter, DoubleSupplier rpm) {
+  public SpinUntilShot(HoodedShooter shooter, Double rpm) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
 
@@ -41,7 +41,7 @@ public class SpinUntilShot extends CommandBase {
   @Override
   public void execute() {
 
-    m_shooter.setRPM(m_rpm.getAsDouble());    
+    m_shooter.setRPM(m_rpm);    
   }
 
   // Called once the command ends or is interrupted.
@@ -54,10 +54,12 @@ public class SpinUntilShot extends CommandBase {
   public boolean isFinished() {
     
     // TODO: figure out a way to account for a changing target RPM...
-    if(m_shooter.isDippedPastThreshold()) {
+   /* if(m_shooter.isDippedPastThreshold()) {
       m_timer.start();
     }
 
     return m_timer.get() > ShooterConstants.kTimeToShoot;
+  }*/
+  return false;
   }
 }

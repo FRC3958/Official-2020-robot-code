@@ -43,7 +43,7 @@ public class HoodedShooter extends SubsystemBase {
     m_master.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, ShooterConstants.kPIDLoopIdx, Constants.kTimeout);
 
     // phase sensor
-    m_master.setSensorPhase(false);
+    m_master.setSensorPhase(true);
 
     // config nominal and peak outputs
     m_master.configNominalOutputForward(0);
