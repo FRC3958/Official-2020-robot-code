@@ -35,7 +35,7 @@ public final class Constants {
         public static final int kDriverControllerPort = 0;
         public static final int kOperatorControllerPort = 1;
 
-        public static final int kKeybindToggleIntake = Button.kStart.value;
+        public static final int kKeybindToggleIntake = Button.kX.value;
         public static final int kKeybindShoot = Button.kA.value;
     }
 
@@ -58,10 +58,10 @@ public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final int kTalonPortFrontLeft = 1;
-        public static final int kTalonPortFrontRight = 2;
-        public static final int kTalonPortBackLeft = 3;
-        public static final int kTalonPortBackRight = 4;
+        public static final int kTalonPortFrontLeft = 7;
+        public static final int kTalonPortFrontRight = 6;
+        public static final int kTalonPortBackLeft = 5;
+        public static final int kTalonPortBackRight = 0;
 
         // TODO: measure track width
         public static final double kTrackWidth = Units.feetToMeters(48.0 / 12.0);
@@ -120,9 +120,9 @@ public final class Constants {
 
     public static final class ShooterConstants {
 
-        public static final int kTalonPortLeft = 5;
+        public static final int kTalonPortLeft = 7;
         public static final int kTalonPortRight = 6;
-        public static final int kTalonPortConveyor = 7;
+        public static final int kTalonPortConveyor = 5;
 
         // TODO: get actual measurements
         public static final double kShooterHeightMeters = Units.feetToMeters(24.0 / 12.0);
@@ -167,7 +167,7 @@ public final class Constants {
         public static final int kCimChannel = 4;
         public static final double kEatenThreshold = 0.0;
 
-        public static final int kTalonPort = 8;
+        public static final int kTalonPort = 3;
 
         public static final int kSolenoidForwardChannel = 0;
         public static final int kSolenoidReverseChannel = 1;
@@ -175,8 +175,10 @@ public final class Constants {
 
     public static final class IndexerConstants {
 
-        public static final int kTalonPortSideways = 9;
-        public static final int kTalonPortTopWheel = 10;
-		public static final int kTalonPortConveyor = 11;
+        public static final int kTalonPortSideways = 7;
+        public static final int kTalonPortTopWheel = 6;
+		public static final int kTalonPortConveyor = 5;
     }
+
+	public static double testrpm = 80;
 }

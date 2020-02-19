@@ -16,7 +16,8 @@ import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.EatBalls;
 import frc.robot.commands.StickDrive;
 import frc.robot.commands.shooting.AlignToTarget;
-import frc.robot.commands.shooting.ShootAtRPM;
+import frc.robot.commands.shooting.SpinUpToSpeed;
+//import frc.robot.commands.shooting.ShootAtRPM;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.HoodedShooter;
 import frc.robot.subsystems.Indexer;
@@ -66,11 +67,15 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, ControlConstants.kKeybindToggleIntake)
       .toggleWhenPressed(new EatBalls(m_intake));
 
-    new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
+      new JoystickButton(m_operatorController, 3)
+      .toggleWhenPressed(new SpinUpToSpeed(m_shooter,Constants.testrpm));
+
+    /*new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
-      .whileHeld(new ShootAtRPM(m_shooter, m_indexer, 
-        () -> Util.calculateRPM(m_limelight.getApproximateDistance())));
-        if (m_operatorController.getAButton()){
+      //.whileHeld(new ShootAtRPM(m_shooter, m_indexer, 
+        () -> Util.calculateRPM(m_limelight.getApproximateDistance())));*/
+
+        if (m_operatorController.getAButton() || m_operatorController.getBButton()){
             m_limelight.setledmode(3);
             m_limelight.setcammode(0);
 

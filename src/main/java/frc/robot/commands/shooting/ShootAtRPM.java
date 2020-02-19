@@ -17,11 +17,11 @@ import frc.robot.subsystems.Indexer;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class ShootAtRPM extends SequentialCommandGroup {
+//public class ShootAtRPM extends SequentialCommandGroup {
   /**
    * Creates a new Shoot.
    */
-  public ShootAtRPM(HoodedShooter shooter, Indexer indexer, DoubleSupplier rpm) {
+  /*public ShootAtRPM(HoodedShooter shooter, Indexer indexer, DoubleSupplier rpm) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
@@ -31,6 +31,8 @@ public class ShootAtRPM extends SequentialCommandGroup {
         new FeedBallUntilShot(shooter),
         new SpinUntilShot(shooter, rpm) 
       )
+      
     );
   }
 }
+*/

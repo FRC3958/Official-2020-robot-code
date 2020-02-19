@@ -16,12 +16,12 @@ import frc.robot.subsystems.HoodedShooter;
 public class SpinUpToSpeed extends CommandBase {
   
   private final HoodedShooter m_shooter;
-  private final DoubleSupplier m_rpm;
+  private final Double m_rpm;
 
   /**
    * Creates a new ArmShooter.
    */
-  public SpinUpToSpeed(HoodedShooter shooter, DoubleSupplier rpm) {
+  public SpinUpToSpeed(HoodedShooter shooter, Double rpm) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
 
@@ -38,7 +38,7 @@ public class SpinUpToSpeed extends CommandBase {
   @Override
   public void execute() {
 
-    m_shooter.setRPM(m_rpm.getAsDouble());
+    m_shooter.setRPM(m_rpm);
   }
 
   // Called once the command ends or is interrupted.
