@@ -39,6 +39,23 @@ public final class Constants {
         public static final int kKeybindShoot = Button.kA.value;
     }
 
+    public static final class FieldConstants {
+
+        public static final double kOuterPortCenterHeightMeters = Units.feetToMeters(98.25 / 12.0);
+    }
+
+    public static final class VisionConstants {
+
+        // TODO: get actual measurements!!!
+        public static final double kLimelightMountHeightMeters = Units.feetToMeters(24.0 / 12.0);
+        public static final double kLimelightMountAngleDeg = 0.0;
+
+        // TODO: tune
+        public static final Gains kAlignToTargetGains = new Gains(0.0, 0.0, 0.0, 0.0);
+        public static final double kAlignToTargetTolerancePosition = 0.05;
+        public static final double kAlignToTargetToleranceVelocity = 0.05;
+    }
+
     public static final class DriveConstants {
 
         public static final int kTalonPortFrontLeft = 1;
@@ -46,8 +63,8 @@ public final class Constants {
         public static final int kTalonPortBackLeft = 3;
         public static final int kTalonPortBackRight = 4;
 
-        public static final double kWheelRadius = Units.feetToMeters(4.0/12.0);
-        public static final double kWheelCircumference = 2.0 * Math.PI * kWheelRadius;
+        public static final double kWheelRadiusMeters = Units.feetToMeters(4.0/12.0);
+        public static final double kWheelCircumferenceMeters = 2.0 * Math.PI * kWheelRadiusMeters;
 
         /**
          * Convert from meters per second to native units per 100ms
@@ -55,7 +72,7 @@ public final class Constants {
          * @return
          */
         public static int getVelocityNativeFromMPS(double mps) {
-            return (int)((mps / kWheelCircumference) * kEncoderResolution
+            return (int)((mps / kWheelCircumferenceMeters) * kEncoderResolution
                 / 10.0);
         }
 
@@ -66,11 +83,11 @@ public final class Constants {
          */
         public static double getVelocityMPSFromNative(int velocityNative) {
             return ((double)velocityNative / (double)kEncoderResolution)
-                * kWheelCircumference * 10.0;
+                * kWheelCircumferenceMeters * 10.0;
         }
 
         public static final int kMaxVelocityNative = 20000;
-        public static final double kMaxVelocity = getVelocityMPSFromNative(kMaxVelocityNative);
+        public static final double kMaxVelocityMPS = getVelocityMPSFromNative(kMaxVelocityNative);
 
         public static final int kPrimaryPIDLoopIdx = 0;
         public static final int kTurnPIDLoopIdx = 1;
@@ -78,6 +95,7 @@ public final class Constants {
         public static final int kSlotVelocity = 0;
         public static final int kSlotTurning  = 1;
 
+        // TODO: tune driving PIDs (again, since we are now using the quirky TalonSRX microprocessor)
         public static final Gains kGainsVelocity = new Gains(0.0, 0.0, 0.0, 0.0);
         public static final Gains kGainsTurn     = new Gains(0.0, 0.0, 0.0, 0.0);
     }
@@ -87,6 +105,10 @@ public final class Constants {
         public static final int kTalonPortLeft = 5;
         public static final int kTalonPortRight = 6;
         public static final int kTalonPortConveyor = 7;
+
+        // TODO: get actual measurements
+        public static final double kShooterHeightMeters = Units.feetToMeters(24.0 / 12.0);
+        public static final double kShooterAngleDeg = 30.0;
 
         /**
          * Convert from native units per 100ms to rotations per minute

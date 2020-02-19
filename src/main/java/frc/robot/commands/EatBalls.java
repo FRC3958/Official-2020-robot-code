@@ -7,17 +7,12 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.Intake;
 
 public class EatBalls extends CommandBase {
 
   private final Intake m_intake;
-
-  private double m_lastDraw = 0.0;
 
   /**
    * Creates a new EatBalls.

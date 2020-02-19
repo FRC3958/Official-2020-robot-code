@@ -9,7 +9,6 @@ package frc.robot.commands.shooting;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HoodedShooter;
-import frc.robot.subsystems.Indexer;
 
 public class FeedBallUntilShot extends CommandBase {
 

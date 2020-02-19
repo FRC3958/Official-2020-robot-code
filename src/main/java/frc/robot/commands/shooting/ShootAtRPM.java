@@ -7,6 +7,8 @@
 
 package frc.robot.commands.shooting;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.HoodedShooter;
@@ -19,7 +21,7 @@ public class ShootAtRPM extends SequentialCommandGroup {
   /**
    * Creates a new Shoot.
    */
-  public ShootAtRPM(HoodedShooter shooter, Indexer indexer, double rpm) {
+  public ShootAtRPM(HoodedShooter shooter, Indexer indexer, DoubleSupplier rpm) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(

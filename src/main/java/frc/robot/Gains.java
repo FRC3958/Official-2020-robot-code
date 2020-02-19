@@ -12,7 +12,7 @@ package frc.robot;
  */
 public class Gains {
 
-    public double kF = 0.0, kP = 0.0, kI = 0.0, kD = 0.0;
+    public double kF, kP, kI, kD;
 
     public Gains(double f, double p, double i, double d) {
         kF = f;

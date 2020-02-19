@@ -7,6 +7,8 @@
 
 package frc.robot.commands.shooting;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
@@ -15,14 +17,14 @@ import frc.robot.subsystems.HoodedShooter;
 public class SpinUntilShot extends CommandBase {
 
   private final HoodedShooter m_shooter;
-  private final double m_rpm;
+  private final DoubleSupplier m_rpm;
 
   private final Timer m_timer = new Timer();
 
   /**
    * Creates a new TriggerShooter.
    */
-  public SpinUntilShot(HoodedShooter shooter, double rpm) {
+  public SpinUntilShot(HoodedShooter shooter, DoubleSupplier rpm) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
 
@@ -39,7 +41,7 @@ public class SpinUntilShot extends CommandBase {
   @Override
   public void execute() {
 
-    m_shooter.setRPM(m_rpm);    
+    m_shooter.setRPM(m_rpm.getAsDouble());    
   }
 
   // Called once the command ends or is interrupted.
@@ -50,11 +52,10 @@ public class SpinUntilShot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    
+    // TODO: figure out a way to account for a changing target RPM...
     if(m_shooter.isDippedPastThreshold()) {
       m_timer.start();
-    }
-    else {
-      m_timer.reset();
     }
 
     return m_timer.get() > ShooterConstants.kTimeToShoot;

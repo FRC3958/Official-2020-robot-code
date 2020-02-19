@@ -15,13 +15,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.SensorTerm;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ShooterConstants;
 
 // if you are confused, look here. then look at ReadTheDocs ctre!!!
 // https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop_AuxStraightQuadrature/src/main/java/frc/robot/Robot.java
@@ -33,6 +33,8 @@ public class Drivetrain extends SubsystemBase {
   private final WPI_TalonSRX m_rightMaster = new WPI_TalonSRX(DriveConstants.kTalonPortFrontRight);
   private final WPI_TalonSRX m_rightSlave = new WPI_TalonSRX(DriveConstants.kTalonPortBackRight);
   
+  private final AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
+
   /**
    * Creates a new Drivetrain.
    */
@@ -132,23 +134,6 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    /**
-     * Encoder info
-     */
-    int leftNative = -m_leftMaster.getSensorCollection().getQuadratureVelocity();
-    int rightNative = m_rightMaster.getSensorCollection().getQuadratureVelocity();
-
-    SmartDashboard.putNumber("left native", leftNative);
-    SmartDashboard.putNumber("right native", rightNative);
-
-    SmartDashboard.putNumber("left mps", DriveConstants.getVelocityMPSFromNative(leftNative));
-    SmartDashboard.putNumber("right mps", DriveConstants.getVelocityMPSFromNative(rightNative));
-
-    /**
-     * PID info
-     */
-    SmartDashboard.putNumber("difference heading", getDifferenceHeading());
   }
 
   /**
@@ -166,7 +151,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Gets the difference heading (difference between both sides' positions) for use with driveStraight
+   * Gets the difference between both sides' positions (for use with driveStraight)
    * @return
    */
   public int getDifferenceHeading() {
@@ -190,5 +175,14 @@ public class Drivetrain extends SubsystemBase {
   public void resetEncoders() {
     m_leftMaster.getSensorCollection().setQuadraturePosition(0, Constants.kTimeout);
     m_rightMaster.getSensorCollection().setQuadraturePosition(0, Constants.kTimeout);
+  }
+
+  /**
+   * Gets the angle of the bot
+   * @return
+   */
+  public double getAngleHeading() {
+
+    return m_ahrs.getAngle();
   }
 }
