@@ -42,7 +42,7 @@ public class HoodedShooter extends SubsystemBase {
 
     // config nominal and peak outputs
     m_master.configNominalOutputForward(0);
-    m_master.configNominalOutputReverse(0);
+    m_master.configNominalOutputReverse(0); // we never want to reverse, could cause mechanical issues!
     m_master.configPeakOutputForward(+1);
     m_master.configPeakOutputReverse(-1);
 
@@ -65,7 +65,7 @@ public class HoodedShooter extends SubsystemBase {
 
   public void setRPM(double rpm) {
 
-    m_master.set(ControlMode.Velocity, ShooterConstants.getVelocityNativeFromRPM(rpm));
+    setNative(ShooterConstants.getVelocityNativeFromRPM(rpm));
   }
 
   /**
@@ -77,7 +77,7 @@ public class HoodedShooter extends SubsystemBase {
     return m_master.getClosedLoopError() / m_master.getClosedLoopTarget();
   }
 
-  public boolean isDippedPastThreshold() {
+  public boolean isDippedPastShotThreshold() {
 
     // error percent is not absolute!!!
     return getClosedLoopErrorPercent() <= -ShooterConstants.kShootDipPercent;

@@ -30,6 +30,9 @@ public class SpinUntilShot extends CommandBase {
 
     m_shooter = shooter;
     m_rpm = rpm;
+
+    m_timer.reset();
+    m_timer.stop();
   }
 
   // Called when the command is initially scheduled.
@@ -54,7 +57,7 @@ public class SpinUntilShot extends CommandBase {
   public boolean isFinished() {
     
     // TODO: figure out a way to account for a changing target RPM...
-    if(m_shooter.isDippedPastThreshold()) {
+    if(m_shooter.isDippedPastShotThreshold()) {
       m_timer.start();
     }
 

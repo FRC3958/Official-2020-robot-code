@@ -50,6 +50,6 @@ public class FeedBallUntilShot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_shooter.isDippedPastThreshold();
+    return m_shooter.isDippedPastShotThreshold();
   }
 }
