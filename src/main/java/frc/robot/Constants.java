@@ -122,7 +122,6 @@ public final class Constants {
 
         public static final int kTalonPortLeft = 5;
         public static final int kTalonPortRight = 6;
-        public static final int kTalonPortConveyor = 7;
 
         // TODO: get actual measurements
         public static final double kShooterHeightMeters = Units.feetToMeters(24.0 / 12.0);
@@ -163,11 +162,11 @@ public final class Constants {
 
     public static final class IntakeConstants {
 
+        public static final int kTalonPort = 7;
+
         // TODO: get these 2 values
         public static final int kCimChannel = 4;
         public static final double kEatenThreshold = 0.0;
-
-        public static final int kTalonPort = 8;
 
         public static final int kSolenoidForwardChannel = 0;
         public static final int kSolenoidReverseChannel = 1;
@@ -175,8 +174,12 @@ public final class Constants {
 
     public static final class IndexerConstants {
 
-        public static final int kTalonPortSideways = 9;
-        public static final int kTalonPortTopWheel = 10;
-		public static final int kTalonPortConveyor = 11;
+        public static final int kTalonPortSideways = 8;
+        public static final int kTalonPortTopWheel = 9;
+    }
+
+    public static final class FeederConstants {
+
+        public static final int kTalonPortConveyor = 10;
     }
 }

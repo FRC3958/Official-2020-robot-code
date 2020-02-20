@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -18,6 +19,7 @@ import frc.robot.commands.StickDrive;
 import frc.robot.commands.shooting.AlignToTarget;
 import frc.robot.commands.shooting.ShootAtRPM;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.HoodedShooter;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -40,6 +42,7 @@ public class RobotContainer {
   private final HoodedShooter m_shooter = new HoodedShooter();
   private final Intake m_intake = new Intake();
   private final Indexer m_indexer = new Indexer();
+  private final Feeder m_feeder = new Feeder();
   private final Limelight m_limelight = new Limelight();
 
   /**
@@ -47,7 +50,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
-    configureButtonBindings();
+    configureButtonBindings(); 
   }
 
   /**
@@ -69,7 +72,7 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
-      .whileHeld(new ShootAtRPM(m_shooter, m_indexer, 
+      .whileHeld(new ShootAtRPM(m_shooter, m_indexer, m_feeder,
         () -> Util.calculateRPM(m_limelight.getApproximateDistance()))
     );
   }

@@ -22,8 +22,6 @@ public class HoodedShooter extends SubsystemBase {
   private final WPI_TalonSRX m_master = new WPI_TalonSRX(ShooterConstants.kTalonPortLeft);
   private final WPI_TalonSRX m_slave = new WPI_TalonSRX(ShooterConstants.kTalonPortRight); 
 
-  private final WPI_TalonSRX m_conveyor = new WPI_TalonSRX(ShooterConstants.kTalonPortConveyor);
-
   /**
    * Creates a new SideShooter.
    */
@@ -31,13 +29,10 @@ public class HoodedShooter extends SubsystemBase {
 
     m_master.configFactoryDefault();
     m_slave.configFactoryDefault();
-    m_conveyor.configFactoryDefault();
 
     // coast for faster subsequent rev ups and less wear and tear
     m_master.setNeutralMode(NeutralMode.Coast);
     m_slave.setNeutralMode(NeutralMode.Coast);
-
-    m_conveyor.setNeutralMode(NeutralMode.Brake);
 
     // config encoder for use in loop
     m_master.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, ShooterConstants.kPIDLoopIdx, Constants.kTimeout);
@@ -86,15 +81,5 @@ public class HoodedShooter extends SubsystemBase {
 
     // error percent is not absolute!!!
     return getClosedLoopErrorPercent() <= -ShooterConstants.kShootDipPercent;
-  }
-
-  public void feed() {
-    
-    m_conveyor.set(ControlMode.PercentOutput, 0.5);
-  }
-
-  public void stopFeeding() {
-
-    m_conveyor.set(ControlMode.PercentOutput, 0.0);
   }
 }
