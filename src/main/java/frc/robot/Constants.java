@@ -74,7 +74,7 @@ public final class Constants {
          * @return
          */
         public static int getNativeFromMeters(double meters) {
-            return (int)((meters / kWheelCircumferenceMeters) * kEncoderResolution);
+            return (int)Math.round((meters / kWheelCircumferenceMeters) * kEncoderResolution);
         }
 
         /**
@@ -93,7 +93,7 @@ public final class Constants {
          * @return
          */
         public static int getVelocityNativeFromMPS(double mps) {
-            return (int)((double)getNativeFromMeters(mps) / 10.0);
+            return (int)Math.round((double)getNativeFromMeters(mps) / 10.0);
         }
 
         /**
@@ -133,27 +133,14 @@ public final class Constants {
          * @return
          */
         public static int getVelocityNativeFromRPM(double rpm) {
-            return (int)(rpm * (double)Constants.kEncoderResolution
-                / 60.0 / 10.0);
-        }
 
-        /**
-         * Convert from rotations per minute to native units per 100ms
-         * @param nativeVelocity
-         * @return
-         */
-        public static double getRPMFromVelocityNative(int velocityNative) {
-            return (double)((double)velocityNative / (double)Constants.kEncoderResolution
-                * 10.0 * 60.0);
+            return (int)Math.round((rpm / 600.0) * Constants.kEncoderResolution);
         }
 
         public static final int kPIDLoopIdx = 0;
 
         public static final Gains kGains = new Gains(0.025, 0.02, 0.0, 0.0);
 
-        public static final double kMinFireVelocityRPM = 2500;
-
-        public static final int kMinFireVelocity = getVelocityNativeFromRPM(kMinFireVelocityRPM);
         public static final double kAcceptablePercentError = 0.02;
 
         public static final double kShootDipPercent = 0.10;
