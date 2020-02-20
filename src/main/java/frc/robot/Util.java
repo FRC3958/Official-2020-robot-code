@@ -16,9 +16,9 @@ public class Util {
         return (Math.abs(value) < deadband) ? 0.0 : value;
     }
 
-    // TODO: figure out best way to solve for RPM from distane
+    // TODO: follow instructions in README to get a working quadratic
     public static double calculateRPM(double targetDistance) {
 
-        return 7700.0 / (targetDistance / 25.0);
+        return 0;
     }
 }

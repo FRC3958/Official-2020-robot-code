@@ -125,6 +125,10 @@ public class Limelight extends SubsystemBase {
     return isValidTargetPresent() ? getAngleOffsetX() : getAngleOffsetXFromMemory();
   }
 
+  /**
+   * Gets the HORIZONTAL distance to the target
+   * @return
+   */
   public double getApproximateDistance() {
 
     // https://docs.limelightvision.io/en/latest/cs_estimating_distance.html
