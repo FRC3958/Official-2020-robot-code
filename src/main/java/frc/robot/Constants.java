@@ -65,8 +65,8 @@ public final class Constants {
 
         // TODO: measure track width
         public static final double kTrackWidth = Units.feetToMeters(48.0 / 12.0);
-        public static final double kWheelRadiusMeters = Units.feetToMeters(4.0/12.0);
-        public static final double kWheelCircumferenceMeters = 2.0 * Math.PI * kWheelRadiusMeters;
+        public static final double kWheelDiameterMeters = Units.feetToMeters(8.0/12.0);
+        public static final double kWheelCircumferenceMeters = Math.PI * kWheelDiameterMeters;
 
         /**
          * Convert from meters to native untis
