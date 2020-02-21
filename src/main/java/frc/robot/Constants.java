@@ -7,17 +7,11 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.util.Units;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants.  This class should not be used for any other purpose.  All constants should be
- * declared globally (i.e. public static).  Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
 public final class Constants {
 
     /**
@@ -35,9 +29,9 @@ public final class Constants {
         public static final int kDriverControllerPort = 0;
         public static final int kOperatorControllerPort = 1;
 
-        public static final int kKeybindToggleIntake = Button.kX.value;
+        public static final int kKeybindToggleIntake = Button.kStart.value;
         public static final int kKeybindShoot = Button.kA.value;
-		public static int kKeybindToggleRPM = Button.kY.value;
+        public static final int kKeybindToggleRPM = Button.kY.value;
     }
 
     public static final class FieldConstants {
@@ -66,8 +60,8 @@ public final class Constants {
 
         // TODO: measure track width
         public static final double kTrackWidth = Units.feetToMeters(48.0 / 12.0);
-        public static final double kWheelRadiusMeters = Units.feetToMeters(4.0/12.0);
-        public static final double kWheelCircumferenceMeters = 2.0 * Math.PI * kWheelRadiusMeters;
+        public static final double kWheelDiameterMeters = Units.feetToMeters(8.0/12.0);
+        public static final double kWheelCircumferenceMeters = Math.PI * kWheelDiameterMeters;
 
         /**
          * Convert from meters to native untis
@@ -75,7 +69,7 @@ public final class Constants {
          * @return
          */
         public static int getNativeFromMeters(double meters) {
-            return (int)((meters / kWheelCircumferenceMeters) * kEncoderResolution);
+            return (int)Math.round((meters / kWheelCircumferenceMeters) * kEncoderResolution);
         }
 
         /**
@@ -94,7 +88,7 @@ public final class Constants {
          * @return
          */
         public static int getVelocityNativeFromMPS(double mps) {
-            return (int)((double)getNativeFromMeters(mps) / 10.0);
+            return (int)Math.round((double)getNativeFromMeters(mps) / 10.0);
         }
 
         /**
@@ -122,12 +116,12 @@ public final class Constants {
     public static final class ShooterConstants {
 
         public static final int kTalonPortLeft = 6;
-        public static final int kTalonPortRight = 7;
-        public static final int kTalonPortConveyor = 5;
+        public static final int kTalonPortRight = 4;
 
         // TODO: get actual measurements
         public static final double kShooterHeightMeters = Units.feetToMeters(24.0 / 12.0);
         public static final double kShooterAngleDeg = 30.0;
+		public static int kTalonPortConveyor;
 
         /**
          * Convert from native units per 100ms to rotations per minute
@@ -135,27 +129,14 @@ public final class Constants {
          * @return
          */
         public static int getVelocityNativeFromRPM(double rpm) {
-            return (int)(rpm * (double)Constants.kEncoderResolution
-                / 60.0 / 10.0);
-        }
 
-        /**
-         * Convert from rotations per minute to native units per 100ms
-         * @param nativeVelocity
-         * @return
-         */
-        public static double getRPMFromVelocityNative(int velocityNative) {
-            return (double)((double)velocityNative / (double)Constants.kEncoderResolution
-                * 10.0 * 60.0);
+            return (int)Math.round((rpm/600) *Constants.kEncoderResolution);
         }
 
         public static final int kPIDLoopIdx = 0;
 
         public static final Gains kGains = new Gains(0.025, 0.02, 0.0, 0.0);
 
-        public static final double kMinFireVelocityRPM = 2500;
-
-        public static final int kMinFireVelocity = getVelocityNativeFromRPM(kMinFireVelocityRPM);
         public static final double kAcceptablePercentError = 0.02;
 
         public static final double kShootDipPercent = 0.10;
@@ -164,11 +145,11 @@ public final class Constants {
 
     public static final class IntakeConstants {
 
+        public static final int kTalonPort = 7;
+
         // TODO: get these 2 values
         public static final int kCimChannel = 4;
         public static final double kEatenThreshold = 0.0;
-
-        public static final int kTalonPort = 3;
 
         public static final int kSolenoidForwardChannel = 0;
         public static final int kSolenoidReverseChannel = 1;
@@ -176,9 +157,8 @@ public final class Constants {
 
     public static final class IndexerConstants {
 
-        public static final int kTalonPortSideways = 1;
-        public static final int kTalonPortTopWheel = 2;
-		public static final int kTalonPortConveyor = 5;
+        public static final int kTalonPortSideways = 8;
+        public static final int kTalonPortTopWheel = 9;
     }
 
     
@@ -194,5 +174,8 @@ public final class Constants {
 
 
     }
-    public static double testrpm = 1000;
+    
+
+   
+     public static double testrpm = 5000;
 }

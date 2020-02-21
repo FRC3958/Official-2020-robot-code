@@ -75,7 +75,7 @@ public class RobotContainer {
       .toggleWhenPressed(new EatBalls(m_intake));
 
       new JoystickButton(m_operatorController, ControlConstants.kKeybindToggleRPM)
-      .toggleWhenPressed(new SpinUpToSpeed(m_shooter,Constants.testrpm));
+      .toggleWhenPressed(new SpinUpToSpeed(m_shooter, Constants.testrpm));
 
     /*new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
