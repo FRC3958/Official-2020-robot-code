@@ -151,6 +151,8 @@ public final class Constants {
 
         public static final int kTalonPort = 7;
 
+        public static final double kRunningPercentOutput = 0.7;
+
         // TODO: get these 2 values
         public static final int kCimChannel = 4;
         public static final double kEatenThreshold = 0.0;
@@ -162,11 +164,21 @@ public final class Constants {
     public static final class IndexerConstants {
 
         public static final int kTalonPortSideways = 8;
-        public static final int kTalonPortTopWheel = 9;
+
+        public static final double kRunningPercentOutput = 0.6;
     }
 
     public static final class FeederConstants {
 
-        public static final int kTalonPortConveyor = 10;
+        public static final int kTalonPortConveyor = 9;
+
+        public static final double kRunningPercentOutput = 0.5;
+    }
+
+    public static final class StopWheelConstants {
+
+        public static final int kTalonPort = 10;
+
+        public static final double kRunningPercentOutput = 0.3;
     }
 }

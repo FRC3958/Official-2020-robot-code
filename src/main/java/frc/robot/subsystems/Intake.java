@@ -89,7 +89,7 @@ public class Intake extends SubsystemBase {
 
   public void eat() {
 
-    m_wheels.set(ControlMode.PercentOutput, 0.7);
+    m_wheels.set(ControlMode.PercentOutput, IntakeConstants.kRunningPercentOutput);
   }
 
   public void stopEating() {

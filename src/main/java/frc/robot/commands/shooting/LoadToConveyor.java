@@ -9,19 +9,20 @@ package frc.robot.commands.shooting;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.StopWheel;
 
-public class LoadBall extends CommandBase {
+public class LoadToConveyor extends CommandBase {
   
-  private final Indexer m_indexer;
+  private final StopWheel m_stopWheel;
   
   /**
-   * Creates a new LoadBall.
+   * Loads ball into the conveyor
    */
-  public LoadBall(Indexer indexer) {
+  public LoadToConveyor(StopWheel stopWheel) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(indexer);
+    addRequirements(stopWheel);
 
-    m_indexer = indexer;
+    m_stopWheel = stopWheel;
   }
 
   // Called when the command is initially scheduled.
@@ -32,13 +33,13 @@ public class LoadBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_indexer.disengangeStopWheel();
+    m_stopWheel.disengangeStopWheel();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_indexer.engageStopWheel();
+    m_stopWheel.engageStopWheel();
   }
 
   // Returns true when the command should end.
