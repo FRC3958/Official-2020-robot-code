@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.EatBalls;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.HoodedShooter;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -32,7 +34,8 @@ import frc.robot.subsystems.Limelight;
  */
 public class RobotContainer {
 
-  // OI
+  public static Object climberconstants;
+// OI
   private final XboxController m_driverController = new XboxController(ControlConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(ControlConstants.kOperatorControllerPort);
 
@@ -42,6 +45,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Indexer m_indexer = new Indexer();
   private final Limelight m_limelight = new Limelight();
+  private final Climber m_climber = new Climber();
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -63,6 +67,9 @@ public class RobotContainer {
       () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
       () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
     );
+    m_climber.setDefaultCommand(new RunCommand(() -> m_climber.manualcontrol(m_operatorController.getY(GenericHID.Hand.kLeft),
+    m_operatorController.getY(GenericHID.Hand.kRight))));
+
 
     new JoystickButton(m_operatorController, ControlConstants.kKeybindToggleIntake)
       .toggleWhenPressed(new EatBalls(m_intake));

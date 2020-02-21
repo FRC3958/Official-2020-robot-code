@@ -181,5 +181,18 @@ public final class Constants {
 		public static final int kTalonPortConveyor = 5;
     }
 
-	public static double testrpm = 1000;
+    
+    public static final class climberconstants{
+
+        public static final int kdown = 1;
+        public static final int kup = 2;
+
+         public static final int kPrimaryPIDLoopIdx = 0;
+         //TODO: Tune climber
+         public static final Gains Kclimberup = new Gains(0.0, 0.0, 0.0, 0.0);
+         public static final Gains Kclimberdown = new Gains(0.0, 0.0, 0.0, 0.0);
+
+
+    }
+    public static double testrpm = 1000;
 }
