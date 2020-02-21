@@ -77,7 +77,7 @@ public class RobotContainer {
     // over and over again at the same time
     new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
-      .whileHeld(new ShootAtRPM(m_shooter, m_indexer, m_feeder, m_stopWheel
+      .whileHeld(new ShootAtRPM(m_shooter, m_indexer, m_feeder, m_stopWheel,
         () -> Util.calculateRPM(m_limelight.getApproximateDistance()))
     );
   }
