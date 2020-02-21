@@ -116,11 +116,12 @@ public final class Constants {
     public static final class ShooterConstants {
 
         public static final int kTalonPortLeft = 6;
-        public static final int kTalonPortRight = 7;
+        public static final int kTalonPortRight = 4;
 
         // TODO: get actual measurements
         public static final double kShooterHeightMeters = Units.feetToMeters(24.0 / 12.0);
         public static final double kShooterAngleDeg = 30.0;
+		public static int kTalonPortConveyor;
 
         /**
          * Convert from native units per 100ms to rotations per minute
@@ -129,7 +130,7 @@ public final class Constants {
          */
         public static int getVelocityNativeFromRPM(double rpm) {
 
-            return (int)Math.round((rpm / 600.0) * Constants.kEncoderResolution);
+            return (int)Math.round((rpm/600) *Constants.kEncoderResolution);
         }
 
         public static final int kPIDLoopIdx = 0;
@@ -164,5 +165,5 @@ public final class Constants {
 
         public static final int kTalonPortConveyor = 10;
     }
-     public static double testrpm = 1000;
+     public static double testrpm = 5000;
 }
