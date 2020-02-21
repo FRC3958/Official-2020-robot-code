@@ -23,6 +23,7 @@ import frc.robot.subsystems.HoodedShooter;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.StopWheel;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -38,10 +39,11 @@ public class RobotContainer {
 
   // The robot's subsystems
   private final Drivetrain m_drive = new Drivetrain();
-  private final HoodedShooter m_shooter = new HoodedShooter();
   private final Intake m_intake = new Intake();
   private final Indexer m_indexer = new Indexer();
   private final Feeder m_feeder = new Feeder();
+  private final StopWheel m_stopWheel = new StopWheel();
+  private final HoodedShooter m_shooter = new HoodedShooter();
   private final Limelight m_limelight = new Limelight();
 
   /**
@@ -75,7 +77,7 @@ public class RobotContainer {
     // over and over again at the same time
     new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
-      .whileHeld(new ShootAtRPM(m_shooter, m_indexer, m_feeder,
+      .whileHeld(new ShootAtRPM(m_shooter, m_indexer, m_feeder, m_stopWheel
         () -> Util.calculateRPM(m_limelight.getApproximateDistance()))
     );
   }

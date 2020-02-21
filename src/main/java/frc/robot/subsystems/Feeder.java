@@ -36,7 +36,7 @@ public class Feeder extends SubsystemBase {
 
   public void feed() {
     
-    m_conveyor.set(ControlMode.PercentOutput, 0.5);
+    m_conveyor.set(ControlMode.PercentOutput, FeederConstants.kRunningPercentOutput);
   }
 
   public void dontFeed() {

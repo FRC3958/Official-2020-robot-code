@@ -7,32 +7,21 @@
 
 package frc.robot.commands.shooting;
 
-import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.HoodedShooter;
+import frc.robot.subsystems.Indexer;
 
-public class SpinUntilShot extends CommandBase {
-
-  private final HoodedShooter m_shooter;
-  private final DoubleSupplier m_rpm;
-
-  private final Timer m_timer = new Timer();
-
+public class FeedToStopWheel extends CommandBase {
+  
+  private final Indexer m_indexer;
+  
   /**
-   * Creates a new SpinUntilShot.
+   * Feeds balls into the stop-wheel
    */
-  public SpinUntilShot(HoodedShooter shooter, DoubleSupplier rpm) {
+  public FeedToStopWheel(Indexer indexer) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(indexer);
 
-    m_shooter = shooter;
-    m_rpm = rpm;
-
-    m_timer.reset();
-    m_timer.stop();
+    m_indexer = indexer;
   }
 
   // Called when the command is initially scheduled.
@@ -44,23 +33,19 @@ public class SpinUntilShot extends CommandBase {
   @Override
   public void execute() {
 
-    m_shooter.setRPM(m_rpm.getAsDouble());    
+    m_indexer.spinSideways();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+
+    m_indexer.stopSpinningSideways();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
-    // TODO: figure out a way to account for a changing target RPM...
-    if(m_shooter.isDippedPastShotThreshold()) {
-      m_timer.start();
-    }
-
-    return m_timer.get() > ShooterConstants.kTimeToShoot;
+    return false;
   }
 }

@@ -9,22 +9,19 @@ package frc.robot.commands.shooting;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.HoodedShooter;
 
-public class FeedBallUntilShot extends CommandBase {
+public class FeedToShooter extends CommandBase {
 
   private final Feeder m_feeder;
-  private final HoodedShooter m_shooter;
 
   /**
-   * Creates a new FeedBall.
+   * Feeds ball to shooter
    */
-  public FeedBallUntilShot(Feeder feeder, HoodedShooter shooter) {
+  public FeedToShooter(Feeder feeder) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(feeder); // we do not require exclusive control of shooter!!!
 
     m_feeder = feeder;
-    m_shooter = shooter;
   }
 
   // Called when the command is initially scheduled.
@@ -50,6 +47,6 @@ public class FeedBallUntilShot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_shooter.isDippedPastShotThreshold();
+    return false;
   }
 }
