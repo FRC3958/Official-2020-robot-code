@@ -36,8 +36,8 @@ public class Indexer extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void spinSideways() {
-    m_sideways.set(ControlMode.PercentOutput, 0.6);
+  public void spinSideways(double speed) {
+    m_sideways.set(ControlMode.PercentOutput,speed);
   }
 
   public void stopSpinningSideways() {
