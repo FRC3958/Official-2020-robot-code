@@ -13,14 +13,15 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 public class HoodedShooter extends SubsystemBase {
 
-  private final WPI_TalonSRX m_master = new WPI_TalonSRX(ShooterConstants.kTalonPortLeft);
-  private final WPI_TalonSRX m_slave = new WPI_TalonSRX(ShooterConstants.kTalonPortRight); 
+  private final WPI_TalonSRX m_master = new WPI_TalonSRX(ShooterConstants.kTalonPortRight);
+  private final WPI_TalonSRX m_slave = new WPI_TalonSRX(ShooterConstants.kTalonPortLeft); 
 
   /**
    * Creates a new SideShooter.
@@ -56,6 +57,13 @@ public class HoodedShooter extends SubsystemBase {
     // slavery
     m_slave.follow(m_master);
     m_slave.setInverted(InvertType.OpposeMaster);
+  }
+
+  @Override
+  public void periodic() {
+    
+    SmartDashboard.putNumber("enc native", m_master.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("enc rpm", ShooterConstants.getRPMFromNativeVelocity(m_master.getSelectedSensorVelocity()));
   }
 
   public void setNative(int targetVelocity) {

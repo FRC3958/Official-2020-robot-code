@@ -9,8 +9,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.EatBalls;
@@ -62,7 +65,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    // Drive with stick (note: it is automatically linearly limited)
+    //Drive with stick (note: it is automatically linearly limited)
     m_drive.setDefaultCommand(new StickDrive(m_drive,
       () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
       () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
@@ -80,6 +83,24 @@ public class RobotContainer {
       .whileHeld(new ShootAtRPM(m_shooter, m_indexer, m_feeder, m_stopWheel,
         () -> Util.calculateRPM(m_limelight.getApproximateDistance()))
     );
+
+    SmartDashboard.putNumber("native target", 1000);
+    SmartDashboard.putData("set native", 
+      new InstantCommand(
+        () -> m_shooter.setNative((int)SmartDashboard.getNumber("native target", 0)),
+        m_shooter
+      )
+    );
+
+    SmartDashboard.putNumber("rpm target", 500);
+    SmartDashboard.putData("set rpm", 
+      new InstantCommand(
+        () -> m_shooter.setRPM(SmartDashboard.getNumber("rpm target", 0)),
+        m_shooter
+      )
+    );
+
+    SmartDashboard.putData("zero shooter", new InstantCommand(() -> m_shooter.setNative(0), m_shooter));
   }
 
   /**

@@ -137,9 +137,13 @@ public final class Constants {
             return (int)Math.round((rpm / 600.0) * Constants.kEncoderResolution);
         }
 
+        public static double getRPMFromNativeVelocity(int velocity) {
+            return (double)velocity * 600.0 / Constants.kEncoderResolution;
+        }
+
         public static final int kPIDLoopIdx = 0;
 
-        public static final Gains kGains = new Gains(0.025, 0.02, 0.0, 0.0);
+        public static final Gains kGains = new Gains(0.03, 0.45, 0.0, 0.0);
 
         public static final double kAcceptablePercentError = 0.02;
 
