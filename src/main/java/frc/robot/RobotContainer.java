@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.EatBalls;
 import frc.robot.commands.StickDrive;
+import frc.robot.commands.climbing.LiftBot;
+import frc.robot.commands.climbing.PrepareClimb;
 import frc.robot.commands.shooting.AlignToTarget;
-import frc.robot.commands.shooting.ShootAtRPM;
+import frc.robot.commands.shooting.FullShootRoutine;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.indexing.ConveyorBelt;
 import frc.robot.subsystems.HoodedShooter;
@@ -26,6 +28,7 @@ import frc.robot.subsystems.indexing.SideBelt;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.indexing.StopWheel;
+import frc.robot.subsystems.Climber;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -42,12 +45,17 @@ public class RobotContainer {
   // The robot's subsystems
   private final Drivetrain m_drive = new Drivetrain();
   private final Intake m_intake = new Intake();
+  private final HoodedShooter m_shooter = new HoodedShooter();
+  private final Limelight m_limelight = new Limelight();
+  private final Climber m_climber = new Climber();
+
+  /**
+   * Indexing subsystems
+   */
   private final SideBelt m_indexer = new SideBelt();
   private final ConveyorBelt m_feeder = new ConveyorBelt();
   private final StopWheel m_stopWheel = new StopWheel();
-  private final HoodedShooter m_shooter = new HoodedShooter();
-  private final Limelight m_limelight = new Limelight();
-
+  
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
@@ -79,27 +87,42 @@ public class RobotContainer {
     // over and over again at the same time
     new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
-      .whileHeld(new ShootAtRPM(m_shooter, m_indexer, m_feeder, m_stopWheel,
+      .whileHeld(new FullShootRoutine(m_shooter, m_indexer, m_feeder, m_stopWheel,
         () -> Util.calculateRPM(m_limelight.getApproximateDistance()))
     );
 
-    SmartDashboard.putNumber("native target", 1000);
-    SmartDashboard.putData("set native", 
-      new InstantCommand(
-        () -> m_shooter.setNative((int)SmartDashboard.getNumber("native target", 0)),
-        m_shooter
-      )
+    // Prepare climber
+    new JoystickButton(m_operatorController, ControlConstants.kKeybindPrepareClimb)
+      .whenPressed(new PrepareClimb(m_climber)
     );
 
-    SmartDashboard.putNumber("rpm target", 500);
-    SmartDashboard.putData("set rpm", 
-      new InstantCommand(
-        () -> m_shooter.setRPM(SmartDashboard.getNumber("rpm target", 0)),
-        m_shooter
-      )
+    // Climb
+    new JoystickButton(m_operatorController, ControlConstants.kKeybindClimb)
+      .whenPressed(new LiftBot(m_climber)
     );
+  
 
-    SmartDashboard.putData("zero shooter", new InstantCommand(() -> m_shooter.setNative(0), m_shooter));
+    /**
+     * Shooter testing
+     */
+
+    // SmartDashboard.putNumber("native target", 1000);
+    // SmartDashboard.putData("set native", 
+    //   new InstantCommand(
+    //     () -> m_shooter.setNative((int)SmartDashboard.getNumber("native target", 0)),
+    //     m_shooter
+    //   )
+    // );
+
+    // SmartDashboard.putNumber("rpm target", 500);
+    // SmartDashboard.putData("set rpm", 
+    //   new InstantCommand(
+    //     () -> m_shooter.setRPM(SmartDashboard.getNumber("rpm target", 0)),
+    //     m_shooter
+    //   )
+    // );
+
+    // SmartDashboard.putData("zero shooter", new InstantCommand(() -> m_shooter.setNative(0), m_shooter));
   }
 
   /**

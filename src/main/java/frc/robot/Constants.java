@@ -37,8 +37,10 @@ public final class Constants {
         public static final int kDriverControllerPort = 0;
         public static final int kOperatorControllerPort = 1;
 
-        public static final int kKeybindToggleIntake = Button.kStart.value;
+        public static final int kKeybindToggleIntake = Button.kBumperLeft.value;
         public static final int kKeybindShoot = Button.kA.value;
+        public static final int kKeybindPrepareClimb = Button.kBack.value;
+        public static final int kKeybindClimb = Button.kStart.value;
     }
 
     public static final class FieldConstants {
@@ -199,10 +201,12 @@ public final class Constants {
 
         // TODO: replace placeholder
         public static final int kHookerDeployedPosition = Constants.kQuadEncoderResolution * 50;
+        public static final double kHookerDeployedPercentTolerance = 0.10;
 
         public static final Gains kWinchPositionGains = new Gains(0.0, 0.0, 0.0, 0.0);
 
         // TODO: replace placeholder
         public static final int kWinchLiftedPosition = Constants.kQuadEncoderResolution * 50;
+        public static final double kWinchLiftedPercentTolerance = 0.10;
     }
 }

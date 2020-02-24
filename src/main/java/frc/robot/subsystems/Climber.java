@@ -64,6 +64,18 @@ public class Climber extends SubsystemBase {
     m_hooker.set(ControlMode.Position, 0);
   }
 
+  public boolean isHookDeployed() {
+
+    return ((Math.abs(ClimberConstants.kHookerDeployedPosition - m_hooker.getSelectedSensorPosition())) 
+      / ClimberConstants.kHookerDeployedPosition) <= ClimberConstants.kHookerDeployedPercentTolerance;
+  }
+
+  public boolean isHookRetracted() {
+
+    return ((Math.abs(ClimberConstants.kHookerDeployedPosition - m_hooker.getSelectedSensorPosition())) 
+      / ClimberConstants.kHookerDeployedPosition) >= (1.0 - ClimberConstants.kHookerDeployedPercentTolerance);
+  }
+
   public void lift() {
 
     m_winch.set(ControlMode.Position, ClimberConstants.kWinchLiftedPosition);
@@ -72,6 +84,12 @@ public class Climber extends SubsystemBase {
   public void stopLifting() {
 
     m_winch.set(ControlMode.Position, m_winch.getSelectedSensorPosition());
+  }
+
+  public boolean isLiftedToHeight() {
+
+    return ((Math.abs(m_winch.getSelectedSensorPosition()) - ClimberConstants.kWinchLiftedPosition) 
+      / ClimberConstants.kWinchLiftedPosition) <= ClimberConstants.kWinchLiftedPercentTolerance;
   }
 
   private void resetEncoders() {

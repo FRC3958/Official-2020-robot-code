@@ -19,11 +19,11 @@ import frc.robot.subsystems.indexing.StopWheel;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class ShootAtRPM extends ParallelRaceGroup {
+public class FullShootRoutine extends ParallelRaceGroup {
   /**
-   * Creates a new Shoot.
+   * Full shooting routine
    */
-  public ShootAtRPM(HoodedShooter shooter, SideBelt sideBelt, ConveyorBelt conveyor, StopWheel stopWheel, DoubleSupplier rpm) {
+  public FullShootRoutine(HoodedShooter shooter, SideBelt sideBelt, ConveyorBelt conveyor, StopWheel stopWheel, DoubleSupplier rpm) {
 
     // ParallelRaceGroup
     super(
