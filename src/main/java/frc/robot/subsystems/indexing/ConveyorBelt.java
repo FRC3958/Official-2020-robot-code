@@ -34,12 +34,12 @@ public class ConveyorBelt extends SubsystemBase {
   }
 
 
-  public void feed() {
+  public void spin() {
     
     m_belt.set(ControlMode.PercentOutput, ConveyorBeltConstants.kRunningPercentOutput);
   }
 
-  public void dontFeed() {
+  public void stop() {
 
     m_belt.set(ControlMode.PercentOutput, 0.0);
   }

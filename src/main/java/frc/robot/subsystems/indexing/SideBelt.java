@@ -33,11 +33,11 @@ public class SideBelt extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void spinSideways() {
+  public void spin() {
     m_sideways.set(ControlMode.PercentOutput, SideBeltConstants.kRunningPercentOutput);
   }
 
-  public void stopSpinningSideways() {
+  public void stop() {
     m_sideways.set(ControlMode.PercentOutput, 0.0);
   }
 }

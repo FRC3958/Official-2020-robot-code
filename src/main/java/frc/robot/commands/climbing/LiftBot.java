@@ -5,43 +5,43 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooting;
+package frc.robot.commands.climbing;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.indexing.ConveyorBelt;
 
-public class FeedToShooter extends CommandBase {
+import frc.robot.subsystems.Climber;
 
-  private final ConveyorBelt m_conveyor;
+public class LiftBot extends CommandBase {
+
+  private final Climber m_climber;
 
   /**
-   * Feeds ball to shooter
+   * Creates a new LiftBot.
    */
-  public FeedToShooter(ConveyorBelt conveyor) {
+  public LiftBot(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(conveyor);
+    addRequirements(climber);
 
-    m_conveyor = conveyor;
+    m_climber = climber;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    m_conveyor.spin();
+    m_climber.lift();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
-    m_conveyor.stop();
+    m_climber.stopLifting();
   }
 
   // Returns true when the command should end.

@@ -32,11 +32,11 @@ public class StopWheel extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void disengangeStopWheel() {
+  public void spin() {
     m_wheel.set(ControlMode.PercentOutput, StopWheelConstants.kRunningPercentOutput);
   }
 
-  public void engageStopWheel() {
+  public void stop() {
     m_wheel.set(ControlMode.PercentOutput, 0.0);
   }
 }
