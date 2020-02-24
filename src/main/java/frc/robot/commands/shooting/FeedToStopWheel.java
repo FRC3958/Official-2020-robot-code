@@ -33,14 +33,14 @@ public class FeedToStopWheel extends CommandBase {
   @Override
   public void execute() {
 
-    m_sideBelt.spinSideways();
+    m_sideBelt.spin();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
-    m_sideBelt.stopSpinningSideways();
+    m_sideBelt.stop();
   }
 
   // Returns true when the command should end.

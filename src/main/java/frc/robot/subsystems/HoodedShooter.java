@@ -41,11 +41,7 @@ public class HoodedShooter extends SubsystemBase {
     // phase sensor
     m_master.setSensorPhase(false);
 
-    // config nominal and peak outputs
-    m_master.configNominalOutputForward(0);
-    m_master.configNominalOutputReverse(0); // we never want to reverse, could cause mechanical issues!
-    m_master.configPeakOutputForward(+1);
-    m_master.configPeakOutputReverse(-1);
+    // TODO: add way of clearing jams by reversing motors 
 
     // config gains
     // running the loop on the talon
