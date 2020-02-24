@@ -5,27 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.indexing;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IndexerConstants;
+import frc.robot.Constants.StopWheelConstants;
 
-public class Indexer extends SubsystemBase {
+public class StopWheel extends SubsystemBase {
 
-  private final WPI_TalonSRX m_sideways = new WPI_TalonSRX(IndexerConstants.kTalonPortSideways);
+  private final WPI_TalonSRX m_wheel = new WPI_TalonSRX(StopWheelConstants.kTalonPort);
 
   /**
-   * Creates a new Indexer.
+   * Creates a new StopWheel.
    */
-  public Indexer() {
+  public StopWheel() {
 
-    m_sideways.configFactoryDefault();
-
-    m_sideways.setNeutralMode(NeutralMode.Coast);
+    m_wheel.configFactoryDefault();
+    m_wheel.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -33,11 +32,11 @@ public class Indexer extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void spinSideways() {
-    m_sideways.set(ControlMode.PercentOutput, IndexerConstants.kRunningPercentOutput);
+  public void disengangeStopWheel() {
+    m_wheel.set(ControlMode.PercentOutput, StopWheelConstants.kRunningPercentOutput);
   }
 
-  public void stopSpinningSideways() {
-    m_sideways.set(ControlMode.PercentOutput, 0.0);
+  public void engageStopWheel() {
+    m_wheel.set(ControlMode.PercentOutput, 0.0);
   }
 }

@@ -5,26 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.indexing;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.StopWheelConstants;
+import frc.robot.Constants.FeederConstants;
 
-public class StopWheel extends SubsystemBase {
+public class ConveyorBelt extends SubsystemBase {
 
-  private final WPI_TalonSRX m_wheel = new WPI_TalonSRX(StopWheelConstants.kTalonPort);
+  private final WPI_TalonSRX m_belt = new WPI_TalonSRX(FeederConstants.kTalonPortConveyor);
 
   /**
-   * Creates a new StopWheel.
+   * Creates a new Feeder.
    */
-  public StopWheel() {
+  public ConveyorBelt() {
 
-    m_wheel.configFactoryDefault();
-    m_wheel.setNeutralMode(NeutralMode.Brake);
+    m_belt.configFactoryDefault();
+
+    m_belt.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -32,11 +33,14 @@ public class StopWheel extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void disengangeStopWheel() {
-    m_wheel.set(ControlMode.PercentOutput, StopWheelConstants.kRunningPercentOutput);
+
+  public void feed() {
+    
+    m_belt.set(ControlMode.PercentOutput, FeederConstants.kRunningPercentOutput);
   }
 
-  public void engageStopWheel() {
-    m_wheel.set(ControlMode.PercentOutput, 0.0);
+  public void dontFeed() {
+
+    m_belt.set(ControlMode.PercentOutput, 0.0);
   }
 }

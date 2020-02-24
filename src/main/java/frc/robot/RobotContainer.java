@@ -21,12 +21,12 @@ import frc.robot.commands.StickDrive;
 import frc.robot.commands.shooting.AlignToTarget;
 import frc.robot.commands.shooting.ShootAtRPM;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.indexing.ConveyorBelt;
 import frc.robot.subsystems.HoodedShooter;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.indexing.SideBelt;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.StopWheel;
+import frc.robot.subsystems.indexing.StopWheel;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -43,8 +43,8 @@ public class RobotContainer {
   // The robot's subsystems
   private final Drivetrain m_drive = new Drivetrain();
   private final Intake m_intake = new Intake();
-  private final Indexer m_indexer = new Indexer();
-  private final Feeder m_feeder = new Feeder();
+  private final SideBelt m_indexer = new SideBelt();
+  private final ConveyorBelt m_feeder = new ConveyorBelt();
   private final StopWheel m_stopWheel = new StopWheel();
   private final HoodedShooter m_shooter = new HoodedShooter();
   private final Limelight m_limelight = new Limelight();

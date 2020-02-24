@@ -8,20 +8,20 @@
 package frc.robot.commands.shooting;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.indexing.SideBelt;
 
 public class FeedToStopWheel extends CommandBase {
   
-  private final Indexer m_indexer;
+  private final SideBelt m_sideBelt;
   
   /**
    * Feeds balls into the stop-wheel
    */
-  public FeedToStopWheel(Indexer indexer) {
+  public FeedToStopWheel(SideBelt sideBelt) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(indexer);
+    addRequirements(sideBelt);
 
-    m_indexer = indexer;
+    m_sideBelt = sideBelt;
   }
 
   // Called when the command is initially scheduled.
@@ -33,14 +33,14 @@ public class FeedToStopWheel extends CommandBase {
   @Override
   public void execute() {
 
-    m_indexer.spinSideways();
+    m_sideBelt.spinSideways();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
-    m_indexer.stopSpinningSideways();
+    m_sideBelt.stopSpinningSideways();
   }
 
   // Returns true when the command should end.

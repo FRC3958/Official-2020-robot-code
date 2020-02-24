@@ -8,20 +8,20 @@
 package frc.robot.commands.shooting;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.indexing.ConveyorBelt;
 
 public class FeedToShooter extends CommandBase {
 
-  private final Feeder m_feeder;
+  private final ConveyorBelt m_conveyor;
 
   /**
    * Feeds ball to shooter
    */
-  public FeedToShooter(Feeder feeder) {
+  public FeedToShooter(ConveyorBelt conveyor) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(feeder); // we do not require exclusive control of shooter!!!
+    addRequirements(conveyor);
 
-    m_feeder = feeder;
+    m_conveyor = conveyor;
   }
 
   // Called when the command is initially scheduled.
@@ -34,14 +34,14 @@ public class FeedToShooter extends CommandBase {
   @Override
   public void execute() {
 
-    m_feeder.feed();
+    m_conveyor.feed();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
-    m_feeder.dontFeed();
+    m_conveyor.dontFeed();
   }
 
   // Returns true when the command should end.

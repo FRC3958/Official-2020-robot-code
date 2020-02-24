@@ -8,8 +8,7 @@
 package frc.robot.commands.shooting;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.StopWheel;
+import frc.robot.subsystems.indexing.StopWheel;
 
 public class LoadToConveyor extends CommandBase {
   

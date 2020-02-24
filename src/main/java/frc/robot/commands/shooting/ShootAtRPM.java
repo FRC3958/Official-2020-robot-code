@@ -9,13 +9,12 @@ package frc.robot.commands.shooting;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.indexing.ConveyorBelt;
 import frc.robot.subsystems.HoodedShooter;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.StopWheel;
+import frc.robot.subsystems.indexing.SideBelt;
+import frc.robot.subsystems.indexing.StopWheel;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -24,16 +23,16 @@ public class ShootAtRPM extends ParallelRaceGroup {
   /**
    * Creates a new Shoot.
    */
-  public ShootAtRPM(HoodedShooter shooter, Indexer indexer, Feeder feeder, StopWheel stopWheel, DoubleSupplier rpm) {
+  public ShootAtRPM(HoodedShooter shooter, SideBelt sideBelt, ConveyorBelt conveyor, StopWheel stopWheel, DoubleSupplier rpm) {
 
     // ParallelRaceGroup
     super(
-      new FeedToStopWheel(indexer),         // the WHOLE time, feed to the stop-wheel
+      new FeedToStopWheel(sideBelt),        // the WHOLE time, feed to the stop-wheel
       new SequentialCommandGroup(
         new SpinUpToSpeed(shooter, rpm),    // spin up to the target RPM before anything
         new ParallelRaceGroup(
           new LoadToConveyor(stopWheel),    // load from the stop-wheel into the conveyor
-          new FeedToShooter(feeder),        // feed from the conveyor to the shooter
+          new FeedToShooter(conveyor),      // feed from the conveyor to the shooter
           new SpinUntilShot(shooter, rpm)   // spin at the target RPM until a shot is made, in which case end everything
         )
       )

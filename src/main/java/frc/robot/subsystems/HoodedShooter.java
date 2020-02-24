@@ -64,6 +64,7 @@ public class HoodedShooter extends SubsystemBase {
     
     SmartDashboard.putNumber("enc native", m_master.getSelectedSensorVelocity());
     SmartDashboard.putNumber("enc rpm", ShooterConstants.getRPMFromNativeVelocity(m_master.getSelectedSensorVelocity()));
+    SmartDashboard.putBoolean("shooter shot", isDippedPastShotThreshold());
   }
 
   public void setNative(int targetVelocity) {

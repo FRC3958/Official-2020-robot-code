@@ -5,27 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.indexing;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.FeederConstants;
+import frc.robot.Constants.IndexerConstants;
 
-public class Feeder extends SubsystemBase {
+public class SideBelt extends SubsystemBase {
 
-  private final WPI_TalonSRX m_conveyor = new WPI_TalonSRX(FeederConstants.kTalonPortConveyor);
+  private final WPI_TalonSRX m_sideways = new WPI_TalonSRX(IndexerConstants.kTalonPortSideways);
 
   /**
-   * Creates a new Feeder.
+   * Creates a new Indexer.
    */
-  public Feeder() {
+  public SideBelt() {
 
-    m_conveyor.configFactoryDefault();
+    m_sideways.configFactoryDefault();
 
-    m_conveyor.setNeutralMode(NeutralMode.Brake);
+    m_sideways.setNeutralMode(NeutralMode.Coast);
   }
 
   @Override
@@ -33,14 +33,11 @@ public class Feeder extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-
-  public void feed() {
-    
-    m_conveyor.set(ControlMode.PercentOutput, FeederConstants.kRunningPercentOutput);
+  public void spinSideways() {
+    m_sideways.set(ControlMode.PercentOutput, IndexerConstants.kRunningPercentOutput);
   }
 
-  public void dontFeed() {
-
-    m_conveyor.set(ControlMode.PercentOutput, 0.0);
+  public void stopSpinningSideways() {
+    m_sideways.set(ControlMode.PercentOutput, 0.0);
   }
 }
