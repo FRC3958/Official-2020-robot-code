@@ -12,11 +12,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IndexerConstants;
+import frc.robot.Constants.SideBeltConstants;
 
 public class SideBelt extends SubsystemBase {
 
-  private final WPI_TalonSRX m_sideways = new WPI_TalonSRX(IndexerConstants.kTalonPortSideways);
+  private final WPI_TalonSRX m_sideways = new WPI_TalonSRX(SideBeltConstants.kTalonPort);
 
   /**
    * Creates a new Indexer.
@@ -34,7 +34,7 @@ public class SideBelt extends SubsystemBase {
   }
 
   public void spinSideways() {
-    m_sideways.set(ControlMode.PercentOutput, IndexerConstants.kRunningPercentOutput);
+    m_sideways.set(ControlMode.PercentOutput, SideBeltConstants.kRunningPercentOutput);
   }
 
   public void stopSpinningSideways() {

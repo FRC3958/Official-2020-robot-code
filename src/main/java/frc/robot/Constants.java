@@ -165,16 +165,16 @@ public final class Constants {
         public static final int kSolenoidReverseChannel = 1;
     }
 
-    public static final class IndexerConstants {
+    public static final class SideBeltConstants {
 
-        public static final int kTalonPortSideways = 8;
+        public static final int kTalonPort = 8;
 
         public static final double kRunningPercentOutput = 0.6;
     }
 
-    public static final class FeederConstants {
+    public static final class ConveyorBeltConstants {
 
-        public static final int kTalonPortConveyor = 9;
+        public static final int kTalonPort = 9;
 
         public static final double kRunningPercentOutput = 0.5;
     }

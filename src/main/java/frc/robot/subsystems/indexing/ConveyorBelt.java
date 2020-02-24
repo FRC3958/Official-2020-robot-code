@@ -12,11 +12,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.FeederConstants;
+import frc.robot.Constants.ConveyorBeltConstants;
 
 public class ConveyorBelt extends SubsystemBase {
 
-  private final WPI_TalonSRX m_belt = new WPI_TalonSRX(FeederConstants.kTalonPortConveyor);
+  private final WPI_TalonSRX m_belt = new WPI_TalonSRX(ConveyorBeltConstants.kTalonPort);
 
   /**
    * Creates a new Feeder.
@@ -36,7 +36,7 @@ public class ConveyorBelt extends SubsystemBase {
 
   public void feed() {
     
-    m_belt.set(ControlMode.PercentOutput, FeederConstants.kRunningPercentOutput);
+    m_belt.set(ControlMode.PercentOutput, ConveyorBeltConstants.kRunningPercentOutput);
   }
 
   public void dontFeed() {
