@@ -28,7 +28,9 @@ public final class Constants {
 
     public static final int kTimeout = 100;
 
-    public static final int kEncoderResolution = 4096; // same encoders are used everywhere, so this is ok
+    public static final int kQuadEncoderResolution = 4096; // same encoders are used everywhere, so this is ok
+    public static final int kFalconResolution = 2048; // same encoders are used everywhere, so this is ok
+
 
     public static final class ControlConstants {
 
@@ -74,7 +76,7 @@ public final class Constants {
          * @return
          */
         public static int getNativeFromMeters(double meters) {
-            return (int)Math.round((meters / kWheelCircumferenceMeters) * kEncoderResolution);
+            return (int)Math.round((meters / kWheelCircumferenceMeters) * kQuadEncoderResolution);
         }
 
         /**
@@ -83,7 +85,7 @@ public final class Constants {
          * @return
          */
         public static double getMetersFromNative(int nativeUnits) {
-            return ((double)nativeUnits / (double)kEncoderResolution)
+            return ((double)nativeUnits / (double)kQuadEncoderResolution)
                 * kWheelCircumferenceMeters;
         }
 
@@ -134,11 +136,11 @@ public final class Constants {
          */
         public static int getVelocityNativeFromRPM(double rpm) {
 
-            return (int)Math.round((rpm / 600.0) * Constants.kEncoderResolution);
+            return (int)Math.round((rpm / 600.0) * Constants.kQuadEncoderResolution);
         }
 
         public static double getRPMFromNativeVelocity(int velocity) {
-            return (double)velocity * 600.0 / Constants.kEncoderResolution;
+            return (double)velocity * 600.0 / Constants.kQuadEncoderResolution;
         }
 
         public static final int kPIDLoopIdx = 0;
@@ -184,5 +186,23 @@ public final class Constants {
         public static final int kTalonPort = 10;
 
         public static final double kRunningPercentOutput = 0.3;
+    }
+
+    public static final class ClimberConstants {
+
+        public static final int kTalonPortHooker = 11;
+        public static final int kTalonPortLifter = 12;
+
+        public static final int kPrimaryPIDLoopIdx = 0;
+
+        public static final Gains kHookerPositionGains = new Gains(0.0, 0.0, 0.0, 0.0);
+
+        // TODO: replace placeholder
+        public static final int kHookerDeployedPosition = Constants.kQuadEncoderResolution * 50;
+
+        public static final Gains kWinchPositionGains = new Gains(0.0, 0.0, 0.0, 0.0);
+
+        // TODO: replace placeholder
+        public static final int kWinchLiftedPosition = Constants.kQuadEncoderResolution * 50;
     }
 }
