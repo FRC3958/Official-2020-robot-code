@@ -34,14 +34,14 @@ public class FeedToShooter extends CommandBase {
   @Override
   public void execute() {
 
-    m_conveyor.feed();
+    m_conveyor.spin();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
-    m_conveyor.dontFeed();
+    m_conveyor.stop();
   }
 
   // Returns true when the command should end.
