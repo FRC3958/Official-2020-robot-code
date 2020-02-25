@@ -161,10 +161,6 @@ public final class Constants {
 
         public static final double kRunningPercentOutput = 0.7;
 
-        // TODO: get these 2 values
-        public static final int kCimChannel = 4;
-        public static final double kEatenThreshold = 0.0;
-
         public static final int kSolenoidForwardChannel = 0;
         public static final int kSolenoidReverseChannel = 1;
     }

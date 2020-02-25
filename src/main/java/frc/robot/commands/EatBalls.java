@@ -44,7 +44,7 @@ public class EatBalls extends CommandBase {
   @Override
   public void end(boolean interrupted) {
 
-    m_intake.stopEating();
+    m_intake.dontEat();
 
     m_intake.liftBar();
   }

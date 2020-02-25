@@ -24,11 +24,6 @@ public class Intake extends SubsystemBase {
   private final DoubleSolenoid m_solenoid 
     = new DoubleSolenoid(IntakeConstants.kSolenoidForwardChannel, IntakeConstants.kSolenoidReverseChannel);
 
-  private final PowerDistributionPanel m_pdp = new PowerDistributionPanel();
-
-  private double m_lastDraw = 0.0;
-  private int m_ballsInPossession = 0;
-
   /**
    * Creates a new Intake.
    */
@@ -42,22 +37,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double draw = getCurrentDraw();
-
-    if(draw >= IntakeConstants.kEatenThreshold
-      && m_lastDraw < IntakeConstants.kEatenThreshold)
-    {
-      ++m_ballsInPossession;
-    }
-
-    m_lastDraw = draw;
-    SmartDashboard.putNumber("How many balls", getBallsInPossession());
-  }
-
-
-  public double getCurrentDraw() {
-
-    return m_pdp.getCurrent(IntakeConstants.kCimChannel);
   }
 
   public void dropBar() {
@@ -92,13 +71,8 @@ public class Intake extends SubsystemBase {
     m_wheels.set(ControlMode.PercentOutput, IntakeConstants.kRunningPercentOutput);
   }
 
-  public void stopEating() {
+  public void dontEat() {
 
     m_wheels.set(ControlMode.PercentOutput, 0.0);
-  }
-
-  public int getBallsInPossession() {
-
-    return m_ballsInPossession;
   }
 }
