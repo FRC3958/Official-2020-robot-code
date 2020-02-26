@@ -22,8 +22,9 @@ public class PrepareClimb extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-      new DeployHook(climber),
-      new RetractHook(climber)
+      new RaiseHook(climber),   // raise hook bar with piston
+      new DeployHook(climber),  // raise hook to grab height
+      new RetractHook(climber)  // retract hook string
     );
   }
 }

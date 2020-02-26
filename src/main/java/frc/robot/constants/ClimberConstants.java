@@ -16,6 +16,7 @@ public final class ClimberConstants {
 
     public static final int kTalonPortHooker = 11;
     public static final int kTalonPortLifter = 12;
+    public static final int kPCMIdPiston = 2;
 
     public static final int kPrimaryPIDLoopIdx = 0;
 

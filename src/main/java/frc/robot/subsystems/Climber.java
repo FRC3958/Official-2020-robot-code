@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ClimberConstants;
@@ -20,6 +21,8 @@ public class Climber extends SubsystemBase {
 
   private final WPI_TalonSRX m_hooker = new WPI_TalonSRX(ClimberConstants.kTalonPortHooker);
   private final WPI_TalonFX m_winch = new WPI_TalonFX(ClimberConstants.kTalonPortLifter);
+
+  private final Solenoid m_piston = new Solenoid(ClimberConstants.kPCMIdPiston);
 
   /**
    * Creates a new Climber.
@@ -52,6 +55,16 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void raiseHook() {
+
+    m_piston.set(true);
+  }
+
+  public void lowerHook() {
+
+    m_piston.set(false);
   }
 
   public void deployHook() {
