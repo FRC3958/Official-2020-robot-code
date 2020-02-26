@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-public class StickDrive extends CommandBase {
+public class TankDrive extends CommandBase {
 
   private final Drivetrain m_drive;
   private final DoubleSupplier m_forward, m_turn;
@@ -24,7 +24,7 @@ public class StickDrive extends CommandBase {
   /**
    * Creates a new StickDrive.
    */
-  public StickDrive(Drivetrain drive, DoubleSupplier forward, DoubleSupplier turn) {
+  public TankDrive(Drivetrain drive, DoubleSupplier forward, DoubleSupplier turn) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
 

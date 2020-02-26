@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.constants.ControlConstants;
 import frc.robot.commands.EatBalls;
-import frc.robot.commands.StickDrive;
+import frc.robot.commands.TankDrive;
 import frc.robot.commands.climbing.LiftBot;
 import frc.robot.commands.climbing.PrepareClimb;
 import frc.robot.commands.shooting.AlignToTarget;
@@ -71,7 +71,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     //Drive with stick (note: it is automatically linearly limited)
-    m_drive.setDefaultCommand(new StickDrive(m_drive,
+    m_drive.setDefaultCommand(new TankDrive(m_drive,
       () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
       () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
     );
