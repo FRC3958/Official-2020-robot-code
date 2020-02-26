@@ -87,7 +87,7 @@ public class Drivetrain extends SubsystemBase {
 
     m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
   }
-
+  
   @Override
   public void periodic() {
     // Serve odometry updates
