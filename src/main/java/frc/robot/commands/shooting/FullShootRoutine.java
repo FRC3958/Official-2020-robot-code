@@ -28,12 +28,12 @@ public class FullShootRoutine extends ParallelRaceGroup {
     // ParallelRaceGroup
     super(
       new FeedToStopWheel(sideBelt),        // the WHOLE time, feed to the stop-wheel
-      new SequentialCommandGroup(
-        new SpinUpToSpeed(shooter, rpm),    // spin up to the target RPM before anything
-        new ParallelRaceGroup(
-          new LoadToConveyor(stopWheel),    // load from the stop-wheel into the conveyor
-          new FeedToShooter(conveyor),      // feed from the conveyor to the shooter
-          new SpinUntilShot(shooter, rpm)   // spin at the target RPM until a shot is made, in which case end everything
+      new SequentialCommandGroup(           // then, in order:
+        new SpinUpToSpeed(shooter, rpm),    // 1. spin up to the target RPM 
+        new ParallelRaceGroup(              // 2. at the same time until a shot is made:
+          new LoadToConveyor(stopWheel),    //    - load from the stop-wheel into the conveyor
+          new FeedToShooter(conveyor),      //    - feed from the conveyor to the shooter
+          new SpinUntilShot(shooter, rpm)   //    - spin at the target RPM
         )
       )
     );
