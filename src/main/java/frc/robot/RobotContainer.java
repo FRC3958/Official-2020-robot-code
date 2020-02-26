@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.constants.ControlConstants;
 import frc.robot.commands.*;
-import frc.robot.commands.auto_commands.*;
 import frc.robot.commands.climbing.*;
 import frc.robot.commands.shooting.*;
 import frc.robot.subsystems.indexing.*;
