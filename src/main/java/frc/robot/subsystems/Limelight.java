@@ -15,8 +15,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.VisionConstants;
+import frc.robot.constants.FieldConstants;
+import frc.robot.constants.VisionConstants;
 
 public class Limelight extends SubsystemBase {
 

@@ -11,7 +11,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.HoodedShooter;
 
 public class SpinUntilShot extends CommandBase {

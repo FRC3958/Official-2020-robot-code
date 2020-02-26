@@ -15,8 +15,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.constants.Constants;
+import frc.robot.constants.ShooterConstants;
 
 public class HoodedShooter extends SubsystemBase {
 

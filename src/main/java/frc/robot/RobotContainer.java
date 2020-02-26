@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.ControlConstants;
+import frc.robot.constants.ControlConstants;
 import frc.robot.commands.EatBalls;
 import frc.robot.commands.StickDrive;
 import frc.robot.commands.climbing.LiftBot;

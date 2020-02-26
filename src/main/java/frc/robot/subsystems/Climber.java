@@ -13,8 +13,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.ClimberConstants;
+import frc.robot.constants.Constants;
+import frc.robot.constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
 
