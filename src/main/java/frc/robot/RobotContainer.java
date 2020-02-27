@@ -7,12 +7,25 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import frc.robot.constants.AutoConstants;
 import frc.robot.constants.ControlConstants;
+import frc.robot.constants.DriveConstants;
 import frc.robot.commands.EatBalls;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.climbing.LiftBot;
@@ -129,7 +142,50 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return null;
+    
+    var voltageConstraint = new DifferentialDriveVoltageConstraint(
+      new SimpleMotorFeedforward(
+        DriveConstants.ksVolts, 
+        DriveConstants.kvVoltSecondsPerMeter, 
+        DriveConstants.kaVoltSecondsSquaredPerMeter
+      ),
+      DriveConstants.kKinematics,
+      10 // not 12, account for voltage sag
+    );
+
+    var config = new TrajectoryConfig(
+      DriveConstants.kMaxVelocityMPS * .6, // 60% of max physical speed
+      DriveConstants.kMaxVelocityMPS / 3.0 // 3 seconds to reach max speed, deemed safe for auton
+    ).setKinematics(DriveConstants.kKinematics)
+    .addConstraint(voltageConstraint);
+
+
+    var trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of(
+        // internal waypoints
+      ),
+      new Pose2d(3, 0, new Rotation2d(0)),
+      config
+    );
+
+    var ramsete = new RamseteCommand(
+      trajectory, 
+      m_drive::getPose, 
+      new RamseteController(AutoConstants.kRameseteB, AutoConstants.kRameseteZeta),
+      new SimpleMotorFeedforward(
+        DriveConstants.ksVolts, 
+        DriveConstants.kvVoltSecondsPerMeter, 
+        DriveConstants.kaVoltSecondsSquaredPerMeter
+      ), 
+      DriveConstants.kKinematics, 
+      m_drive::getWheelSpeeds, 
+      new PIDController(DriveConstants.kPDriveVel, 0.0, 0.0),
+      new PIDController(DriveConstants.kPDriveVel, 0.0, 0.0),
+      m_drive::tankDriveVolts, 
+      m_drive
+    );
+
+    return ramsete.andThen(() -> m_drive.tankDriveVolts(0.0, 0.0));
   } 
 }

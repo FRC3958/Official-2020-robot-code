@@ -13,7 +13,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
@@ -29,8 +31,7 @@ public class Drivetrain extends SubsystemBase {
   private final WPI_TalonSRX m_leftSlave = new WPI_TalonSRX(DriveConstants.kTalonPortBackLeft);
   private final WPI_TalonSRX m_rightMaster = new WPI_TalonSRX(DriveConstants.kTalonPortFrontRight);
   private final WPI_TalonSRX m_rightSlave = new WPI_TalonSRX(DriveConstants.kTalonPortBackRight);
-  
-  private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(DriveConstants.kTrackWidth);
+
   private final DifferentialDriveOdometry m_odometry;
 
   private final AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
@@ -119,7 +120,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void chassisSpeedsDrive(ChassisSpeeds speeds) {
 
-    DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
+    DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.kKinematics.toWheelSpeeds(speeds);
 
     m_leftMaster.set(ControlMode.Velocity, 
       DriveConstants.getVelocityNativeFromMPS(wheelSpeeds.leftMetersPerSecond)
@@ -128,6 +129,16 @@ public class Drivetrain extends SubsystemBase {
     m_rightMaster.set(ControlMode.Velocity, 
       DriveConstants.getVelocityNativeFromMPS(wheelSpeeds.rightMetersPerSecond)
     );
+  }
+
+  public void tankDriveVolts(double leftVoltage, double rightVoltage) {
+
+    m_leftMaster.setVoltage(-leftVoltage);
+    m_rightMaster.setVoltage(+rightVoltage);
+  }
+
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
   }
 
   public double getLeftDistanceMeters() {
@@ -141,6 +152,14 @@ public class Drivetrain extends SubsystemBase {
   public void resetEncoders() {
     m_leftMaster.getSensorCollection().setQuadraturePosition(0, Constants.kTimeout);
     m_rightMaster.getSensorCollection().setQuadraturePosition(0, Constants.kTimeout);
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+
+    return new DifferentialDriveWheelSpeeds(
+      DriveConstants.getVelocityMPSFromNative(m_leftMaster.getSelectedSensorVelocity()),
+      DriveConstants.getVelocityMPSFromNative(m_rightMaster.getSelectedSensorVelocity())
+    );
   }
 
   /**
