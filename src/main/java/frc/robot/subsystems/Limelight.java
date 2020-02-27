@@ -20,7 +20,7 @@ import frc.robot.constants.VisionConstants;
 
 public class Limelight extends SubsystemBase {
 
-  enum LedMode {
+  public enum LedMode {
 
     kAuto(0),
     kForceOff(1),
@@ -37,7 +37,7 @@ public class Limelight extends SubsystemBase {
     }
   }
 
-  enum CamMode {
+   public enum CamMode {
 
     kVisionProcessor(0),
     kDriver(1);

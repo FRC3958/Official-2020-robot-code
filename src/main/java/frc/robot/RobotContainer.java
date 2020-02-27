@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.constants.ControlConstants;
 import frc.robot.commands.EatBalls;
+import frc.robot.commands.LimelightModepresets;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.climbing.LiftBot;
 import frc.robot.commands.climbing.PrepareClimb;
@@ -98,7 +99,8 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, ControlConstants.kKeybindClimb)
       .whenPressed(new LiftBot(m_climber)
     );
-  
+    new JoystickButton(m_operatorController, ControlConstants.kKeybindMode)
+      .whenPressed(new LimelightModepresets(m_limelight));
 
     /**
      * Shooter testing

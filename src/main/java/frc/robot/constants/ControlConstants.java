@@ -21,4 +21,5 @@ public final class ControlConstants {
     public static final int kKeybindShoot = Button.kA.value;
     public static final int kKeybindPrepareClimb = Button.kBack.value;
     public static final int kKeybindClimb = Button.kStart.value;
+	public static final int kKeybindMode = Button.kB.value;
 }
