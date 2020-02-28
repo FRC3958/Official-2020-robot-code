@@ -16,9 +16,11 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -39,7 +41,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.indexing.ConveyorBelt;
 import frc.robot.subsystems.indexing.SideBelt;
-import frc.robot.subsystems.indexing.StopWheel;
+import frc.robot.subsystems.indexing.Gateway;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -65,7 +67,7 @@ public class RobotContainer {
    */
   private final SideBelt m_indexer = new SideBelt();
   private final ConveyorBelt m_feeder = new ConveyorBelt();
-  private final StopWheel m_stopWheel = new StopWheel();
+  private final Gateway m_gateway = new Gateway();
   
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -98,7 +100,7 @@ public class RobotContainer {
     // over and over again at the same time
     new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
-      .whileHeld(new FullShootRoutine(m_shooter, m_indexer, m_feeder, m_stopWheel,
+      .whileHeld(new FullShootRoutine(m_shooter, m_indexer, m_feeder, m_gateway,
         () -> Util.calculateRPM(m_limelight.getApproximateDistance()))
     );
 
@@ -117,23 +119,23 @@ public class RobotContainer {
      * Shooter testing
      */
 
-    // SmartDashboard.putNumber("native target", 1000);
-    // SmartDashboard.putData("set native", 
-    //   new InstantCommand(
-    //     () -> m_shooter.setNative((int)SmartDashboard.getNumber("native target", 0)),
-    //     m_shooter
-    //   )
-    // );
+    SmartDashboard.putNumber("native target", 1000);
+    SmartDashboard.putData("set native", 
+      new InstantCommand(
+        () -> m_shooter.setNative((int)SmartDashboard.getNumber("native target", 0)),
+        m_shooter
+      )
+    );
 
-    // SmartDashboard.putNumber("rpm target", 500);
-    // SmartDashboard.putData("set rpm", 
-    //   new InstantCommand(
-    //     () -> m_shooter.setRPM(SmartDashboard.getNumber("rpm target", 0)),
-    //     m_shooter
-    //   )
-    // );
+    SmartDashboard.putNumber("rpm target", 500);
+    SmartDashboard.putData("set rpm", 
+      new InstantCommand(
+        () -> m_shooter.setRPM(SmartDashboard.getNumber("rpm target", 0)),
+        m_shooter
+      )
+    );
 
-    // SmartDashboard.putData("zero shooter", new InstantCommand(() -> m_shooter.setNative(0), m_shooter));
+    SmartDashboard.putData("zero shooter", new InstantCommand(() -> m_shooter.setNative(0), m_shooter));
   }
 
   /**
@@ -187,5 +189,7 @@ public class RobotContainer {
     );
 
     return ramsete.andThen(() -> m_drive.tankDriveVolts(0.0, 0.0));
+
+    // return null;
   } 
 }

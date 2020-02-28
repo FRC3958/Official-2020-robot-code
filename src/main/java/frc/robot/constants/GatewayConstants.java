@@ -10,7 +10,7 @@ package frc.robot.constants;
 /**
  * Add your docs here.
  */
-public final class StopWheelConstants {
+public final class GatewayConstants {
 
     public static final int kTalonPort = 10;
 

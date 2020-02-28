@@ -21,8 +21,7 @@ public final class DriveConstants {
     public static final int kTalonPortBackLeft = 3;
     public static final int kTalonPortBackRight = 4;
 
-    // TODO: measure track width
-    public static final double kTrackWidth = Units.feetToMeters(48.0 / 12.0);
+    public static final double kTrackWidth = Units.feetToMeters(21.2 / 12.0);
     public static final double kWheelDiameterMeters = Units.feetToMeters(8.0/12.0);
     public static final double kWheelCircumferenceMeters = Math.PI * kWheelDiameterMeters;
     

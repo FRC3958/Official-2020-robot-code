@@ -10,14 +10,14 @@ package frc.robot.commands.shooting;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.indexing.SideBelt;
 
-public class FeedToStopWheel extends CommandBase {
+public class FeedToGateway extends CommandBase {
   
   private final SideBelt m_sideBelt;
   
   /**
    * Feeds balls into the stop-wheel
    */
-  public FeedToStopWheel(SideBelt sideBelt) {
+  public FeedToGateway(SideBelt sideBelt) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(sideBelt);
 

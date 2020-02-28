@@ -15,8 +15,8 @@ import frc.robot.Gains;
  */
 public final class ShooterConstants {
 
-    public static final int kTalonPortLeft = 5;
-    public static final int kTalonPortRight = 6;
+    public static final int kTalonPortLeft = 3;//5; // TODO: temp
+    public static final int kTalonPortRight = 8;//6; // TODO: temp
 
     // TODO: get actual measurements
     public static final double kShooterHeightMeters = Units.feetToMeters(24.0 / 12.0);
