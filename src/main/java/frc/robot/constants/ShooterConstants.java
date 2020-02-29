@@ -35,8 +35,6 @@ public final class ShooterConstants {
         return (double)velocity * 600.0 / Constants.kQuadEncoderResolution;
     }
 
-    public static final int kPIDLoopIdx = 0;
-
     public static final Gains kGains = new Gains(0.03, 0.45, 0.0, 0.0);
 
     public static final double kAcceptablePercentError = 0.02;

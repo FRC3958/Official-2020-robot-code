@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -39,9 +40,30 @@ public class Drivetrain extends SubsystemBase {
    */
   public Drivetrain() {
 
-    m_leftMaster.configFactoryDefault();
+    TalonSRXConfiguration leftConfig = new TalonSRXConfiguration();
+    TalonSRXConfiguration rightConfig = new TalonSRXConfiguration();
+
+    // config sensor for right, will be used as remote sensor
+    leftConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
+    rightConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
+    
+    /**
+     * Gains config for both loops
+     */
+    leftConfig.slot0.kF = DriveConstants.kGainsVelocity.kF;
+    leftConfig.slot0.kP = DriveConstants.kGainsVelocity.kP;
+    leftConfig.slot0.kI = DriveConstants.kGainsVelocity.kI;
+    leftConfig.slot0.kD = DriveConstants.kGainsVelocity.kD;
+
+    rightConfig.slot0.kF = DriveConstants.kGainsVelocity.kF;
+    rightConfig.slot0.kP = DriveConstants.kGainsVelocity.kP;
+    rightConfig.slot0.kI = DriveConstants.kGainsVelocity.kI;
+    rightConfig.slot0.kD = DriveConstants.kGainsVelocity.kD;
+
+    // apply configs
+    m_leftMaster.configAllSettings(leftConfig);
+    m_rightMaster.configAllSettings(rightConfig);
     m_leftSlave.configFactoryDefault();
-    m_rightMaster.configFactoryDefault();
     m_rightSlave.configFactoryDefault();
 
     // brake for best control
@@ -49,10 +71,6 @@ public class Drivetrain extends SubsystemBase {
     m_leftSlave.setNeutralMode(NeutralMode.Brake);
     m_rightMaster.setNeutralMode(NeutralMode.Brake);
     m_rightSlave.setNeutralMode(NeutralMode.Brake);
-
-    // config sensor for right, will be used as remote sensor
-    m_leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, DriveConstants.kPrimaryPIDLoopIdx, Constants.kTimeout);
-    m_rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, DriveConstants.kPrimaryPIDLoopIdx, Constants.kTimeout);
 
     // config motor direction
     m_leftMaster.setInverted(false);
@@ -63,18 +81,6 @@ public class Drivetrain extends SubsystemBase {
     // sensor phases
     m_leftMaster.setSensorPhase(true);
     m_rightMaster.setSensorPhase(true);
-    
-    /**
-     * Gains config for both loops
-     */
-    m_leftMaster.config_kF(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kF);
-    m_leftMaster.config_kP(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kP);
-    m_leftMaster.config_kI(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kI); 
-    m_leftMaster.config_kD(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kD);
-    m_rightMaster.config_kF(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kF);
-    m_rightMaster.config_kP(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kP);
-    m_rightMaster.config_kI(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kI); 
-    m_rightMaster.config_kD(DriveConstants.kSlotVelocity, DriveConstants.kGainsVelocity.kD);
 
     // follow masters
     m_leftSlave.follow(m_leftMaster);

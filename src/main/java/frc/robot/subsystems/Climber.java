@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -29,25 +31,36 @@ public class Climber extends SubsystemBase {
    */
   public Climber() {
 
-    // encoder on hooker is used to deploy hook, then pull string back
-    m_hooker.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    TalonSRXConfiguration hookerConfig = new TalonSRXConfiguration();
 
-    m_hooker.config_kF(ClimberConstants.kPrimaryPIDLoopIdx, ClimberConstants.kHookerPositionGains.kF);
-    m_hooker.config_kP(ClimberConstants.kPrimaryPIDLoopIdx, ClimberConstants.kHookerPositionGains.kP);
-    m_hooker.config_kI(ClimberConstants.kPrimaryPIDLoopIdx, ClimberConstants.kHookerPositionGains.kI);
-    m_hooker.config_kD(ClimberConstants.kPrimaryPIDLoopIdx, ClimberConstants.kHookerPositionGains.kD);
+    // encoder on hooker is used to deploy hook, then pull string back
+    hookerConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
+
+    // config gains
+    hookerConfig.slot0.kF = ClimberConstants.kHookerPositionGains.kF;
+    hookerConfig.slot0.kP = ClimberConstants.kHookerPositionGains.kP;
+    hookerConfig.slot0.kI = ClimberConstants.kHookerPositionGains.kI;
+    hookerConfig.slot0.kD = ClimberConstants.kHookerPositionGains.kD;
+
+    // apply config
+    m_hooker.configAllSettings(hookerConfig);
+
+    TalonFXConfiguration winchConfig = new TalonFXConfiguration();
 
     // encoder on winch is used to lift to a desired height
-    m_winch.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    
-    // winch CANNOT turn backwards!!! zero any possible reverse values
-    m_winch.configNominalOutputReverse(0.0);
-    m_winch.configPeakOutputReverse(0.0);
+    winchConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
 
-    m_winch.config_kF(ClimberConstants.kPrimaryPIDLoopIdx, ClimberConstants.kWinchPositionGains.kF);
-    m_winch.config_kP(ClimberConstants.kPrimaryPIDLoopIdx, ClimberConstants.kWinchPositionGains.kP);
-    m_winch.config_kI(ClimberConstants.kPrimaryPIDLoopIdx, ClimberConstants.kWinchPositionGains.kI);
-    m_winch.config_kD(ClimberConstants.kPrimaryPIDLoopIdx, ClimberConstants.kWinchPositionGains.kD);
+    // winch CANNOT turn backwards!!! zero any possible reverse values
+    winchConfig.peakOutputReverse = 0.0;
+    winchConfig.nominalOutputReverse = 0.0;
+
+    winchConfig.slot0.kF = ClimberConstants.kWinchPositionGains.kF;
+    winchConfig.slot0.kP = ClimberConstants.kWinchPositionGains.kP;
+    winchConfig.slot0.kI = ClimberConstants.kWinchPositionGains.kI;
+    winchConfig.slot0.kD = ClimberConstants.kWinchPositionGains.kD;
+
+    // apply config
+    m_winch.configAllSettings(winchConfig);
 
     resetEncoders();
   }

@@ -24,6 +24,7 @@ public class Gateway extends SubsystemBase {
   public Gateway() {
 
     m_wheel.configFactoryDefault();
+    
     m_wheel.setNeutralMode(NeutralMode.Brake);
   }
 
