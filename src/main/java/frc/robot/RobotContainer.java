@@ -96,10 +96,12 @@ public class RobotContainer {
 
     // Toggle intake
     new JoystickButton(m_operatorController, ControlConstants.kKeybindToggleIntake)
-      .toggleWhenPressed(new EatBalls(m_intake));
+      .toggleWhenPressed(new EatBalls(m_intake)
+    );
 
     new JoystickButton(m_operatorController, ControlConstants.kKeybindUnintake)
-      .toggleWhenPressed(new UnEatBalls(m_intake));
+      .toggleWhenPressed(new UnEatBalls(m_intake)
+    );
 
     // Run entire shooting routine, maintaining alignment when held, and shoot balls
     // over and over again at the same time
@@ -107,7 +109,7 @@ public class RobotContainer {
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
       .whileHeld(new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
         () -> Util.calculateRPM(m_limelight.getApproximateDistance()))
-      );
+    );
 
     // Prepare climber
     new JoystickButton(m_operatorController, ControlConstants.kKeybindPrepareClimb)
@@ -118,30 +120,24 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, ControlConstants.kKeybindClimb)
       .whenPressed(new LiftBot(m_climber)
     );
+
     new JoystickButton(m_operatorController, ControlConstants.kKeybindMode)
-      .toggleWhenPressed(new SwitchToDriverMode(m_limelight));
+      .toggleWhenPressed(new SwitchToDriverMode(m_limelight)
+    );
 
     /**
      * Shooter testing
      */
 
-    SmartDashboard.putNumber("native target", 1000);
-    SmartDashboard.putData("set native", 
+    SmartDashboard.putNumber("RPM setpoint", 0);
+    SmartDashboard.putData("Set RPM setpoint", 
       new InstantCommand(
-        () -> m_shooter.setNative((int)SmartDashboard.getNumber("native target", 0)),
+        () -> m_shooter.setRPM(SmartDashboard.getNumber("RPM setpoint", 0)),
         m_shooter
       )
     );
 
-    SmartDashboard.putNumber("rpm target", 500);
-    SmartDashboard.putData("set rpm", 
-      new InstantCommand(
-        () -> m_shooter.setRPM(SmartDashboard.getNumber("rpm target", 0)),
-        m_shooter
-      )
-    );
-
-    SmartDashboard.putData("zero shooter", new InstantCommand(() -> m_shooter.setNative(0), m_shooter));
+    SmartDashboard.putData("Stop shooter", new InstantCommand(() -> m_shooter.setNative(0), m_shooter));
   }
 
   /**
