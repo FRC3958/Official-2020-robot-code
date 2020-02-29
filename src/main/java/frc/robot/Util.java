@@ -19,6 +19,7 @@ public class Util {
     //https://docs.google.com/spreadsheets/d/1oIpPNEuoaOrB24wLa9FMBx6Za_Jd8xJV_Y1EI6LmxWM/edit#gid=0
     public static double calculateRPM(double targetDistance) {
         
-        return 4297 - (433 * targetDistance) + (175 * Math.pow(targetDistance, 2));
+        // 4297 + -433x + 175x^2
+        return 4297 + (-433 * targetDistance) + (175 * Math.pow(targetDistance, 2));
     }
 }

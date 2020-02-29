@@ -134,7 +134,8 @@ public class Limelight extends SubsystemBase {
     // https://docs.limelightvision.io/en/latest/cs_estimating_distance.html
     // d = (h2-h1) / tan(a1+a2)
 
-    return (FieldConstants.kOuterPortCenterHeightMeters - VisionConstants.kLimelightMountHeightMeters)
-      / Math.tan(Units.degreesToRadians(VisionConstants.kLimelightMountAngleDeg + getAngleOffsetY()));
+    return ((FieldConstants.kOuterPortCenterHeightMeters - VisionConstants.kLimelightMountHeightMeters)
+      / Math.tan(Units.degreesToRadians(VisionConstants.kLimelightMountAngleDeg + getAngleOffsetY())))
+        - VisionConstants.kLimelightMountDistanceFromBackMeters;
   }
 }
