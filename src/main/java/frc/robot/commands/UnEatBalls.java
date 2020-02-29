@@ -5,23 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooting;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.indexing.Gateway;
+import frc.robot.subsystems.Intake;
 
-public class LoadToConveyor extends CommandBase {
-  
-  private final Gateway m_gateway;
-  
+public class UnEatBalls extends CommandBase {
   /**
-   * Loads ball into the conveyor
+   * Creates a new UnEatBalls.
    */
-  public LoadToConveyor(Gateway gateway) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(gateway);
+  private final Intake m_intake;
 
-    m_gateway = gateway;
+  public UnEatBalls(Intake intake) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intake);
+
+    m_intake = intake;
   }
 
   // Called when the command is initially scheduled.
@@ -32,13 +31,13 @@ public class LoadToConveyor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_gateway.spin();
+    m_intake.uneat();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_gateway.stop();
+    m_intake.dontEat();
   }
 
   // Returns true when the command should end.

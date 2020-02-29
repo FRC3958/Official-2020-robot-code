@@ -19,7 +19,7 @@ public class SideBelt extends SubsystemBase {
   private final WPI_TalonSRX m_sideways = new WPI_TalonSRX(SideBeltConstants.kTalonPort);
 
   /**
-   * Creates a new Indexer.
+   * Clears jams and places balls into the gateway
    */
   public SideBelt() {
 

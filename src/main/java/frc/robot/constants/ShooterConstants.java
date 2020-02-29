@@ -18,9 +18,8 @@ public final class ShooterConstants {
     public static final int kTalonPortLeft = 5;
     public static final int kTalonPortRight = 6;
 
-    // TODO: get actual measurements
-    public static final double kShooterHeightMeters = Units.feetToMeters(24.0 / 12.0);
-    public static final double kShooterAngleDeg = 30.0;
+    public static final double kShooterHeightMeters = Units.feetToMeters(26.0 / 12.0); // center of ball
+    public static final double kShooterAngleDeg = 26.5;
 
     /**
      * Convert from native units per 100ms to rotations per minute
@@ -35,8 +34,6 @@ public final class ShooterConstants {
     public static double getRPMFromNativeVelocity(int velocity) {
         return (double)velocity * 600.0 / Constants.kQuadEncoderResolution;
     }
-
-    public static final int kPIDLoopIdx = 0;
 
     public static final Gains kGains = new Gains(0.03, 0.45, 0.0, 0.0);
 

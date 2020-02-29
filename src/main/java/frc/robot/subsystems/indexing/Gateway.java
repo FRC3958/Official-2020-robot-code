@@ -12,18 +12,19 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.StopWheelConstants;
+import frc.robot.constants.GatewayConstants;
 
-public class StopWheel extends SubsystemBase {
+public class Gateway extends SubsystemBase {
 
-  private final WPI_TalonSRX m_wheel = new WPI_TalonSRX(StopWheelConstants.kTalonPort);
+  private final WPI_TalonSRX m_wheel = new WPI_TalonSRX(GatewayConstants.kTalonPort);
 
   /**
-   * Creates a new StopWheel.
+   * Leads balls into the conveyor.
    */
-  public StopWheel() {
+  public Gateway() {
 
     m_wheel.configFactoryDefault();
+    
     m_wheel.setNeutralMode(NeutralMode.Brake);
   }
 
@@ -33,7 +34,7 @@ public class StopWheel extends SubsystemBase {
   }
 
   public void spin() {
-    m_wheel.set(ControlMode.PercentOutput, StopWheelConstants.kRunningPercentOutput);
+    m_wheel.set(ControlMode.PercentOutput, GatewayConstants.kRunningPercentOutput);
   }
 
   public void stop() {

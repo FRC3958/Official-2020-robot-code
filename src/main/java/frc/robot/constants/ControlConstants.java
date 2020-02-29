@@ -23,5 +23,6 @@ public final class ControlConstants {
     public static final int kKeybindClimb = Button.kStart.value;
     public static final int kKeybindMode = Button.kB.value;
     
+	public static int kKeybindUnintake = Button.kBumperRight.value;
 }
 

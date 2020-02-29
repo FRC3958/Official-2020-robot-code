@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,27 +29,23 @@ public class HoodedShooter extends SubsystemBase {
    */
   public HoodedShooter() {
 
-    m_master.configFactoryDefault();
+    TalonSRXConfiguration masterConfig = new TalonSRXConfiguration();
+
+    // config feedback sensor
+    masterConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
+
+    // config gains
+    masterConfig.slot0.kF = ShooterConstants.kGains.kF;
+    masterConfig.slot0.kP = ShooterConstants.kGains.kP;
+    masterConfig.slot0.kI = ShooterConstants.kGains.kI;
+    masterConfig.slot0.kD = ShooterConstants.kGains.kD;
+
+    // apply configs
+    m_master.configAllSettings(masterConfig);
     m_slave.configFactoryDefault();
-
-    // coast for faster subsequent rev ups and less wear and tear
-    m_master.setNeutralMode(NeutralMode.Coast);
-    m_slave.setNeutralMode(NeutralMode.Coast);
-
-    // config encoder for use in loop
-    m_master.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, ShooterConstants.kPIDLoopIdx, Constants.kTimeout);
 
     // phase sensor
     m_master.setSensorPhase(false);
-
-    // TODO: add way of clearing jams by reversing motors 
-
-    // config gains
-    // running the loop on the talon
-    m_master.config_kF(ShooterConstants.kPIDLoopIdx, ShooterConstants.kGains.kF);
-    m_master.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kGains.kP);
-    m_master.config_kI(ShooterConstants.kPIDLoopIdx, ShooterConstants.kGains.kI);
-    m_master.config_kD(ShooterConstants.kPIDLoopIdx, ShooterConstants.kGains.kD);
     
     // slavery
     m_slave.follow(m_master);
@@ -58,9 +55,8 @@ public class HoodedShooter extends SubsystemBase {
   @Override
   public void periodic() {
     
-    SmartDashboard.putNumber("enc native", m_master.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("enc rpm", ShooterConstants.getRPMFromNativeVelocity(m_master.getSelectedSensorVelocity()));
-    SmartDashboard.putBoolean("shooter shot", isDippedPastShotThreshold());
+    SmartDashboard.putNumber("Shooter RPM", ShooterConstants.getRPMFromNativeVelocity(m_master.getSelectedSensorVelocity()));
+
   }
 
   public void setNative(int targetVelocity) {

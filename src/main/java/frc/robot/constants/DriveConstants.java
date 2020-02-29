@@ -7,6 +7,7 @@
 
 package frc.robot.constants;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Gains;
 
@@ -20,10 +21,17 @@ public final class DriveConstants {
     public static final int kTalonPortBackLeft = 3;
     public static final int kTalonPortBackRight = 4;
 
-    // TODO: measure track width
-    public static final double kTrackWidth = Units.feetToMeters(48.0 / 12.0);
+    public static final double kTrackWidth = Units.feetToMeters(21.2 / 12.0);
     public static final double kWheelDiameterMeters = Units.feetToMeters(8.0/12.0);
     public static final double kWheelCircumferenceMeters = Math.PI * kWheelDiameterMeters;
+    
+    public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(DriveConstants.kTrackWidth);
+
+    // TODO: characterize drivetrain
+    public static final double ksVolts = 0.0;
+    public static final double kvVoltSecondsPerMeter = 0.0;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.0;
+    public static final double kPDriveVel = 0.0;
 
     /**
      * Convert from meters to native untis

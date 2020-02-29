@@ -19,7 +19,7 @@ public class ConveyorBelt extends SubsystemBase {
   private final WPI_TalonSRX m_belt = new WPI_TalonSRX(ConveyorBeltConstants.kTalonPort);
 
   /**
-   * Creates a new Feeder.
+   * Feeds into the shooter wheel.
    */
   public ConveyorBelt() {
 
