@@ -24,6 +24,7 @@ public class LimelightModepresets extends CommandBase {
   public LimelightModepresets(Limelight limelight ) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(limelight);
+    m_limelight = limelight;
     
   }
 
@@ -36,15 +37,16 @@ public class LimelightModepresets extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_limelight.setLedMode(LedMode.kForceOn);
-    m_limelight.setCamMode(CamMode.kVisionProcessor);
+    m_limelight.setLedMode(LedMode.kForceOff);
+    m_limelight.setCamMode(CamMode.kDriver);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_limelight.setLedMode(LedMode.kForceOff);
-    m_limelight.setCamMode(CamMode.kDriver);
+   
+    m_limelight.setLedMode(LedMode.kForceOn);
+    m_limelight.setCamMode(CamMode.kVisionProcessor);
 
   }
 

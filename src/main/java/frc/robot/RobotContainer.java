@@ -100,7 +100,7 @@ public class RobotContainer {
       .whenPressed(new LiftBot(m_climber)
     );
     new JoystickButton(m_operatorController, ControlConstants.kKeybindMode)
-      .whenPressed(new LimelightModepresets(m_limelight));
+      .toggleWhenPressed(new LimelightModepresets(m_limelight));
 
     /**
      * Shooter testing

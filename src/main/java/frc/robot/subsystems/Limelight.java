@@ -52,7 +52,7 @@ public class Limelight extends SubsystemBase {
     }
   }
   
-  private final NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");;
+  public NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");;
   
   private final NetworkTableEntry m_tv = m_table.getEntry("tv");
   private final NetworkTableEntry m_tx = m_table.getEntry("tx");
