@@ -126,10 +126,10 @@ public class Limelight extends SubsystemBase {
   }
 
   /**
-   * Gets the HORIZONTAL distance to the target
+   * Gets the HORIZONTAL distance to the target in meters
    * @return
    */
-  public double getApproximateDistance() {
+  public double getApproximateDistanceMeters() {
 
     // https://docs.limelightvision.io/en/latest/cs_estimating_distance.html
     // d = (h2-h1) / tan(a1+a2)

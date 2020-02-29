@@ -108,7 +108,7 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
       .whileHeld(new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
-        () -> Util.calculateRPM(m_limelight.getApproximateDistance()))
+        () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()))
     );
 
     // Prepare climber
