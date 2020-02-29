@@ -19,7 +19,7 @@ public class Gateway extends SubsystemBase {
   private final WPI_TalonSRX m_wheel = new WPI_TalonSRX(GatewayConstants.kTalonPort);
 
   /**
-   * Creates a new StopWheel.
+   * Leads balls into the conveyor.
    */
   public Gateway() {
 

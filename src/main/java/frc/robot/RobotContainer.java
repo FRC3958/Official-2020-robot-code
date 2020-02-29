@@ -67,8 +67,8 @@ public class RobotContainer {
   /**
    * Indexing subsystems
    */
-  private final SideBelt m_indexer = new SideBelt();
-  private final ConveyorBelt m_feeder = new ConveyorBelt();
+  private final SideBelt m_sideBelt = new SideBelt();
+  private final ConveyorBelt m_conveyor = new ConveyorBelt();
   private final Gateway m_gateway = new Gateway();
 
   /**
@@ -104,7 +104,7 @@ public class RobotContainer {
     // over and over again at the same time
     new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
-      .whileHeld(new FullShootRoutine(m_shooter, m_indexer, m_feeder, m_gateway,
+      .whileHeld(new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
         () -> Util.calculateRPM(m_limelight.getApproximateDistance()))
     );
 
