@@ -20,7 +20,7 @@ import frc.robot.constants.VisionConstants;
 
 public class Limelight extends SubsystemBase {
 
- /* public enum LedMode {
+  public enum LedMode {
 
     kAuto(0),
     kForceOff(1),
@@ -51,7 +51,7 @@ public class Limelight extends SubsystemBase {
       return value;
     }
   }
-  */
+  
   private final NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");;
   
   private final NetworkTableEntry m_tv = m_table.getEntry("tv");
@@ -71,15 +71,15 @@ public class Limelight extends SubsystemBase {
 
   }
 
-  public void setCamMode(int mode){
+  public void setCamMode(CamMode mode){
 
-    m_camMode.setNumber(mode);
+    m_camMode.setDouble(mode.getInt());
   }
 
   //led mode 1 meaning its off, 2 meaning its blinking, and 3 meaning its on
-  public void setLedMode(int mode){
+  public void setLedMode(LedMode mode){
 
-    m_ledMode.setNumber(mode);
+    m_ledMode.setDouble(mode.getInt());
   }
 
   @Override

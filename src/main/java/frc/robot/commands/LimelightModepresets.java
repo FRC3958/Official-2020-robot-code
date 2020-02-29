@@ -9,8 +9,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
-//import frc.robot.subsystems.Limelight.LedMode;
-//import frc.robot.subsystems.Limelight.CamMode;
+import frc.robot.subsystems.Limelight.CamMode;
+import frc.robot.subsystems.Limelight.LedMode;
+
 
 
 
@@ -29,20 +30,21 @@ public class LimelightModepresets extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+   
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_limelight.setLedMode(3);
-    m_limelight.setCamMode(0);
+    m_limelight.setLedMode(LedMode.kForceOn);
+    m_limelight.setCamMode(CamMode.kVisionProcessor);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_limelight.setLedMode(1);
-    m_limelight.setCamMode(1);
+    m_limelight.setLedMode(LedMode.kForceOff);
+    m_limelight.setCamMode(CamMode.kDriver);
 
   }
 
