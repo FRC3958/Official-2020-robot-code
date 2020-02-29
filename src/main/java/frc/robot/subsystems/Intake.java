@@ -68,6 +68,7 @@ public class Intake extends SubsystemBase {
 
     m_wheels.set(ControlMode.PercentOutput, IntakeConstants.kRunningPercentOutput);
   }
+  
   public void uneat(){
 
     m_wheels.set(ControlMode.PercentOutput, -IntakeConstants.kRunningPercentOutput);

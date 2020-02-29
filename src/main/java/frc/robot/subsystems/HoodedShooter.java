@@ -41,8 +41,6 @@ public class HoodedShooter extends SubsystemBase {
     // phase sensor
     m_master.setSensorPhase(false);
 
-    // TODO: add way of clearing jams by reversing motors 
-
     // config gains
     // running the loop on the talon
     m_master.config_kF(ShooterConstants.kPIDLoopIdx, ShooterConstants.kGains.kF);

@@ -14,10 +14,12 @@ public class UnEatBalls extends CommandBase {
   /**
    * Creates a new UnEatBalls.
    */
-  Intake m_intake;
+  private final Intake m_intake;
+
   public UnEatBalls(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
+
     m_intake = intake;
   }
 

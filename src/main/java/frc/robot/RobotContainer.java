@@ -88,16 +88,18 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // Drive with stick (note: it is automatically linearly limited)
-    m_drive.setDefaultCommand(new ArcadeDrive(m_drive, () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
-        () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1)));
+    m_drive.setDefaultCommand(new ArcadeDrive(m_drive, 
+      () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
+      () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
+    );
 
     // Toggle intake
     new JoystickButton(m_operatorController, ControlConstants.kKeybindToggleIntake)
-        .toggleWhenPressed(new EatBalls(m_intake));
+      .toggleWhenPressed(new EatBalls(m_intake));
 
     new JoystickButton(m_operatorController, ControlConstants.kKeybindUnintake)
-    .toggleWhenPressed(new UnEatBalls(m_intake)
-      );
+      .toggleWhenPressed(new UnEatBalls(m_intake));
+
     // Run entire shooting routine, maintaining alignment when held, and shoot balls
     // over and over again at the same time
     new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)

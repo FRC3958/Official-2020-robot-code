@@ -15,12 +15,11 @@ import frc.robot.Gains;
  */
 public final class ShooterConstants {
 
-    public static final int kTalonPortLeft = 3;//5; // TODO: temp
-    public static final int kTalonPortRight = 8;//6; // TODO: temp
+    public static final int kTalonPortLeft = 5;
+    public static final int kTalonPortRight = 6;
 
-    // TODO: get actual measurements
-    public static final double kShooterHeightMeters = Units.feetToMeters(24.0 / 12.0);
-    public static final double kShooterAngleDeg = 30.0;
+    public static final double kShooterHeightMeters = Units.feetToMeters(26.0 / 12.0); // center of ball
+    public static final double kShooterAngleDeg = 26.5;
 
     /**
      * Convert from native units per 100ms to rotations per minute
