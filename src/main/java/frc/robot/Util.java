@@ -16,9 +16,9 @@ public class Util {
         return (Math.abs(value) < deadband) ? 0.0 : value;
     }
 
-    // TODO: follow instructions in README to get a working quadratic
+    //https://docs.google.com/spreadsheets/d/1oIpPNEuoaOrB24wLa9FMBx6Za_Jd8xJV_Y1EI6LmxWM/edit#gid=0
     public static double calculateRPM(double targetDistance) {
-
-        return 0;
+        
+        return 4297 - (433 * targetDistance) + (175 * Math.pow(targetDistance, 2));
     }
 }
