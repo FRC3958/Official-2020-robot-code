@@ -29,6 +29,7 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.ControlConstants;
 import frc.robot.constants.DriveConstants;
 import frc.robot.commands.EatBalls;
+import frc.robot.commands.LimelightModepresets;
 import frc.robot.commands.UnEatBalls;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.climbing.LiftBot;
@@ -117,7 +118,8 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, ControlConstants.kKeybindClimb)
       .whenPressed(new LiftBot(m_climber)
     );
-  
+    new JoystickButton(m_operatorController, ControlConstants.kKeybindMode)
+      .toggleWhenPressed(new LimelightModepresets(m_limelight));
 
     /**
      * Shooter testing
