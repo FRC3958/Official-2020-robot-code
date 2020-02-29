@@ -10,12 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-
-
 public class EatBalls extends CommandBase {
 
   private final Intake m_intake;
-  
 
   /**
    * Creates a new EatBalls.
@@ -24,7 +21,6 @@ public class EatBalls extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     
-
     m_intake = intake;
   }
 

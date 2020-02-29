@@ -18,7 +18,6 @@ public class ArcadeDrive extends CommandBase {
 
   private final Drivetrain m_drive;
   private final DoubleSupplier m_forward, m_turn;
- 
 
   private final SlewRateLimiter m_forwardLimiter = new SlewRateLimiter(2);
   private final SlewRateLimiter m_turnLimiter = new SlewRateLimiter(2);

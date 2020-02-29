@@ -29,7 +29,7 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.ControlConstants;
 import frc.robot.constants.DriveConstants;
 import frc.robot.commands.EatBalls;
-import frc.robot.commands.LimelightModepresets;
+import frc.robot.commands.SwitchToDriverMode;
 import frc.robot.commands.UnEatBalls;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.climbing.LiftBot;
@@ -107,7 +107,7 @@ public class RobotContainer {
       .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
       .whileHeld(new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
         () -> Util.calculateRPM(m_limelight.getApproximateDistance()))
-    );
+      );
 
     // Prepare climber
     new JoystickButton(m_operatorController, ControlConstants.kKeybindPrepareClimb)
@@ -119,7 +119,7 @@ public class RobotContainer {
       .whenPressed(new LiftBot(m_climber)
     );
     new JoystickButton(m_operatorController, ControlConstants.kKeybindMode)
-      .toggleWhenPressed(new LimelightModepresets(m_limelight));
+      .toggleWhenPressed(new SwitchToDriverMode(m_limelight));
 
     /**
      * Shooter testing

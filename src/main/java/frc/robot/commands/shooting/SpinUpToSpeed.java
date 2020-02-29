@@ -13,13 +13,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.HoodedShooter;
 
-
-
 public class SpinUpToSpeed extends CommandBase {
   
   private final HoodedShooter m_shooter;
   private final DoubleSupplier m_rpm;
-  
 
   /**
    * Creates a new ArmShooter.
