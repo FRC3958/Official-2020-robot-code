@@ -13,10 +13,13 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Limelight.CamMode;
+import frc.robot.subsystems.Limelight.LedMode;
 
 public class AlignToTarget extends PIDCommand {
 
   private final boolean m_forever;
+  Limelight m_limelight;
 
   /**
    * Creates a new AlignToTarget.
@@ -51,11 +54,19 @@ public class AlignToTarget extends PIDCommand {
     );
 
     m_forever = forever;
+    m_limelight = limelight;
+    m_limelight.setLedMode(LedMode.kForceOn);
+    m_limelight.setCamMode(CamMode.kVisionProcessor);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (m_forever == true){
+
+      m_limelight.setLedMode(LedMode.kForceOff);
+      m_limelight.setCamMode(CamMode.kDriver);
+    }
     return m_forever ? false : getController().atSetpoint();
   }
 }
