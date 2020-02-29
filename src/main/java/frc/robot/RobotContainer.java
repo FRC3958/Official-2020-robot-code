@@ -29,6 +29,7 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.ControlConstants;
 import frc.robot.constants.DriveConstants;
 import frc.robot.commands.EatBalls;
+import frc.robot.commands.UnEatBalls;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.climbing.LiftBot;
 import frc.robot.commands.climbing.PrepareClimb;
@@ -44,10 +45,11 @@ import frc.robot.subsystems.indexing.SideBelt;
 import frc.robot.subsystems.indexing.Gateway;
 
 /**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
 
@@ -68,34 +70,34 @@ public class RobotContainer {
   private final SideBelt m_indexer = new SideBelt();
   private final ConveyorBelt m_feeder = new ConveyorBelt();
   private final Gateway m_gateway = new Gateway();
-  
+
   /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
+   * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
-    configureButtonBindings(); 
+    configureButtonBindings();
   }
 
   /**
-   * Use this method to define your button->command mappings.  Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
 
-    //Drive with stick (note: it is automatically linearly limited)
-    m_drive.setDefaultCommand(new ArcadeDrive(m_drive,
-      () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
-      () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
-    );
+    // Drive with stick (note: it is automatically linearly limited)
+    m_drive.setDefaultCommand(new ArcadeDrive(m_drive, () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
+        () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1)));
 
     // Toggle intake
     new JoystickButton(m_operatorController, ControlConstants.kKeybindToggleIntake)
-      .toggleWhenPressed(new EatBalls(m_intake)
-    );
+        .toggleWhenPressed(new EatBalls(m_intake));
 
+    new JoystickButton(m_operatorController, ControlConstants.kKeybindUnintake)
+    .toggleWhenPressed(new UnEatBalls(m_intake)
+      );
     // Run entire shooting routine, maintaining alignment when held, and shoot balls
     // over and over again at the same time
     new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
