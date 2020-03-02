@@ -126,7 +126,7 @@ public class Limelight extends SubsystemBase {
   }
 
   /**
-   * Gets the HORIZONTAL distance to the target in meters
+   * Gets the HORIZONTAL distance to the target from back of frame in meters
    * @return
    */
   public double getApproximateDistanceMeters() {
@@ -136,6 +136,6 @@ public class Limelight extends SubsystemBase {
 
     return ((FieldConstants.kOuterPortCenterHeightMeters - VisionConstants.kLimelightMountHeightMeters)
       / Math.tan(Units.degreesToRadians(VisionConstants.kLimelightMountAngleDeg + getAngleOffsetY())))
-        - VisionConstants.kLimelightMountDistanceFromBackMeters;
+        + VisionConstants.kLimelightMountDistanceFromBackMeters;
   }
 }
