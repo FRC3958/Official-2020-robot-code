@@ -8,22 +8,24 @@
 package frc.robot.commands.climbing;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 import frc.robot.subsystems.Climber;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class PrepareClimb extends SequentialCommandGroup {
+public class Climb extends SequentialCommandGroup {
   /**
-   * Creates a new FullClimbRoutine.
+   * Creates a new Climb.
    */
-  public PrepareClimb(Climber climber) {
+  public Climb(Climber climber) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-      new RaiseHook(climber).withTimeout(0.5), // raise hook bar with piston
-      new DeployHook(climber) // raise hook to grab height
+
+      new RetractHook(climber),
+      new LowerHook(climber).withTimeout(0.5),
+      new LiftBot(climber)
     );
   }
 }

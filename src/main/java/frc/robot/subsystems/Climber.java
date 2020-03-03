@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -52,7 +54,7 @@ public class Climber extends SubsystemBase {
 
     // winch CANNOT turn backwards!!! zero any possible reverse values
     winchConfig.peakOutputReverse = 0.0;
-    winchConfig.nominalOutputReverse = 0.0;
+    winchConfig.nominalOutputReverse = 0.0; 
 
     winchConfig.slot0.kF = ClimberConstants.kWinchPositionGains.kF;
     winchConfig.slot0.kP = ClimberConstants.kWinchPositionGains.kP;
@@ -61,6 +63,9 @@ public class Climber extends SubsystemBase {
 
     // apply config
     m_winch.configAllSettings(winchConfig);
+
+    m_winch.setNeutralMode(NeutralMode.Brake);
+    m_winch.setInverted(InvertType.None);
 
     resetEncoders();
   }

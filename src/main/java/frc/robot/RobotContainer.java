@@ -99,6 +99,7 @@ public class RobotContainer {
       .toggleWhenPressed(new EatBalls(m_intake)
     );
 
+    // Clear intake
     new JoystickButton(m_operatorController, ControlConstants.kKeybindUnintake)
       .toggleWhenPressed(new UnEatBalls(m_intake)
     );
@@ -121,6 +122,7 @@ public class RobotContainer {
       .whenPressed(new LiftBot(m_climber)
     );
 
+    // Switch driver mode
     new JoystickButton(m_operatorController, ControlConstants.kKeybindMode)
       .toggleWhenPressed(new SwitchToDriverMode(m_limelight)
     );
