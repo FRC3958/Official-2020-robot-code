@@ -11,17 +11,17 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.subsystems.HoodedShooter;
+import frc.robot.subsystems.Shooter;
 
 public class SpinUpToSpeed extends CommandBase {
   
-  private final HoodedShooter m_shooter;
+  private final Shooter m_shooter;
   private final DoubleSupplier m_rpm;
 
   /**
    * Creates a new ArmShooter.
    */
-  public SpinUpToSpeed(HoodedShooter shooter, DoubleSupplier rpm) {
+  public SpinUpToSpeed(Shooter shooter, DoubleSupplier rpm) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
     
@@ -49,6 +49,7 @@ public class SpinUpToSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_shooter.getClosedLoopErrorPercent()) <= ShooterConstants.kAcceptablePercentError;
+    return Math.abs(m_shooter.getClosedLoopErrorPercent()) <=
+      ShooterConstants.kAcceptablePercentError;
   }
 }

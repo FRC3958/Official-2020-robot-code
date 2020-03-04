@@ -12,11 +12,11 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.subsystems.HoodedShooter;
+import frc.robot.subsystems.Shooter;
 
 public class SpinUntilShot extends CommandBase {
 
-  private final HoodedShooter m_shooter;
+  private final Shooter m_shooter;
   private final DoubleSupplier m_rpm;
 
   private final Timer m_timer = new Timer();
@@ -24,7 +24,7 @@ public class SpinUntilShot extends CommandBase {
   /**
    * Creates a new SpinUntilShot.
    */
-  public SpinUntilShot(HoodedShooter shooter, DoubleSupplier rpm) {
+  public SpinUntilShot(Shooter shooter, DoubleSupplier rpm) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
 

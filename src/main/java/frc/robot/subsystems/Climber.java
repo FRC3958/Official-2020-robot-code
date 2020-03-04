@@ -17,11 +17,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
 import frc.robot.constants.ClimberConstants;
+import frc.robot.constants.Constants;
 
 public class Climber extends SubsystemBase {
 
@@ -72,33 +71,46 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void raiseHookBar() {
+  /**
+   * Hook BAR
+   */
+  
+  public void raiseShaft() {
 
     m_piston.set(Value.kForward);
   }
 
-  public void lowerHookBar() {
+  public void lowerShaft() {
 
     m_piston.set(Value.kReverse);
   }
 
-  public void deployHook() {
+  public boolean isShaftRaised() {
+
+    return m_piston.get() == Value.kForward;
+  }
+
+  /**
+   * Hook itself (which detaches)
+   */
+
+  public void extendShaft() {
 
     m_hooker.set(ControlMode.Position, ClimberConstants.kHookerDeployedPosition);
   }
 
-  public void retractHook() {
+  public void retractShaft() {
 
     m_hooker.set(ControlMode.Position, 0);
   }
 
-  public boolean isHookDeployed() {
+  public boolean isHookFullyExtended() {
 
     return ((Math.abs(ClimberConstants.kHookerDeployedPosition - m_hooker.getSelectedSensorPosition())) 
       / ClimberConstants.kHookerDeployedPosition) <= ClimberConstants.kHookerDeployedPercentTolerance;
   }
 
-  public boolean isHookRetracted() {
+  public boolean isHookFullyRetracted() {
 
     return ((Math.abs(ClimberConstants.kHookerDeployedPosition - m_hooker.getSelectedSensorPosition())) 
       / ClimberConstants.kHookerDeployedPosition) >= (1.0 - ClimberConstants.kHookerDeployedPercentTolerance);
@@ -106,7 +118,7 @@ public class Climber extends SubsystemBase {
 
   public void lift() {
 
-    m_winch.set(ControlMode.Velocity, 0.5);
+    m_winch.set(ControlMode.Velocity, ClimberConstants.kWinchOperationSpeed);
   }
 
   public void stopLifting() {

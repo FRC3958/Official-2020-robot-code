@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Climber;
 
-public class RetractHook extends CommandBase {
+public class RaiseShaft extends CommandBase {
   
   private final Climber m_climber;
-
+  
   /**
-   * Creates a new RetractHook.
+   * Creates a new RaiseHook.
    */
-  public RetractHook(Climber climber) {
+  public RaiseShaft(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
 
@@ -34,7 +34,7 @@ public class RetractHook extends CommandBase {
   @Override
   public void execute() {
 
-    m_climber.retractHook();
+    m_climber.raiseShaft();
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +45,6 @@ public class RetractHook extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_climber.isHookRetracted();
+    return m_climber.isShaftRaised();
   }
 }

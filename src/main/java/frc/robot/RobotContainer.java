@@ -7,43 +7,33 @@
 
 package frc.robot;
 
-import java.util.List;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.RamseteController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import frc.robot.constants.AutoConstants;
-import frc.robot.constants.ControlConstants;
-import frc.robot.constants.DriveConstants;
+import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.EatBalls;
 import frc.robot.commands.SwitchToDriverMode;
-import frc.robot.commands.UnEatBalls;
-import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.EjectBalls;
+import frc.robot.commands.climbing.ExtendShaft;
+import frc.robot.commands.climbing.LiftBot;
+import frc.robot.commands.climbing.LowerShaft;
+import frc.robot.commands.climbing.RaiseShaft;
+import frc.robot.commands.climbing.RetractShaft;
 import frc.robot.commands.shooting.AlignToTarget;
 import frc.robot.commands.shooting.FullShootRoutine;
+import frc.robot.constants.ControlConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.HoodedShooter;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.indexing.ConveyorBelt;
-import frc.robot.subsystems.indexing.SideBelt;
 import frc.robot.subsystems.indexing.Gateway;
-
-import frc.robot.commands.climbing.*;
+import frc.robot.subsystems.indexing.SideBelt;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -58,26 +48,57 @@ public class RobotContainer {
   private final XboxController m_driverController = new XboxController(ControlConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(ControlConstants.kOperatorControllerPort);
 
-  // // The robot's subsystems
-  // private final Drivetrain m_drive = new Drivetrain();
-  // private final Intake m_intake = new Intake();
-  // private final HoodedShooter m_shooter = new HoodedShooter();
-  // private final Limelight m_limelight = new Limelight();
+  // The robot's subsystems
+  private final Drivetrain m_drive = new Drivetrain();
+  
+  private final Intake m_intake = new Intake();
+  
+  private final Shooter m_shooter = new Shooter();
+  
+  private final Limelight m_limelight = new Limelight();
+  
   private final Climber m_climber = new Climber();
 
-  // /**
-  //  * Indexing subsystems
-  //  */
-  // private final SideBelt m_sideBelt = new SideBelt();
-  // private final ConveyorBelt m_conveyor = new ConveyorBelt();
-  // private final Gateway m_gateway = new Gateway();
+  private final SideBelt m_sideBelt = new SideBelt();
+  private final ConveyorBelt m_conveyor = new ConveyorBelt();
+  private final Gateway m_gateway = new Gateway();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
+
+    setupSmartDashboard();
     configureButtonBindings();
+  }
+
+  /**
+   * Puts all information to SmartDashboard. Putting anything general
+   */
+  private void setupSmartDashboard() {
+
+    /*
+     * Shooter testing
+     */
+
+    SmartDashboard.putNumber("RPM setpoint", 0);
+    SmartDashboard.putData("Set RPM setpoint", 
+      new InstantCommand(
+        () -> m_shooter.setRPM(SmartDashboard.getNumber("RPM setpoint", 0)),
+        m_shooter
+      )
+    );
+
+    SmartDashboard.putData("Zero shooter", 
+      new InstantCommand(() -> m_shooter.setNative(0), m_shooter)
+    );
+
+    /**
+     * Climber testing
+     */
+
+    SmartDashboard.putData("Extend hook shaft", new ExtendShaft(m_climber));
+    SmartDashboard.putData("Retract hook shaft", new RetractShaft(m_climber));
   }
 
   /**
@@ -88,63 +109,67 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    // config controls
+    configureDriverControls(m_driverController);
+    configureOperatorControls(m_operatorController);
+  }
+
+  /**
+   * Configure all driver controls on the given controller
+   * @param controller
+   */
+  private void configureDriverControls(XboxController controller) {
+    
     // Drive with stick (note: it is automatically linearly limited)
-    // m_drive.setDefaultCommand(new ArcadeDrive(m_drive, 
-    //   () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
-    //   () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
-    // );
+    m_drive.setDefaultCommand(new ArcadeDrive(m_drive, 
+      () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
+      () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
+    );
+  }
 
-    // // Toggle intake
-    // new JoystickButton(m_operatorController, ControlConstants.kKeybindToggleIntake)
-    //   .toggleWhenPressed(new EatBalls(m_intake)
-    // );
+  /**
+   * Configure all operator controls on the given controller
+   * @param controller
+   */
+  private void configureOperatorControls(XboxController controller) {
 
-    // // Clear intake
-    // new JoystickButton(m_operatorController, ControlConstants.kKeybindUnintake)
-    //   .toggleWhenPressed(new UnEatBalls(m_intake)
-    // );
+    // Toggle intake
+    new JoystickButton(m_operatorController, ControlConstants.Operator.kToggleIntake)
+      .toggleWhenPressed(new EatBalls(m_intake)
+    );
 
-    // // Run entire shooting routine, maintaining alignment when held, and shoot balls
-    // // over and over again at the same time
-    // new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
-    //   .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
-    //   .whileHeld(new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
-    //     () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()))
-    // );
+    // Clear intake
+    new JoystickButton(m_operatorController, ControlConstants.Operator.kEjectBalls)
+      .toggleWhenPressed(new EjectBalls(m_intake)
+    );
 
-    // Prepare climber
-    new JoystickButton(m_operatorController, ControlConstants.kKeybindPrepareClimb)
-      .whenPressed(new PrepareClimb(m_climber))
-      .whenReleased(new RetractHook(m_climber)
+    // Run entire shooting routine, maintaining alignment when held, and shoot balls
+    // over and over again at the same time
+    new JoystickButton(m_operatorController, ControlConstants.Operator.kShoot)
+      .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
+      .whileHeld(new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
+        () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()))
+    );
+
+    // Lift shaft and put hook above bar
+    new JoystickButton(m_operatorController, ControlConstants.Operator.kPrepareClimb)
+      .whenHeld(
+        new RaiseShaft(m_climber)               // first raise shaft (with solenoid)
+        .andThen(new ExtendShaft(m_climber))    // then extend shaft (like a toy lightsaber)
+      )
+      .whenReleased(new RetractShaft(m_climber) // retract hook when released
     );
 
     // Climb
-    new JoystickButton(m_operatorController, ControlConstants.kKeybindClimb)
-      .whenPressed(new LowerHookBar(m_climber))
-      .whenHeld(new LiftBot(m_climber)
+    new JoystickButton(m_operatorController, ControlConstants.Operator.kClimb)
+      .whenPressed(new LowerShaft(m_climber)) // first lower shaft
+      .whenHeld(new LiftBot(m_climber)        // lift bot while pressing
+    );    
+
+    // Switch driver mode limelight
+    new JoystickButton(m_operatorController, ControlConstants.Operator.kLimelightModeSwitch)
+      .toggleWhenPressed(new SwitchToDriverMode(m_limelight)
     );
-
-    SmartDashboard.putData(new DeployHook(m_climber));
-    SmartDashboard.putData(new RetractHook(m_climber));
-
-    // // Switch driver mode
-    // new JoystickButton(m_operatorController, ControlConstants.kKeybindMode)
-    //   .toggleWhenPressed(new SwitchToDriverMode(m_limelight)
-    // );
-
-    // /**
-    //  * Shooter testing
-    //  */
-
-    // SmartDashboard.putNumber("RPM setpoint", 0);
-    // SmartDashboard.putData("Set RPM setpoint", 
-    //   new InstantCommand(
-    //     () -> m_shooter.setRPM(SmartDashboard.getNumber("RPM setpoint", 0)),
-    //     m_shooter
-    //   )
-    // );
-
-    // SmartDashboard.putData("Stop shooter", new InstantCommand(() -> m_shooter.setNative(0), m_shooter));
   }
 
   /**

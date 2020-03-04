@@ -12,7 +12,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.indexing.ConveyorBelt;
-import frc.robot.subsystems.HoodedShooter;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.indexing.SideBelt;
 import frc.robot.subsystems.indexing.Gateway;
 
@@ -23,17 +23,17 @@ public class FullShootRoutine extends ParallelRaceGroup {
   /**
    * Full shooting routine
    */
-  public FullShootRoutine(HoodedShooter shooter, SideBelt sideBelt, ConveyorBelt conveyor, Gateway Gateway, DoubleSupplier rpm) {
+  public FullShootRoutine(Shooter shooter, SideBelt sideBelt, ConveyorBelt conveyor, Gateway Gateway, DoubleSupplier rpm) {
 
     // ParallelRaceGroup
     super(
-      new FeedToGateway(sideBelt),        // the WHOLE time, feed to the stop-wheel
-      new SequentialCommandGroup(           // then, in order:
-        new SpinUpToSpeed(shooter, rpm),    // 1. spin up to the target RPM 
-        new ParallelRaceGroup(              // 2. at the same time until a shot is made:
-          new LoadToConveyor(Gateway),    //    - load from the stop-wheel into the conveyor
-          new FeedToShooter(conveyor),      //    - feed from the conveyor to the shooter
-          new SpinUntilShot(shooter, rpm)   //    - spin at the target RPM
+      new FeedToGateway(sideBelt),        // the WHOLE time, direct balls to the stop-wheel
+      new SequentialCommandGroup(         // then, in order:
+        new SpinUpToSpeed(shooter, rpm),  // 1. spin up to the target RPM 
+        new ParallelRaceGroup(            // 2. at the same time until a shot is made:
+          new LoadToConveyor(Gateway),    //    - load from the gateway into the conveyor
+          new FeedToShooter(conveyor),    //    - feed from the conveyor to the shooter
+          new SpinUntilShot(shooter, rpm) //    - spin at the target RPM
         )
       )
     );

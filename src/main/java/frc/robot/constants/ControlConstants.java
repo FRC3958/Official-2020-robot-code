@@ -17,12 +17,22 @@ public final class ControlConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
 
-    public static final int kKeybindToggleIntake = Button.kBumperLeft.value;
-    public static final int kKeybindShoot = Button.kA.value;
-    public static final int kKeybindPrepareClimb = Button.kBack.value;
-    public static final int kKeybindClimb = Button.kStart.value;
-    public static final int kKeybindMode = Button.kB.value;
-    
-	public static int kKeybindUnintake = Button.kBumperRight.value;
+    public static class Driver {
+
+        
+    }
+
+    public static class Operator {
+
+        public static final int kToggleIntake           = Button.kBumperLeft.value;
+        public static final int kEjectBalls             = Button.kBumperRight.value;
+
+        public static final int kShoot                  = Button.kA.value;
+
+        public static final int kPrepareClimb           = Button.kBack.value;
+        public static final int kClimb                  = Button.kStart.value;
+        
+        public static final int kLimelightModeSwitch    = Button.kB.value;
+    }
 }
 

@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ShooterConstants;
 
-public class HoodedShooter extends SubsystemBase {
+public class Shooter extends SubsystemBase {
 
   private final WPI_TalonSRX m_master = new WPI_TalonSRX(ShooterConstants.kTalonPortRight);
   private final WPI_TalonSRX m_slave = new WPI_TalonSRX(ShooterConstants.kTalonPortLeft); 
@@ -24,7 +24,7 @@ public class HoodedShooter extends SubsystemBase {
   /**
    * Creates a new SideShooter.
    */
-  public HoodedShooter() {
+  public Shooter() {
 
     TalonSRXConfiguration masterConfig = new TalonSRXConfiguration();
 
@@ -52,8 +52,7 @@ public class HoodedShooter extends SubsystemBase {
   @Override
   public void periodic() {
     
-    SmartDashboard.putNumber("Shooter RPM", ShooterConstants.getRPMFromNativeVelocity(m_master.getSelectedSensorVelocity()));
-
+    SmartDashboard.putNumber("Shooter RPM", getRPM());
   }
 
   public void setNative(int targetVelocity) {
@@ -64,6 +63,11 @@ public class HoodedShooter extends SubsystemBase {
   public void setRPM(double rpm) {
 
     setNative(ShooterConstants.getVelocityNativeFromRPM(rpm));
+  }
+
+  public double getRPM() {
+    
+    return ShooterConstants.getRPMFromNativeVelocity(m_master.getSelectedSensorVelocity());
   }
 
   /**

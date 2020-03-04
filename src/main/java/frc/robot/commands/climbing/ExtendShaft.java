@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Climber;
 
-public class DeployHook extends CommandBase {
+public class ExtendShaft extends CommandBase {
 
   private final Climber m_climber;
 
   /**
    * Creates a new DeployHook.
    */
-  public DeployHook(Climber climber) {
+  public ExtendShaft(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
 
@@ -34,7 +34,7 @@ public class DeployHook extends CommandBase {
   @Override
   public void execute() {
 
-    m_climber.deployHook();
+    m_climber.extendShaft();
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +45,6 @@ public class DeployHook extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_climber.isHookDeployed();
+    return m_climber.isHookFullyExtended();
   }
 }

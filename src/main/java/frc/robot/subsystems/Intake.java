@@ -19,8 +19,8 @@ import frc.robot.constants.IntakeConstants;
 public class Intake extends SubsystemBase {
 
   private final WPI_TalonSRX m_wheels = new WPI_TalonSRX(IntakeConstants.kTalonPort);
-  // private final DoubleSolenoid m_solenoid 
-  //   = new DoubleSolenoid(IntakeConstants.kSolenoidForwardChannel, IntakeConstants.kSolenoidReverseChannel);
+  private final DoubleSolenoid m_solenoid 
+    = new DoubleSolenoid(IntakeConstants.kSolenoidForwardChannel, IntakeConstants.kSolenoidReverseChannel);
 
   /**
    * Creates a new Intake.
@@ -39,12 +39,12 @@ public class Intake extends SubsystemBase {
 
   public void dropBar() {
 
-    // m_solenoid.set(Value.kForward);
+    m_solenoid.set(Value.kForward);
   }
 
   public void liftBar() {
 
-    // m_solenoid.set(Value.kReverse);
+    m_solenoid.set(Value.kReverse);
   }
 
   /**
@@ -53,8 +53,7 @@ public class Intake extends SubsystemBase {
    */
   public boolean isBarDown() {
 
-    return false;
-    // return m_solenoid.get() == Value.kForward;
+    return m_solenoid.get() == Value.kForward;
   }
 
   public void toggleBar() {
@@ -67,15 +66,15 @@ public class Intake extends SubsystemBase {
 
   public void eat() {
 
-    m_wheels.set(ControlMode.PercentOutput, IntakeConstants.kRunningPercentOutput);
+    m_wheels.set(ControlMode.PercentOutput, IntakeConstants.kOperationSpeed);
   }
   
-  public void uneat(){
+  public void eject(){
 
-    m_wheels.set(ControlMode.PercentOutput, -IntakeConstants.kRunningPercentOutput);
+    m_wheels.set(ControlMode.PercentOutput, -IntakeConstants.kOperationSpeed);
   }
 
-  public void dontEat() {
+  public void stopEating() {
 
     m_wheels.set(ControlMode.PercentOutput, 0.0);
   }

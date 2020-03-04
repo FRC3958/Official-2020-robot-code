@@ -32,10 +32,6 @@ public class EatBalls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   
-    if(!m_intake.isBarDown()) {
-      m_intake.dropBar();
-    }
 
     m_intake.eat();
   }
@@ -44,9 +40,7 @@ public class EatBalls extends CommandBase {
   @Override
   public void end(boolean interrupted) {
 
-    m_intake.dontEat();
-
-    m_intake.liftBar();
+    m_intake.stopEating();
   }
 
   // Returns true when the command should end.

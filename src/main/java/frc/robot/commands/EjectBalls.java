@@ -5,24 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climbing;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Intake;
 
-import frc.robot.subsystems.Climber;
-
-public class RaiseHookBar extends CommandBase {
-  
-  private final Climber m_climber;
-  
+public class EjectBalls extends CommandBase {
   /**
-   * Creates a new RaiseHook.
+   * Creates a new UnEatBalls.
    */
-  public RaiseHookBar(Climber climber) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(climber);
+  private final Intake m_intake;
 
-    m_climber = climber;
+  public EjectBalls(Intake intake) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intake);
+
+    m_intake = intake;
   }
 
   // Called when the command is initially scheduled.
@@ -33,13 +31,13 @@ public class RaiseHookBar extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    m_climber.raiseHookBar();
+    m_intake.eject();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_intake.stopEating();
   }
 
   // Returns true when the command should end.
