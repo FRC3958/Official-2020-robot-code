@@ -32,8 +32,6 @@ import frc.robot.commands.EatBalls;
 import frc.robot.commands.SwitchToDriverMode;
 import frc.robot.commands.UnEatBalls;
 import frc.robot.commands.ArcadeDrive;
-import frc.robot.commands.climbing.LiftBot;
-import frc.robot.commands.climbing.PrepareClimb;
 import frc.robot.commands.shooting.AlignToTarget;
 import frc.robot.commands.shooting.FullShootRoutine;
 import frc.robot.subsystems.Climber;
@@ -44,6 +42,8 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.indexing.ConveyorBelt;
 import frc.robot.subsystems.indexing.SideBelt;
 import frc.robot.subsystems.indexing.Gateway;
+
+import frc.robot.commands.climbing.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -58,19 +58,19 @@ public class RobotContainer {
   private final XboxController m_driverController = new XboxController(ControlConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(ControlConstants.kOperatorControllerPort);
 
-  // The robot's subsystems
-  private final Drivetrain m_drive = new Drivetrain();
-  private final Intake m_intake = new Intake();
-  private final HoodedShooter m_shooter = new HoodedShooter();
-  private final Limelight m_limelight = new Limelight();
+  // // The robot's subsystems
+  // private final Drivetrain m_drive = new Drivetrain();
+  // private final Intake m_intake = new Intake();
+  // private final HoodedShooter m_shooter = new HoodedShooter();
+  // private final Limelight m_limelight = new Limelight();
   private final Climber m_climber = new Climber();
 
-  /**
-   * Indexing subsystems
-   */
-  private final SideBelt m_sideBelt = new SideBelt();
-  private final ConveyorBelt m_conveyor = new ConveyorBelt();
-  private final Gateway m_gateway = new Gateway();
+  // /**
+  //  * Indexing subsystems
+  //  */
+  // private final SideBelt m_sideBelt = new SideBelt();
+  // private final ConveyorBelt m_conveyor = new ConveyorBelt();
+  // private final Gateway m_gateway = new Gateway();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -89,57 +89,62 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // Drive with stick (note: it is automatically linearly limited)
-    m_drive.setDefaultCommand(new ArcadeDrive(m_drive, 
-      () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
-      () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
-    );
+    // m_drive.setDefaultCommand(new ArcadeDrive(m_drive, 
+    //   () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
+    //   () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
+    // );
 
-    // Toggle intake
-    new JoystickButton(m_operatorController, ControlConstants.kKeybindToggleIntake)
-      .toggleWhenPressed(new EatBalls(m_intake)
-    );
+    // // Toggle intake
+    // new JoystickButton(m_operatorController, ControlConstants.kKeybindToggleIntake)
+    //   .toggleWhenPressed(new EatBalls(m_intake)
+    // );
 
-    // Clear intake
-    new JoystickButton(m_operatorController, ControlConstants.kKeybindUnintake)
-      .toggleWhenPressed(new UnEatBalls(m_intake)
-    );
+    // // Clear intake
+    // new JoystickButton(m_operatorController, ControlConstants.kKeybindUnintake)
+    //   .toggleWhenPressed(new UnEatBalls(m_intake)
+    // );
 
-    // Run entire shooting routine, maintaining alignment when held, and shoot balls
-    // over and over again at the same time
-    new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
-      .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
-      .whileHeld(new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
-        () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()))
-    );
+    // // Run entire shooting routine, maintaining alignment when held, and shoot balls
+    // // over and over again at the same time
+    // new JoystickButton(m_operatorController, ControlConstants.kKeybindShoot)
+    //   .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
+    //   .whileHeld(new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
+    //     () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()))
+    // );
 
     // Prepare climber
     new JoystickButton(m_operatorController, ControlConstants.kKeybindPrepareClimb)
-      .whenPressed(new PrepareClimb(m_climber)
+      .whenPressed(new PrepareClimb(m_climber))
+      .whenReleased(new RetractHook(m_climber)
     );
 
     // Climb
     new JoystickButton(m_operatorController, ControlConstants.kKeybindClimb)
-      .whenPressed(new LiftBot(m_climber)
+      .whenPressed(new LowerHookBar(m_climber))
+      .whenHeld(new LiftBot(m_climber)
     );
 
-    // Switch driver mode
-    new JoystickButton(m_operatorController, ControlConstants.kKeybindMode)
-      .toggleWhenPressed(new SwitchToDriverMode(m_limelight)
-    );
+    SmartDashboard.putData(new DeployHook(m_climber));
+    SmartDashboard.putData(new RetractHook(m_climber));
 
-    /**
-     * Shooter testing
-     */
+    // // Switch driver mode
+    // new JoystickButton(m_operatorController, ControlConstants.kKeybindMode)
+    //   .toggleWhenPressed(new SwitchToDriverMode(m_limelight)
+    // );
 
-    SmartDashboard.putNumber("RPM setpoint", 0);
-    SmartDashboard.putData("Set RPM setpoint", 
-      new InstantCommand(
-        () -> m_shooter.setRPM(SmartDashboard.getNumber("RPM setpoint", 0)),
-        m_shooter
-      )
-    );
+    // /**
+    //  * Shooter testing
+    //  */
 
-    SmartDashboard.putData("Stop shooter", new InstantCommand(() -> m_shooter.setNative(0), m_shooter));
+    // SmartDashboard.putNumber("RPM setpoint", 0);
+    // SmartDashboard.putData("Set RPM setpoint", 
+    //   new InstantCommand(
+    //     () -> m_shooter.setRPM(SmartDashboard.getNumber("RPM setpoint", 0)),
+    //     m_shooter
+    //   )
+    // );
+
+    // SmartDashboard.putData("Stop shooter", new InstantCommand(() -> m_shooter.setNative(0), m_shooter));
   }
 
   /**
@@ -149,51 +154,51 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     
-    var voltageConstraint = new DifferentialDriveVoltageConstraint(
-      new SimpleMotorFeedforward(
-        DriveConstants.ksVolts, 
-        DriveConstants.kvVoltSecondsPerMeter, 
-        DriveConstants.kaVoltSecondsSquaredPerMeter
-      ),
-      DriveConstants.kKinematics,
-      10 // not 12, account for voltage sag
-    );
+    // var voltageConstraint = new DifferentialDriveVoltageConstraint(
+    //   new SimpleMotorFeedforward(
+    //     DriveConstants.ksVolts, 
+    //     DriveConstants.kvVoltSecondsPerMeter, 
+    //     DriveConstants.kaVoltSecondsSquaredPerMeter
+    //   ),
+    //   DriveConstants.kKinematics,
+    //   10 // not 12, account for voltage sag
+    // );
 
-    var config = new TrajectoryConfig(
-      DriveConstants.kMaxVelocityMPS * .6, // 60% of max physical speed
-      DriveConstants.kMaxVelocityMPS / 3.0 // 3 seconds to reach max speed, deemed safe for auton
-    ).setKinematics(DriveConstants.kKinematics)
-    .addConstraint(voltageConstraint);
+    // var config = new TrajectoryConfig(
+    //   DriveConstants.kMaxVelocityMPS * .6, // 60% of max physical speed
+    //   DriveConstants.kMaxVelocityMPS / 3.0 // 3 seconds to reach max speed, deemed safe for auton
+    // ).setKinematics(DriveConstants.kKinematics)
+    // .addConstraint(voltageConstraint);
 
 
-    var trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)),
-      List.of(
-        // internal waypoints
-      ),
-      new Pose2d(3, 0, new Rotation2d(0)),
-      config
-    );
+    // var trajectory = TrajectoryGenerator.generateTrajectory(
+    //   new Pose2d(0, 0, new Rotation2d(0)),
+    //   List.of(
+    //     // internal waypoints
+    //   ),
+    //   new Pose2d(3, 0, new Rotation2d(0)),
+    //   config
+    // );
 
-    var ramsete = new RamseteCommand(
-      trajectory, 
-      m_drive::getPose, 
-      new RamseteController(AutoConstants.kRameseteB, AutoConstants.kRameseteZeta),
-      new SimpleMotorFeedforward(
-        DriveConstants.ksVolts, 
-        DriveConstants.kvVoltSecondsPerMeter, 
-        DriveConstants.kaVoltSecondsSquaredPerMeter
-      ), 
-      DriveConstants.kKinematics, 
-      m_drive::getWheelSpeeds, 
-      new PIDController(DriveConstants.kPDriveVel, 0.0, 0.0),
-      new PIDController(DriveConstants.kPDriveVel, 0.0, 0.0),
-      m_drive::tankDriveVolts, 
-      m_drive
-    );
+    // var ramsete = new RamseteCommand(
+    //   trajectory, 
+    //   m_drive::getPose, 
+    //   new RamseteController(AutoConstants.kRameseteB, AutoConstants.kRameseteZeta),
+    //   new SimpleMotorFeedforward(
+    //     DriveConstants.ksVolts, 
+    //     DriveConstants.kvVoltSecondsPerMeter, 
+    //     DriveConstants.kaVoltSecondsSquaredPerMeter
+    //   ), 
+    //   DriveConstants.kKinematics, 
+    //   m_drive::getWheelSpeeds, 
+    //   new PIDController(DriveConstants.kPDriveVel, 0.0, 0.0),
+    //   new PIDController(DriveConstants.kPDriveVel, 0.0, 0.0),
+    //   m_drive::tankDriveVolts, 
+    //   m_drive
+    // );
 
-    return ramsete.andThen(() -> m_drive.tankDriveVolts(0.0, 0.0));
+    // return ramsete.andThen(() -> m_drive.tankDriveVolts(0.0, 0.0));
 
-    // return null;
+    return null;
   } 
 }

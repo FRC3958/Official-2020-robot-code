@@ -16,7 +16,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ClimberConstants;
@@ -26,7 +28,7 @@ public class Climber extends SubsystemBase {
   private final WPI_TalonSRX m_hooker = new WPI_TalonSRX(ClimberConstants.kTalonPortHooker);
   private final WPI_TalonFX m_winch = new WPI_TalonFX(ClimberConstants.kTalonPortLifter);
 
-  private final Solenoid m_piston = new Solenoid(ClimberConstants.kPCMIdPiston);
+  private final DoubleSolenoid m_piston = new DoubleSolenoid(ClimberConstants.kPCMPistonForward, ClimberConstants.kPCMPistonReverse);
 
   /**
    * Creates a new Climber.
@@ -54,12 +56,7 @@ public class Climber extends SubsystemBase {
 
     // winch CANNOT turn backwards!!! zero any possible reverse values
     winchConfig.peakOutputReverse = 0.0;
-    winchConfig.nominalOutputReverse = 0.0; 
-
-    winchConfig.slot0.kF = ClimberConstants.kWinchPositionGains.kF;
-    winchConfig.slot0.kP = ClimberConstants.kWinchPositionGains.kP;
-    winchConfig.slot0.kI = ClimberConstants.kWinchPositionGains.kI;
-    winchConfig.slot0.kD = ClimberConstants.kWinchPositionGains.kD;
+    winchConfig.nominalOutputReverse = 0.0;
 
     // apply config
     m_winch.configAllSettings(winchConfig);
@@ -75,14 +72,14 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void raiseHook() {
+  public void raiseHookBar() {
 
-    m_piston.set(true);
+    m_piston.set(Value.kForward);
   }
 
-  public void lowerHook() {
+  public void lowerHookBar() {
 
-    m_piston.set(false);
+    m_piston.set(Value.kReverse);
   }
 
   public void deployHook() {
@@ -109,18 +106,12 @@ public class Climber extends SubsystemBase {
 
   public void lift() {
 
-    m_winch.set(ControlMode.Position, ClimberConstants.kWinchLiftedPosition);
+    m_winch.set(ControlMode.Velocity, 0.5);
   }
 
   public void stopLifting() {
 
-    m_winch.set(ControlMode.Position, m_winch.getSelectedSensorPosition());
-  }
-
-  public boolean isLiftedToHeight() {
-
-    return ((Math.abs(m_winch.getSelectedSensorPosition()) - ClimberConstants.kWinchLiftedPosition) 
-      / ClimberConstants.kWinchLiftedPosition) <= ClimberConstants.kWinchLiftedPercentTolerance;
+    m_winch.set(ControlMode.Velocity, 0.0);
   }
 
   private void resetEncoders() {

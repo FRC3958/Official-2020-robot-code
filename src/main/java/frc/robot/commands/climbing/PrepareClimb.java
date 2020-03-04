@@ -8,7 +8,6 @@
 package frc.robot.commands.climbing;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Climber;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -22,7 +21,7 @@ public class PrepareClimb extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-      new RaiseHook(climber).withTimeout(0.5), // raise hook bar with piston
+      new RaiseHookBar(climber).withTimeout(0.5), // raise hook bar with piston
       new DeployHook(climber) // raise hook to grab height
     );
   }

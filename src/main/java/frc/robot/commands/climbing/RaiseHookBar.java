@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Climber;
 
-public class RaiseHook extends CommandBase {
+public class RaiseHookBar extends CommandBase {
   
   private final Climber m_climber;
   
   /**
    * Creates a new RaiseHook.
    */
-  public RaiseHook(Climber climber) {
+  public RaiseHookBar(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
 
@@ -34,7 +34,7 @@ public class RaiseHook extends CommandBase {
   @Override
   public void execute() {
 
-    m_climber.raiseHook();
+    m_climber.raiseHookBar();
   }
 
   // Called once the command ends or is interrupted.
