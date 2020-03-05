@@ -8,6 +8,7 @@
 package frc.robot.subsystems.indexing;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -25,6 +26,7 @@ public class SideBelt extends SubsystemBase {
 
     m_sideways.configFactoryDefault();
 
+    m_sideways.setInverted(InvertType.None);
     m_sideways.setNeutralMode(NeutralMode.Coast);
   }
 

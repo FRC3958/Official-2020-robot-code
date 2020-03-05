@@ -16,12 +16,13 @@ public final class ClimberConstants {
 
     public static final int kTalonPortHooker = 11;
     public static final int kTalonPortLifter = 12;
-    public static final int kPCMPistonForward = 0;
-    public static final int kPCMPistonReverse = 1;
+
+    public static final int kPCMPistonForward = 2;
+    public static final int kPCMPistonReverse = 3;
 
     public static final int kPrimaryPIDLoopIdx = 0;
 
-    public static final Gains kHookerPositionGains = new Gains(0.0, 0.0, 0.0, 0.0);
+    public static final Gains kHookerPositionGains = new Gains(0.0, 0.5, 0.0, 0.0);
 
     // TODO: replace placeholder
     public static final int kHookerDeployedPosition = Constants.kQuadEncoderResolution * 50;

@@ -41,6 +41,7 @@ public class AlignToTarget extends PIDCommand {
         output -> {
           // Use the output here
           output = MathUtil.clamp(output, -1.0, 1.0);
+          output = convertToMovable(output);
           drivetrain.arcadeDrive(0.0, output);
         });
         
@@ -55,6 +56,7 @@ public class AlignToTarget extends PIDCommand {
 
     m_forever = forever;
     m_limelight = limelight;
+
     m_limelight.setLedMode(LedMode.kForceOn);
     m_limelight.setCamMode(CamMode.kVisionProcessor);
   }
@@ -62,11 +64,22 @@ public class AlignToTarget extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_forever == true){
 
-      m_limelight.setLedMode(LedMode.kForceOff);
-      m_limelight.setCamMode(CamMode.kDriver);
-    }
     return m_forever ? false : getController().atSetpoint();
+  }
+
+  private static double convertToMovable(double in) {
+
+    if(Math.abs(in) >= 0.1) {
+      return in;
+    }
+
+    if(in < -0.05) {
+      return -0.1;
+    } else if(in > 0.05) {
+      return 0.1;
+    }
+
+    return in;
   }
 }

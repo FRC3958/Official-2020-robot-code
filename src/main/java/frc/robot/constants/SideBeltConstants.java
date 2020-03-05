@@ -14,5 +14,5 @@ public final class SideBeltConstants {
 
     public static final int kTalonPort = 8;
 
-    public static final double kRunningPercentOutput = 0.6;
+    public static final double kRunningPercentOutput = 0.5;
 }

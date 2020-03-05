@@ -14,5 +14,5 @@ public final class ConveyorBeltConstants {
 
     public static final int kTalonPort = 9;
 
-    public static final double kRunningPercentOutput = 0.5;
+    public static final double kRunningPercentOutput = 0.38;
 }

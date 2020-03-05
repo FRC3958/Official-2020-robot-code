@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
 
@@ -28,6 +29,7 @@ public class Intake extends SubsystemBase {
   public Intake() {
 
     m_wheels.configFactoryDefault();
+    // TODO: asdfasdfasdfasdf
 
     m_wheels.setNeutralMode(NeutralMode.Brake);
   }
@@ -35,6 +37,8 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    SmartDashboard.putNumber("Intake draw", m_wheels.getSupplyCurrent());
   }
 
   public void dropBar() {

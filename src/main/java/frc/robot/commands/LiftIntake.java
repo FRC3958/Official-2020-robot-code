@@ -8,48 +8,38 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Limelight.CamMode;
-import frc.robot.subsystems.Limelight.LedMode;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.Intake;
 
-public class SwitchToDriverMode extends CommandBase {
-  
+public class LiftIntake extends InstantCommand {
+
+  private final Intake m_intake;
+
   /**
-   * Switched the limelight to driver mode
+   * Creates a new LiftIntake.
    */
-  private Limelight m_limelight;
- 
-  public SwitchToDriverMode(Limelight limelight) {
+  public LiftIntake(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(limelight);
+    addRequirements(intake);
 
-    m_limelight = limelight;
+    m_intake = intake;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-   
-    m_limelight.setLedMode(LedMode.kForceOff);
-    m_limelight.setCamMode(CamMode.kDriver);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    m_intake.stopEating();
+    m_intake.liftBar();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-   
-    m_limelight.setLedMode(LedMode.kForceOn);
-    m_limelight.setCamMode(CamMode.kVisionProcessor);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

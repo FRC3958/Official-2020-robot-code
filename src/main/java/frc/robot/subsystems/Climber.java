@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -15,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.music.Orchestra;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -28,6 +31,8 @@ public class Climber extends SubsystemBase {
   private final WPI_TalonFX m_winch = new WPI_TalonFX(ClimberConstants.kTalonPortLifter);
 
   private final DoubleSolenoid m_piston = new DoubleSolenoid(ClimberConstants.kPCMPistonForward, ClimberConstants.kPCMPistonReverse);
+
+  private final Orchestra m_orchestra = new Orchestra();
 
   /**
    * Creates a new Climber.
@@ -64,6 +69,12 @@ public class Climber extends SubsystemBase {
     m_winch.setInverted(InvertType.None);
 
     resetEncoders();
+
+    /**
+     * Playing music yay
+     */
+    m_orchestra.loadMusic("darude3.chrp");
+    m_orchestra.addInstrument(m_winch);
   }
 
   @Override
@@ -130,5 +141,15 @@ public class Climber extends SubsystemBase {
 
     m_hooker.getSensorCollection().setQuadraturePosition(0, Constants.kTimeout);
     m_winch.getSensorCollection().setIntegratedSensorPosition(0, Constants.kTimeout);
+  }
+
+  public void playMusic() {
+
+    m_orchestra.play();
+  }
+
+  public void stopMusic() {
+
+    m_orchestra.stop();
   }
 }
