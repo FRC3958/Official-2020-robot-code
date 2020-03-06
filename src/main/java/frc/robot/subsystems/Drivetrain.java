@@ -26,10 +26,10 @@ import frc.robot.constants.DriveConstants;
 
 public class Drivetrain extends SubsystemBase {
   
-  private final WPI_TalonSRX m_leftMaster = new WPI_TalonSRX(DriveConstants.kTalonPortFrontLeft);
-  private final WPI_TalonSRX m_leftSlave = new WPI_TalonSRX(DriveConstants.kTalonPortBackLeft);
-  private final WPI_TalonSRX m_rightMaster = new WPI_TalonSRX(DriveConstants.kTalonPortFrontRight);
-  private final WPI_TalonSRX m_rightSlave = new WPI_TalonSRX(DriveConstants.kTalonPortBackRight);
+  private final WPI_TalonSRX m_leftMaster = new WPI_TalonSRX(DriveConstants.kTalonPortBackLeft);
+  private final WPI_TalonSRX m_leftSlave = new WPI_TalonSRX(DriveConstants.kTalonPortFrontLeft);
+  private final WPI_TalonSRX m_rightMaster = new WPI_TalonSRX(DriveConstants.kTalonPortBackRight);
+  private final WPI_TalonSRX m_rightSlave = new WPI_TalonSRX(DriveConstants.kTalonPortFrontRight);
 
   private final DifferentialDriveOdometry m_odometry;
 
@@ -46,19 +46,6 @@ public class Drivetrain extends SubsystemBase {
     // config sensor for right, will be used as remote sensor
     leftConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
     rightConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
-    
-    /**
-     * Gains config for both loops
-     */
-    leftConfig.slot0.kF = DriveConstants.kGainsVelocity.kF;
-    leftConfig.slot0.kP = DriveConstants.kGainsVelocity.kP;
-    leftConfig.slot0.kI = DriveConstants.kGainsVelocity.kI;
-    leftConfig.slot0.kD = DriveConstants.kGainsVelocity.kD;
-
-    rightConfig.slot0.kF = DriveConstants.kGainsVelocity.kF;
-    rightConfig.slot0.kP = DriveConstants.kGainsVelocity.kP;
-    rightConfig.slot0.kI = DriveConstants.kGainsVelocity.kI;
-    rightConfig.slot0.kD = DriveConstants.kGainsVelocity.kD;
 
     // apply configs
     m_leftMaster.configAllSettings(leftConfig);
@@ -76,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
     m_leftMaster.setInverted(false);
     m_leftSlave.setInverted(false);
     m_rightMaster.setInverted(true);
-    m_rightSlave.setInverted(true);
+    m_rightSlave.setInverted(false);
 
     // sensor phases
     m_leftMaster.setSensorPhase(true);
@@ -109,30 +96,6 @@ public class Drivetrain extends SubsystemBase {
    * @param turn -1.0 to +1.0 indicating left (neg) or right (pos)
    */
   public void arcadeDrive(double forward, double turn) {
-
-    chassisSpeedsDrive(
-      new ChassisSpeeds(
-        forward * DriveConstants.kMaxVelocityMPS,
-        0.0,
-        turn * DriveConstants.kMaxTurningVelocityRPS)
-    );
-  }
-
-  /**
-   * Set velocity targets according to chassis speeds
-   * @param speeds
-   */
-  public void chassisSpeedsDrive(ChassisSpeeds speeds) {
-
-    DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.kKinematics.toWheelSpeeds(speeds);
-
-    m_leftMaster.set(ControlMode.Velocity, 
-      DriveConstants.getVelocityNativeFromMPS(wheelSpeeds.leftMetersPerSecond)
-    );
-
-    m_rightMaster.set(ControlMode.Velocity, 
-      DriveConstants.getVelocityNativeFromMPS(wheelSpeeds.rightMetersPerSecond)
-    );
   }
 
   public void tankDriveVolts(double leftVoltage, double rightVoltage) {

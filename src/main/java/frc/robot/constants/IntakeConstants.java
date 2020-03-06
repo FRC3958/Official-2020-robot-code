@@ -16,6 +16,6 @@ public final class IntakeConstants {
 
     public static final double kOperationSpeed = 0.5;
 
-    public static final int kSolenoidForwardChannel = 0;
-    public static final int kSolenoidReverseChannel = 1;
+    public static final int kSolenoidForwardChannel = 2;
+    public static final int kSolenoidReverseChannel = 3;
 }

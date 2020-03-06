@@ -7,12 +7,22 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -35,7 +45,9 @@ import frc.robot.commands.shooting.FeedToShooter;
 import frc.robot.commands.shooting.FullShootRoutine;
 import frc.robot.commands.shooting.LoadToConveyor;
 import frc.robot.commands.shooting.SpinUpToSpeed;
+import frc.robot.constants.AutoConstants;
 import frc.robot.constants.ControlConstants;
+import frc.robot.constants.DriveConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -45,6 +57,7 @@ import frc.robot.subsystems.Limelight.LedMode;
 import frc.robot.subsystems.indexing.ConveyorBelt;
 import frc.robot.subsystems.indexing.Gateway;
 import frc.robot.subsystems.indexing.SideBelt;
+import edu.wpi.first.wpilibj.controller.PIDController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -68,7 +81,7 @@ public class RobotContainer {
   
   private final Limelight m_limelight = new Limelight();
   
-  private final Climber m_climber = new Climber();
+  // private final Climber m_climber = new Climber();
 
   private final SideBelt m_sideBelt = new SideBelt();
   private final ConveyorBelt m_conveyor = new ConveyorBelt();
@@ -125,17 +138,17 @@ public class RobotContainer {
       new InstantCommand(() -> m_shooter.setNative(0), m_shooter)
     );
 
-    /**
-     * Climber testing
-     */
+    // /**
+    //  * Climber testing
+    //  */
 
-    SmartDashboard.putData("Raise shaft", new RaiseShaft(m_climber));
-    SmartDashboard.putData("Lower shaft", new LowerShaft(m_climber));
+    // SmartDashboard.putData("Raise shaft", new RaiseShaft(m_climber));
+    // SmartDashboard.putData("Lower shaft", new LowerShaft(m_climber));
 
-    SmartDashboard.putData("Extend hook shaft", new ExtendShaft(m_climber));
-    SmartDashboard.putData("Retract hook shaft", new RetractShaft(m_climber));
+    // SmartDashboard.putData("Extend hook shaft", new ExtendShaft(m_climber));
+    // SmartDashboard.putData("Retract hook shaft", new RetractShaft(m_climber));
 
-    SmartDashboard.putData("Lift bot (hook must be deployed)", new LiftBot(m_climber, () -> 0.3));
+    // SmartDashboard.putData("Lift bot (hook must be deployed)", new LiftBot(m_climber, () -> 0.3));
 
     /**
      * Limelight
@@ -148,8 +161,8 @@ public class RobotContainer {
       * Music
       */
 
-    SmartDashboard.putData("Play music", new InstantCommand(() -> m_climber.playMusic()));
-    SmartDashboard.putData("Pause music", new InstantCommand(() -> m_climber.stopMusic()));
+    // SmartDashboard.putData("Play music", new InstantCommand(() -> m_climber.playMusic()));
+    // SmartDashboard.putData("Pause music", new InstantCommand(() -> m_climber.stopMusic()));
   }
 
   /**
@@ -161,7 +174,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // config controls
-    configureDriverControls(m_driverController, m_operatorController);
+    //configureDriverControls(m_driverController, m_operatorController);
     configureOperatorControls(m_operatorController, m_driverController);
   }
 
@@ -212,7 +225,14 @@ public class RobotContainer {
     new Button(() -> controller.getRawAxis(ControlConstants.Operator.kManualRampUp) >= 0.5)
       .whenHeld(new SpinUpToSpeed(
         m_shooter,
-        () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()),
+        () -> {
+          // manual ramp up rpm logic
+          if(m_limelight.isValidTargetPresent()) {
+            return 2000;
+          }
+
+          return Util.calculateRPM(m_limelight.getApproximateDistanceMeters());
+        },
         true
       )
     );
@@ -224,14 +244,7 @@ public class RobotContainer {
       && driverController.getRawButton(ControlConstants.Driver.kAutoAlign)  // driver must also be autoaligning
     ).whileHeld(
       new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
-        () -> {
-          // manual ramp up rpm logic
-          if(m_limelight.isValidTargetPresent()) {
-            return 2000;
-          }
-
-          return Util.calculateRPM(m_limelight.getApproximateDistanceMeters());
-        }
+      () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters())
       )
     );
 
@@ -240,25 +253,25 @@ public class RobotContainer {
       .toggleWhenPressed(new SwitchToDriverMode(m_limelight)
     );
 
-    // Toggle raising / lowering shaft
-    new JoystickButton(controller, ControlConstants.Operator.kToggleClimberPiston)
-      .whenPressed(new RaiseLowerShaft(m_climber)
-    );
+    // // Toggle raising / lowering shaft
+    // new JoystickButton(controller, ControlConstants.Operator.kToggleClimberPiston)
+    //   .whenPressed(new RaiseLowerShaft(m_climber)
+    // );
 
-    // Extend shaft
-    new JoystickButton(controller, ControlConstants.Operator.kExtendShaft)
-      .whenPressed(new ExtendShaft(m_climber)
-    );
+    // // Extend shaft
+    // new JoystickButton(controller, ControlConstants.Operator.kExtendShaft)
+    //   .whenPressed(new ExtendShaft(m_climber)
+    // );
 
-    // Retract shaft
-    new JoystickButton(controller, ControlConstants.Operator.kRetractShaft)
-      .whenPressed(new RetractShaft(m_climber)
-    );
+    // // Retract shaft
+    // new JoystickButton(controller, ControlConstants.Operator.kRetractShaft)
+    //   .whenPressed(new RetractShaft(m_climber)
+    // );
 
-    // Lift (with winch)
-    new Button(() -> -controller.getRawAxis(ControlConstants.Operator.kLift) >= 0.2)
-      .whenPressed(new LiftBot(m_climber, () -> -controller.getRawAxis(ControlConstants.Operator.kLift))
-    );
+    // // Lift (with winch)
+    // new Button(() -> -controller.getRawAxis(ControlConstants.Operator.kLift) >= 0.2)
+    //   .whenPressed(new LiftBot(m_climber, () -> -controller.getRawAxis(ControlConstants.Operator.kLift))
+    // );
   }
 
   /**
@@ -268,51 +281,51 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     
-    // var voltageConstraint = new DifferentialDriveVoltageConstraint(
-    //   new SimpleMotorFeedforward(
-    //     DriveConstants.ksVolts, 
-    //     DriveConstants.kvVoltSecondsPerMeter, 
-    //     DriveConstants.kaVoltSecondsSquaredPerMeter
-    //   ),
-    //   DriveConstants.kKinematics,
-    //   10 // not 12, account for voltage sag
-    // );
+    var voltageConstraint = new DifferentialDriveVoltageConstraint(
+      new SimpleMotorFeedforward(
+        DriveConstants.ksVolts, 
+        DriveConstants.kvVoltSecondsPerMeter, 
+        DriveConstants.kaVoltSecondsSquaredPerMeter
+      ),
+      DriveConstants.kKinematics,
+      10 // not 12, account for voltage sag
+    );
 
-    // var config = new TrajectoryConfig(
-    //   DriveConstants.kMaxVelocityMPS * .6, // 60% of max physical speed
-    //   DriveConstants.kMaxVelocityMPS / 3.0 // 3 seconds to reach max speed, deemed safe for auton
-    // ).setKinematics(DriveConstants.kKinematics)
-    // .addConstraint(voltageConstraint);
+    var config = new TrajectoryConfig(
+      DriveConstants.kMaxVelocityMPS * .6, // 60% of max physical speed
+      DriveConstants.kMaxVelocityMPS * .6// 3 seconds to reach max speed, deemed safe for auton
+    ).setKinematics(DriveConstants.kKinematics)
+    .addConstraint(voltageConstraint);
 
 
-    // var trajectory = TrajectoryGenerator.generateTrajectory(
-    //   new Pose2d(0, 0, new Rotation2d(0)),
-    //   List.of(
-    //     // internal waypoints
-    //   ),
-    //   new Pose2d(3, 0, new Rotation2d(0)),
-    //   config
-    // );
+    var trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of(
+        // internal waypoints
+      ),
+      new Pose2d(0, 5, new Rotation2d(0)),
+      config
+    );
 
-    // var ramsete = new RamseteCommand(
-    //   trajectory, 
-    //   m_drive::getPose, 
-    //   new RamseteController(AutoConstants.kRameseteB, AutoConstants.kRameseteZeta),
-    //   new SimpleMotorFeedforward(
-    //     DriveConstants.ksVolts, 
-    //     DriveConstants.kvVoltSecondsPerMeter, 
-    //     DriveConstants.kaVoltSecondsSquaredPerMeter
-    //   ), 
-    //   DriveConstants.kKinematics, 
-    //   m_drive::getWheelSpeeds, 
-    //   new PIDController(DriveConstants.kPDriveVel, 0.0, 0.0),
-    //   new PIDController(DriveConstants.kPDriveVel, 0.0, 0.0),
-    //   m_drive::tankDriveVolts, 
-    //   m_drive
-    // );
+    var ramsete = new RamseteCommand(
+      trajectory, 
+      m_drive::getPose, 
+      new RamseteController(AutoConstants.kRameseteB, AutoConstants.kRameseteZeta),
+      new SimpleMotorFeedforward(
+        DriveConstants.ksVolts, 
+        DriveConstants.kvVoltSecondsPerMeter, 
+        DriveConstants.kaVoltSecondsSquaredPerMeter
+      ), 
+      DriveConstants.kKinematics, 
+      m_drive::getWheelSpeeds, 
+      new PIDController(DriveConstants.kPDriveVel, 0.0, 0.0),
+      new PIDController(DriveConstants.kPDriveVel, 0.0, 0.0),
+      m_drive::tankDriveVolts, 
+      m_drive
+    );
 
-    // return ramsete.andThen(() -> m_drive.tankDriveVolts(0.0, 0.0));
+    return ramsete.andThen(() -> m_drive.tankDriveVolts(0.0, 0.0));
 
-    return null;
+    // return null;
   } 
 }

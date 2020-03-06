@@ -28,10 +28,10 @@ public final class DriveConstants {
     public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(DriveConstants.kTrackWidth);
 
     // TODO: characterize drivetrain
-    public static final double ksVolts = 0.0;
-    public static final double kvVoltSecondsPerMeter = 0.0;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.0;
-    public static final double kPDriveVel = 0.0;
+    public static final double ksVolts = 0.804;
+    public static final double kvVoltSecondsPerMeter = 2.39;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.352;
+    public static final double kPDriveVel = 4.13;
 
     /**
      * Convert from meters to native untis
@@ -70,8 +70,7 @@ public final class DriveConstants {
         return getMetersFromNative(velocityNative) * 10.0;
     }
 
-    public static final int kMaxVelocityNative = 20000;
-    public static final double kMaxVelocityMPS = getVelocityMPSFromNative(kMaxVelocityNative);
+    public static final double kMaxVelocityMPS = 3;
 
     public static final double kMaxTurningVelocityRPS = Units.degreesToRadians(50.0);
 
