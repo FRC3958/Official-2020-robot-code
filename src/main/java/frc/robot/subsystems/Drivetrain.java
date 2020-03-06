@@ -7,8 +7,8 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -17,9 +17,10 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.DriveConstants;
@@ -30,6 +31,8 @@ public class Drivetrain extends SubsystemBase {
   private final WPI_TalonSRX m_leftSlave = new WPI_TalonSRX(DriveConstants.kTalonPortFrontLeft);
   private final WPI_TalonSRX m_rightMaster = new WPI_TalonSRX(DriveConstants.kTalonPortBackRight);
   private final WPI_TalonSRX m_rightSlave = new WPI_TalonSRX(DriveConstants.kTalonPortFrontRight);
+
+  private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMaster, m_rightMaster);
 
   private final DifferentialDriveOdometry m_odometry;
 
@@ -59,15 +62,18 @@ public class Drivetrain extends SubsystemBase {
     m_rightMaster.setNeutralMode(NeutralMode.Brake);
     m_rightSlave.setNeutralMode(NeutralMode.Brake);
 
-    // config motor direction
-    m_leftMaster.setInverted(false);
-    m_leftSlave.setInverted(false);
-    m_rightMaster.setInverted(true);
-    m_rightSlave.setInverted(false);
+    // so that talons will show forward indicator
+    m_drive.setRightSideInverted(false);
 
     // sensor phases
-    m_leftMaster.setSensorPhase(true);
+    m_leftMaster.setSensorPhase(false);
     m_rightMaster.setSensorPhase(true);
+
+    // config motor direction    
+    m_leftMaster.setInverted(InvertType.None);
+    m_leftSlave.setInverted(InvertType.None);
+    m_rightMaster.setInverted(InvertType.InvertMotorOutput);
+    m_rightSlave.setInverted(InvertType.FollowMaster);
 
     // follow masters
     m_leftSlave.follow(m_leftMaster);
@@ -77,6 +83,7 @@ public class Drivetrain extends SubsystemBase {
     resetEncoders();
     resetHeading();
 
+    // instantiate odometry object after resetting everything
     m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
   }
   
@@ -88,6 +95,17 @@ public class Drivetrain extends SubsystemBase {
       getLeftDistanceMeters(),
       getRightDistanceMeters()
     );
+
+    updateSmartDashboard();
+  }
+
+  private void updateSmartDashboard() {
+
+    var speeds = getWheelSpeeds();
+
+    SmartDashboard.putNumber("DT Left m/s", speeds.leftMetersPerSecond);
+    SmartDashboard.putNumber("DT Right m/s", speeds.rightMetersPerSecond);
+    SmartDashboard.putNumber("DT velocity m/s", (speeds.leftMetersPerSecond + speeds.rightMetersPerSecond) * .5);
   }
 
   /**
@@ -96,12 +114,15 @@ public class Drivetrain extends SubsystemBase {
    * @param turn -1.0 to +1.0 indicating left (neg) or right (pos)
    */
   public void arcadeDrive(double forward, double turn) {
+    m_drive.arcadeDrive(forward, turn);
   }
 
   public void tankDriveVolts(double leftVoltage, double rightVoltage) {
 
-    m_leftMaster.setVoltage(-leftVoltage);
-    m_rightMaster.setVoltage(+rightVoltage);
+    m_leftMaster.setVoltage(leftVoltage);
+    m_rightMaster.setVoltage(-rightVoltage);
+
+    m_drive.feed();
   }
 
   public Pose2d getPose() {
@@ -134,7 +155,7 @@ public class Drivetrain extends SubsystemBase {
    * @return
    */
   public double getHeading() {
-    return m_ahrs.getAngle();
+    return -m_ahrs.getAngle();
   }
 
   public void resetHeading() {

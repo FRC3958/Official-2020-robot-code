@@ -12,6 +12,4 @@ package frc.robot.constants;
  */
 public final class AutoConstants {
 
-    public static final double kRameseteB = 2.0;
-    public static final double kRameseteZeta = 0.7;
 }

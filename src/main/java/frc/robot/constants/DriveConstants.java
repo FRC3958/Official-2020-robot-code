@@ -27,11 +27,17 @@ public final class DriveConstants {
     
     public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(DriveConstants.kTrackWidth);
 
-    // TODO: characterize drivetrain
+    // TODO: characterize
     public static final double ksVolts = 0.804;
     public static final double kvVoltSecondsPerMeter = 2.39;
     public static final double kaVoltSecondsSquaredPerMeter = 0.352;
     public static final double kPDriveVel = 4.13;
+
+    public static final double kMaxVelocityMetersPerSecond = 0.0;
+    public static final double kMaxAccelerationMetersPerSecondSq = 0.0;
+
+    public static final double kRameseteB = 2.0;
+    public static final double kRameseteZeta = 0.7;
 
     /**
      * Convert from meters to native untis
@@ -69,15 +75,4 @@ public final class DriveConstants {
     public static double getVelocityMPSFromNative(int velocityNative) {
         return getMetersFromNative(velocityNative) * 10.0;
     }
-
-    public static final double kMaxVelocityMPS = 3;
-
-    public static final double kMaxTurningVelocityRPS = Units.degreesToRadians(50.0);
-
-    public static final int kPrimaryPIDLoopIdx = 0;
-
-    public static final int kSlotVelocity = 0;
-
-    // TODO: tune driving PIDs (again, since we are now using the quirky TalonSRX microprocessor)
-    public static final Gains kGainsVelocity = new Gains(0.0, 0.0, 0.0, 0.0);
 }
