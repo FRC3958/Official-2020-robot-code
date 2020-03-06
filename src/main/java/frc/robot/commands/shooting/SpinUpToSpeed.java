@@ -17,6 +17,7 @@ public class SpinUpToSpeed extends CommandBase {
   
   private final Shooter m_shooter;
   private final DoubleSupplier m_rpm;
+  private final boolean m_forever;
 
   /**
    * Creates a new ArmShooter.
@@ -27,6 +28,15 @@ public class SpinUpToSpeed extends CommandBase {
     
     m_shooter = shooter;
     m_rpm = rpm;
+    m_forever = false;
+  }
+
+  public SpinUpToSpeed(Shooter shooter, DoubleSupplier rpm, boolean forever) {
+    addRequirements(shooter);
+    
+    m_shooter = shooter;
+    m_rpm = rpm;
+    m_forever = forever;
   }
 
   // Called when the command is initially scheduled.
@@ -49,7 +59,10 @@ public class SpinUpToSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_shooter.getClosedLoopErrorPercent()) <=
-      ShooterConstants.kAcceptablePercentError;
+    if(!m_forever) {
+      return Math.abs(m_shooter.getClosedLoopErrorPercent()) <= ShooterConstants.kAcceptablePercentError;
+    }
+
+    return false;
   }
 }

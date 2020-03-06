@@ -7,6 +7,8 @@
 
 package frc.robot.commands.shooting;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpiutil.math.MathUtil;
@@ -19,12 +21,12 @@ import frc.robot.subsystems.Limelight.LedMode;
 public class AlignToTarget extends PIDCommand {
 
   private final boolean m_forever;
-  Limelight m_limelight;
+  private final Limelight m_limelight;
 
   /**
    * Creates a new AlignToTarget.
    */
-  public AlignToTarget(Limelight limelight, Drivetrain drivetrain, boolean forever) {    
+  public AlignToTarget(Limelight limelight, Drivetrain drivetrain, boolean forever, DoubleSupplier forward) {    
     
     super(
         // The controller that the command will use
@@ -42,7 +44,7 @@ public class AlignToTarget extends PIDCommand {
           // Use the output here
           output = MathUtil.clamp(output, -1.0, 1.0);
           output = convertToMovable(output);
-          drivetrain.arcadeDrive(0.0, output);
+          drivetrain.arcadeDrive(forward.getAsDouble(), output);
         });
         
     // Use addRequirements() here to declare subsystem dependencies.

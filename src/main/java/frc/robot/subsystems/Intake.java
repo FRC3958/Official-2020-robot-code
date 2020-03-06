@@ -29,7 +29,6 @@ public class Intake extends SubsystemBase {
   public Intake() {
 
     m_wheels.configFactoryDefault();
-    // TODO: asdfasdfasdfasdf
 
     m_wheels.setNeutralMode(NeutralMode.Brake);
   }

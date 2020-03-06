@@ -7,6 +7,7 @@
 
 package frc.robot.constants;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
 /**
@@ -25,33 +26,40 @@ public final class ControlConstants {
 
     public static class Driver {
 
-        
+        public static final int kAutoAlign              = Button.kBumperLeft.value;
     }
 
     public static class Operator {
+
         //Button used to take balls in
-
-        public static final int kToggleIntake           = Button.kBumperLeft.value;
-
+        public static final int kEat                    = XboxController.Button.kB.value;
+        
         // Button used to make the intake spin reverse
+        public static final int kEjectBalls             = XboxController.Button.kY.value;
 
-        public static final int kEjectBalls             = Button.kBumperRight.value;
+        // Lift or lower intake (toggle)
+        public static final int kLiftLowerIntake        = XboxController.Button.kA.value;
 
-        /* Button for Hooded Shooter to shoot sequentially,
-        along with other commands like autoalign */
+        // Trigger for manual ramp up
+        public static final int kManualRampUp           = XboxController.Axis.kLeftTrigger.value;
 
-        public static final int kShoot                  = Button.kA.value;
-        // Button to make the hook go up
+        // Trigger to shoot
+        public static final int kShoot                  = XboxController.Axis.kRightTrigger.value;
 
-        public static final int kPrepareClimb           = Button.kBack.value;
+        // Raise/lower shaft
+        public static final int kToggleClimberPiston    = XboxController.Button.kX.value;
 
-        // Button to get the gearbox to climb
+        // Extand shaft
+        public static final int kExtendShaft            = XboxController.Button.kBumperRight.value;
 
-        public static final int kClimb                  = Button.kStart.value;
+        // Retract shaft
+        public static final int kRetractShaft           = XboxController.Button.kBumperLeft.value;
+
+        // Lift (with winch)
+        public static final int kLift                   = XboxController.Axis.kRightY.value;
 
         // Button to get the Limelight to switch between driver and vision mode
-        
-        public static final int kLimelightModeSwitch    = Button.kB.value;
+        public static final int kLimelightModeSwitch    = 0;
     }
 }
 

@@ -19,22 +19,18 @@ import frc.robot.subsystems.indexing.Gateway;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class FullShootRoutine extends ParallelRaceGroup {
+public class FullShootRoutine extends SequentialCommandGroup {
   /**
    * Full shooting routine
    */
   public FullShootRoutine(Shooter shooter, SideBelt sideBelt, ConveyorBelt conveyor, Gateway Gateway, DoubleSupplier rpm) {
 
-    // ParallelRaceGroup
     super(
-      new FeedToGateway(sideBelt),        // the WHOLE time, direct balls to the stop-wheel
-      new SequentialCommandGroup(         // then, in order:
-        new SpinUpToSpeed(shooter, rpm),  // 1. spin up to the target RPM 
-        new ParallelRaceGroup(            // 2. at the same time until a shot is made:
-          new LoadToConveyor(Gateway),    //    - load from the gateway into the conveyor
-          new FeedToShooter(conveyor),    //    - feed from the conveyor to the shooter
-          new SpinUntilShot(shooter, rpm) //    - spin at the target RPM
-        )
+      new SpinUpToSpeed(shooter, rpm),  // 1. spin up to the target RPM 
+      new ParallelRaceGroup(            // 2. at the same time until a shot is made:
+        new LoadToConveyor(Gateway),    //    - load from the gateway into the conveyor
+        new FeedToShooter(conveyor),    //    - feed from the conveyor to the shooter
+        new SpinUntilShot(shooter, rpm) //    - spin at the target RPM
       )
     );
   }

@@ -13,16 +13,20 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.DropIntake;
 import frc.robot.commands.EatBalls;
 import frc.robot.commands.SwitchToDriverMode;
 import frc.robot.commands.EjectBalls;
+import frc.robot.commands.LiftDropIntake;
 import frc.robot.commands.LiftIntake;
 import frc.robot.commands.climbing.ExtendShaft;
 import frc.robot.commands.climbing.LiftBot;
 import frc.robot.commands.climbing.LowerShaft;
+import frc.robot.commands.climbing.RaiseLowerShaft;
 import frc.robot.commands.climbing.RaiseShaft;
 import frc.robot.commands.climbing.RetractShaft;
 import frc.robot.commands.shooting.AlignToTarget;
@@ -30,6 +34,7 @@ import frc.robot.commands.shooting.FeedToGateway;
 import frc.robot.commands.shooting.FeedToShooter;
 import frc.robot.commands.shooting.FullShootRoutine;
 import frc.robot.commands.shooting.LoadToConveyor;
+import frc.robot.commands.shooting.SpinUpToSpeed;
 import frc.robot.constants.ControlConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -130,7 +135,7 @@ public class RobotContainer {
     SmartDashboard.putData("Extend hook shaft", new ExtendShaft(m_climber));
     SmartDashboard.putData("Retract hook shaft", new RetractShaft(m_climber));
 
-    SmartDashboard.putData("Lift bot (hook must be deployed)", new LiftBot(m_climber));
+    SmartDashboard.putData("Lift bot (hook must be deployed)", new LiftBot(m_climber, () -> 0.3));
 
     /**
      * Limelight
@@ -156,66 +161,104 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // config controls
-    configureDriverControls(m_driverController);
-    configureOperatorControls(m_operatorController);
+    configureDriverControls(m_driverController, m_operatorController);
+    configureOperatorControls(m_operatorController, m_driverController);
   }
 
   /**
    * Configure all driver controls on the given controller
    * @param controller
    */
-  private void configureDriverControls(XboxController controller) {
+  private void configureDriverControls(XboxController controller, XboxController operatorController) {
     
     // Drive with stick (note: it is automatically linearly limited)
-    // m_drive.setDefaultCommand(new ArcadeDrive(m_drive, 
-    //   () -> Util.deadband(m_driverController.getY(Hand.kRight), 0.1),
-    //   () -> Util.deadband(m_driverController.getX(Hand.kLeft), 0.1))
-    // );
+    m_drive.setDefaultCommand(new ArcadeDrive(m_drive, 
+      () -> Util.deadband(controller.getY(Hand.kRight), 0.1),
+      () -> Util.deadband(controller.getX(Hand.kLeft), 0.1))
+    );
+
+    // Auto align
+    new JoystickButton(controller, ControlConstants.Driver.kAutoAlign)
+      .whenHeld(new AlignToTarget(
+        m_limelight,
+        m_drive, 
+        true,
+        () -> Util.deadband(controller.getY(Hand.kRight), 0.1))
+    );
   }
 
   /**
    * Configure all operator controls on the given controller
    * @param controller
    */
-  private void configureOperatorControls(XboxController controller) {
+  private void configureOperatorControls(XboxController controller, XboxController driverController) {
 
-    // // Toggle intake
-    // new JoystickButton(m_operatorController, ControlConstants.Operator.kToggleIntake)
-    //   .toggleWhenPressed(new EatBalls(m_intake)
-    // );
+    // Eat balls
+    new JoystickButton(controller, ControlConstants.Operator.kEat)
+      .whenHeld(new EatBalls(m_intake)
+    );
 
-    // // Clear intake
-    // new JoystickButton(m_operatorController, ControlConstants.Operator.kEjectBalls)
-    //   .toggleWhenPressed(new EjectBalls(m_intake)
-    // );
+    // Clear intake
+    new JoystickButton(controller, ControlConstants.Operator.kEjectBalls)
+      .whenHeld(new EjectBalls(m_intake)
+    );
+
+    // Lift lower intake
+    new JoystickButton(controller, ControlConstants.Operator.kLiftLowerIntake)
+      .whenPressed(new LiftDropIntake(m_intake)
+    );
+
+    // Manual ramp up
+    new Button(() -> controller.getRawAxis(ControlConstants.Operator.kManualRampUp) >= 0.5)
+      .whenHeld(new SpinUpToSpeed(
+        m_shooter,
+        () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()),
+        true
+      )
+    );
 
     // Run entire shooting routine, maintaining alignment when held, and shoot balls
     // over and over again at the same time
-    // new JoystickButton(m_operatorController, ControlConstants.Operator.kShoot)
-    //   .whenHeld(new AlignToTarget(m_limelight, m_drive, true))
-    //   .whileHeld(new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
-    //     () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()))
-    // );
- 
-    // Lift shaft and put hook above bar
-    new JoystickButton(m_operatorController, ControlConstants.Operator.kPrepareClimb)
-      .whenHeld(
-        new RaiseShaft(m_climber)               // first raise shaft (with solenoid)
-        .andThen(new ExtendShaft(m_climber))    // then extend shaft (like a toy lightsaber)
+    new Button(
+      () -> controller.getRawAxis(ControlConstants.Operator.kShoot) >= 0.5
+      && driverController.getRawButton(ControlConstants.Driver.kAutoAlign)  // driver must also be autoaligning
+    ).whileHeld(
+      new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
+        () -> {
+          // manual ramp up rpm logic
+          if(m_limelight.isValidTargetPresent()) {
+            return 2000;
+          }
+
+          return Util.calculateRPM(m_limelight.getApproximateDistanceMeters());
+        }
       )
-      .whenReleased(new RetractShaft(m_climber) // retract hook when released
     );
 
-    // Climb
-    new JoystickButton(m_operatorController, ControlConstants.Operator.kClimb)
-      .whenPressed(new LowerShaft(m_climber)) // first lower shaft
-      .whenHeld(new LiftBot(m_climber)        // lift bot while pressing
-    );    
+    // Switch driver mode limelight
+    new JoystickButton(controller, ControlConstants.Operator.kLimelightModeSwitch)
+      .toggleWhenPressed(new SwitchToDriverMode(m_limelight)
+    );
 
-    // // Switch driver mode limelight
-    // new JoystickButton(m_operatorController, ControlConstants.Operator.kLimelightModeSwitch)
-    //   .toggleWhenPressed(new SwitchToDriverMode(m_limelight)
-    // );
+    // Toggle raising / lowering shaft
+    new JoystickButton(controller, ControlConstants.Operator.kToggleClimberPiston)
+      .whenPressed(new RaiseLowerShaft(m_climber)
+    );
+
+    // Extend shaft
+    new JoystickButton(controller, ControlConstants.Operator.kExtendShaft)
+      .whenPressed(new ExtendShaft(m_climber)
+    );
+
+    // Retract shaft
+    new JoystickButton(controller, ControlConstants.Operator.kRetractShaft)
+      .whenPressed(new RetractShaft(m_climber)
+    );
+
+    // Lift (with winch)
+    new Button(() -> -controller.getRawAxis(ControlConstants.Operator.kLift) >= 0.2)
+      .whenPressed(new LiftBot(m_climber, () -> -controller.getRawAxis(ControlConstants.Operator.kLift))
+    );
   }
 
   /**

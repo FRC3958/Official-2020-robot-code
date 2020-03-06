@@ -7,8 +7,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -31,6 +29,8 @@ public class Climber extends SubsystemBase {
   private final WPI_TalonFX m_winch = new WPI_TalonFX(ClimberConstants.kTalonPortLifter);
 
   private final DoubleSolenoid m_piston = new DoubleSolenoid(ClimberConstants.kPCMPistonForward, ClimberConstants.kPCMPistonReverse);
+
+  private boolean m_hasHookDeployed;
 
   private final Orchestra m_orchestra = new Orchestra();
 
@@ -70,6 +70,8 @@ public class Climber extends SubsystemBase {
 
     resetEncoders();
 
+    m_hasHookDeployed = false;
+
     /**
      * Playing music yay
      */
@@ -108,6 +110,7 @@ public class Climber extends SubsystemBase {
   public void extendShaft() {
 
     m_hooker.set(ControlMode.Position, ClimberConstants.kHookerDeployedPosition);
+    m_hasHookDeployed = true;
   }
 
   public void retractShaft() {
@@ -127,9 +130,9 @@ public class Climber extends SubsystemBase {
       / ClimberConstants.kHookerDeployedPosition) >= (1.0 - ClimberConstants.kHookerDeployedPercentTolerance);
   }
 
-  public void lift() {
+  public void lift(double speed) {
 
-    m_winch.set(ControlMode.Velocity, ClimberConstants.kWinchOperationSpeed);
+    m_winch.set(ControlMode.Velocity, speed * ClimberConstants.kWinchOperationSpeed);
   }
 
   public void stopLifting() {
@@ -151,5 +154,10 @@ public class Climber extends SubsystemBase {
   public void stopMusic() {
 
     m_orchestra.stop();
+  }
+
+  public boolean hasHookDeployedOnce() {
+
+    return m_hasHookDeployed;
   }
 }
