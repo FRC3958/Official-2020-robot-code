@@ -21,6 +21,7 @@ public class Util {
         
         double x = targetDistanceMeters;
 
+        // http://www.xuru.org/rt/PR.asp#CopyPaste
         // 3.6815008x^5 - 115.9117541x^4 + 1349.00234x^3 - 6908.883255x^2 + 13561.41364x + 1388.348389
 
         return (3.6815008 * Math.pow(x, 5)) + (-115.9117541 * Math.pow(x, 4)) + (1349.00234 * Math.pow(x, 3)) 
