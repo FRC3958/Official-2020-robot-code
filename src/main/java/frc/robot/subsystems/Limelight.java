@@ -13,6 +13,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldConstants;
@@ -89,6 +90,8 @@ public class Limelight extends SubsystemBase {
 
       m_absoluteTargetAngleX = m_ahrs.getYaw() + getAngleOffsetX();
     }
+
+    SmartDashboard.putNumber("Limelight horiz distance estimate", getApproximateDistanceMeters());
   }
 
 
@@ -136,6 +139,6 @@ public class Limelight extends SubsystemBase {
 
     return ((FieldConstants.kOuterPortCenterHeightMeters - VisionConstants.kLimelightMountHeightMeters)
       / Math.tan(Units.degreesToRadians(VisionConstants.kLimelightMountAngleDeg + getAngleOffsetY())))
-        + VisionConstants.kLimelightMountDistanceFromBackMeters;
+        - VisionConstants.kLimelightMountDistanceFromBackMeters;
   }
 }
