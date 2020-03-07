@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -29,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ClearIndexer;
+import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DropIntake;
 import frc.robot.commands.EatBalls;
 import frc.robot.commands.SwitchToDriverMode;
@@ -347,17 +349,24 @@ public class RobotContainer {
     //   m_drive
     // );
 
-    SequentialCommandGroup queue = new SequentialCommandGroup(
-      new RunCommand(() -> m_drive.arcadeDrive(-.3, 0), m_drive).withTimeout(3)
-        .withInterrupt(() -> m_limelight.isValidTargetPresent()), // drive forward then turn around
-      new SeekTarget(m_drive, m_limelight).withTimeout(5.0), // seek target if we cant see it
-      new AlignToTarget(m_limelight, m_drive, false, () -> 0.0) // align to target
+    // SequentialCommandGroup queue = new SequentialCommandGroup(
+    //   new RunCommand(() -> m_drive.arcadeDrive(-.3, 0), m_drive).withTimeout(3)
+    //     .withInterrupt(() -> m_limelight.isValidTargetPresent()), // drive forward then turn around
+    //   new SeekTarget(m_drive, m_limelight).withTimeout(5.0), // seek target if we cant see it
+    //   new AlignToTarget(m_limelight, m_drive, false, () -> 0.0) // align to target
+    // );
+
+    // var shootRoutine = new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
+    //   () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()));
+
+    // return queue.andThen(shootRoutine)
+    //   .andThen(() -> m_shooter.setRPM(0), m_shooter);
+
+    SequentialCommandGroup auton = new SequentialCommandGroup(
+      new DropIntake(m_intake),
+      new DriveDistance(m_drive, -1.5)
     );
 
-    var shootRoutine = new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
-      () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()));
-
-    return queue.andThen(shootRoutine)
-      .andThen(() -> m_shooter.setRPM(0), m_shooter);
+    return auton;
   } 
 }
