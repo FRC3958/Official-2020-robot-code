@@ -19,7 +19,31 @@ public class Util {
     //https://docs.google.com/spreadsheets/d/1oIpPNEuoaOrB24wLa9FMBx6Za_Jd8xJV_Y1EI6LmxWM/edit#gid=0
     public static double calculateRPM(double targetDistanceMeters) {
         
-        // 4297 + -433x + 175x^2
-        return 3912 + (71.5 * targetDistanceMeters) + (42.5 * Math.pow(targetDistanceMeters, 2));
+        double x = targetDistanceMeters;
+
+        // http://www.xuru.org/rt/PR.asp#CopyPaste
+        // 3.6815008x^5 - 115.9117541x^4 + 1349.00234x^3 - 6908.883255x^2 + 13561.41364x + 1388.348389
+
+        return (3.6815008 * Math.pow(x, 5)) + (-115.9117541 * Math.pow(x, 4)) + (1349.00234 * Math.pow(x, 3)) 
+        + (-6908.883255 * Math.pow(x, 2)) + (13561.41364 * Math.pow(x, 1)) +  1388.348389;
+
+
+        /**
+        3.6815008
+        - 115.9117541
+        1349.00234
+        - 6908.883255
+        13561.41364
+        1388.348389
+         */
+
+        /**
+        * Math.pow(x, 5) +
+        * Math.pow(x, 4)
+        * Math.pow(x, 3)
+        * Math.pow(x, 2)
+        * Math.pow(x, 1)
+        * x
+         */
     }
 }
