@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.SlewRateLimiter;
@@ -26,17 +27,20 @@ public class ArcadeDrive extends CommandBase {
   private final PIDController m_straightPid = new PIDController(0.5, 0, 0);
   private boolean m_justRanPid = false;
   private double m_angleSetpoint = 0.0;
+  private BooleanSupplier m_half;
 
   /**
    * Creates a new StickDrive.
    */
-  public ArcadeDrive(Drivetrain drive, DoubleSupplier forward, DoubleSupplier turn) {
+  public ArcadeDrive(Drivetrain drive, DoubleSupplier forward, DoubleSupplier turn,
+    BooleanSupplier half) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
 
     m_drive = drive;
     m_forward = forward;
     m_turn = turn;
+    m_half = half;
   }
 
   // Called when the command is initially scheduled.
@@ -47,6 +51,8 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    double scale = m_half.getAsBoolean() ? 0.5 : 1.0;
 
     double turn = m_turnLimiter.calculate(m_turn.getAsDouble());
 
@@ -70,8 +76,8 @@ public class ArcadeDrive extends CommandBase {
     // }
 
     m_drive.arcadeDrive(
-      m_forwardLimiter.calculate(m_forward.getAsDouble()), 
-      turn
+      scale * m_forwardLimiter.calculate(m_forward.getAsDouble()), 
+      scale * turn
     );
   }
 

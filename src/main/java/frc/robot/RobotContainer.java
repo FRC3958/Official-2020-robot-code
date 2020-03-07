@@ -195,7 +195,8 @@ public class RobotContainer {
     // Drive with stick (note: it is automatically linearly limited)
     m_drive.setDefaultCommand(new ArcadeDrive(m_drive, 
       () -> Util.deadband(-controller.getRawAxis(ControlConstants.Driver.kForwardDrive), 0.1),
-      () -> Util.deadband(controller.getRawAxis(ControlConstants.Driver.kTurnDrive), 0.1))
+      () -> Util.deadband(controller.getRawAxis(ControlConstants.Driver.kTurnDrive), 0.1),
+      () -> controller.getRawButton(ControlConstants.Driver.kHalfSpeed))
     );
 
     // Auto align

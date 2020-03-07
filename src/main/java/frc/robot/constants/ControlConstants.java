@@ -27,6 +27,8 @@ public final class ControlConstants {
 
     public static class Driver {
 
+        public static final int kHalfSpeed              = Button.kBumperRight.value;
+
         public static final int kForwardDrive           = Axis.kRightY.value;
         public static final int kTurnDrive              = Axis.kLeftX.value;
 
