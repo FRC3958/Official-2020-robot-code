@@ -38,10 +38,6 @@ public class LiftBot extends CommandBase {
   @Override
   public void execute() {
 
-    if(!m_climber.hasHookDeployedOnce()) {
-      return;
-    }
-
     m_climber.lift(m_speed.getAsDouble());
   }
 

@@ -141,7 +141,7 @@ public class Climber extends SubsystemBase {
 
   public void lift(double speed) {
 
-    m_winch.set(ControlMode.Velocity, speed * ClimberConstants.kWinchOperationSpeed);
+    m_winch.set(ControlMode.PercentOutput, speed * ClimberConstants.kWinchOperationSpeed);
   }
 
   public void stopLifting() {

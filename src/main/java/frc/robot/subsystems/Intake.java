@@ -72,6 +72,11 @@ public class Intake extends SubsystemBase {
     m_wheels.set(ControlMode.PercentOutput, IntakeConstants.kOperationSpeed);
   }
   
+  public void eat(double speed) {
+
+    m_wheels.set(ControlMode.PercentOutput, speed * .7);
+  }
+
   public void eject(){
 
     m_wheels.set(ControlMode.PercentOutput, -IntakeConstants.kOperationSpeed);

@@ -52,7 +52,7 @@ public class ArcadeDrive extends CommandBase {
   @Override
   public void execute() {
 
-    double scale = m_half.getAsBoolean() ? 0.5 : 1.0;
+    double scale = m_half.getAsBoolean() ? 0.4 : 1.0;
 
     double turn = m_turnLimiter.calculate(m_turn.getAsDouble());
 
@@ -70,7 +70,7 @@ public class ArcadeDrive extends CommandBase {
     //   m_justRanPid = true;
     // } else {
 
-      SmartDashboard.putBoolean("Driving straight", false);
+      // SmartDashboard.putBoolean("Driving straight", false);
 
       m_justRanPid = false;
     // }

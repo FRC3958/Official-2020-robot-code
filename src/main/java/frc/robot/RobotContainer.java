@@ -207,6 +207,10 @@ public class RobotContainer {
         true,
         () -> Util.deadband(controller.getRawAxis(ControlConstants.Driver.kForwardDrive), 0.1))
     );
+
+    // climb
+    // new JoystickButton(controller, XboxController.Button.kBack.value)
+    //   .whenHeld(new RunCommand(() -> m_climber.lift(.5), m_climber));
   }
 
   /**
@@ -216,9 +220,13 @@ public class RobotContainer {
   private void configureOperatorControls(XboxController controller, XboxController driverController) {
 
     // Eat balls
-    new JoystickButton(controller, ControlConstants.Operator.kEat)
-      .whenHeld(new EatBalls(m_intake)
-    );
+    // new JoystickButton(controller, ControlConstants.Operator.kEat)
+    //   .whenHeld(new EatBalls(m_intake)
+    // );
+    // Eat balls
+    new Button(() -> Math.abs(controller.getRawAxis(ControlConstants.Operator.kEat)) >= 0.2)
+      .whenPressed(() -> m_intake.eat(controller.getRawAxis(ControlConstants.Operator.kEat)))
+      .whenReleased(() -> m_intake.stopEating(), m_intake);
 
     // Clear intake
     new JoystickButton(controller, ControlConstants.Operator.kEjectBalls)
@@ -245,12 +253,12 @@ public class RobotContainer {
     // over and over again at the same time
     new Button(
       () -> controller.getRawAxis(ControlConstants.Operator.kShoot) >= 0.5
-      && driverController.getRawButton(ControlConstants.Driver.kAutoAlign)  // driver must also be autoaligning
+      // && driverController.getRawButton(ControlConstants.Driver.kAutoAlign)  // driver must also be autoaligning
     ).whileHeld(
       new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
       () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters())
       )
-    );
+    ).whenReleased(() -> m_shooter.setRPM(0), m_shooter);
 
     // spin sidebelt
     new Button(() -> Math.abs(controller.getRawAxis(ControlConstants.Operator.kClearIndexer)) >= 0.2)
@@ -340,7 +348,8 @@ public class RobotContainer {
     // );
 
     SequentialCommandGroup queue = new SequentialCommandGroup(
-      new RunCommand(() -> m_drive.arcadeDrive(-.3, 0), m_drive).withTimeout(3), // drive forward then turn around
+      new RunCommand(() -> m_drive.arcadeDrive(-.3, 0), m_drive).withTimeout(3)
+        .withInterrupt(() -> m_limelight.isValidTargetPresent()), // drive forward then turn around
       new SeekTarget(m_drive, m_limelight).withTimeout(5.0), // seek target if we cant see it
       new AlignToTarget(m_limelight, m_drive, false, () -> 0.0) // align to target
     );
@@ -348,6 +357,7 @@ public class RobotContainer {
     var shootRoutine = new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
       () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()));
 
-    return queue.andThen(shootRoutine, shootRoutine, shootRoutine);
+    return queue.andThen(shootRoutine)
+      .andThen(() -> m_shooter.setRPM(0), m_shooter);
   } 
 }

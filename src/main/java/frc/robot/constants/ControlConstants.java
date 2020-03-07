@@ -38,7 +38,7 @@ public final class ControlConstants {
     public static class Operator {
 
         //Button used to take balls in
-        public static final int kEat                    = Button.kB.value;
+        public static final int kEat                    = Axis.kLeftY.value;
         
         // Button used to make the intake spin reverse
         public static final int kEjectBalls             = Button.kY.value;
