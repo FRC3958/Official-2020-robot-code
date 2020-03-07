@@ -20,8 +20,8 @@ public class ArcadeDrive extends CommandBase {
   private final Drivetrain m_drive;
   private final DoubleSupplier m_forward, m_turn;
 
-  private final SlewRateLimiter m_forwardLimiter = new SlewRateLimiter(2);
-  private final SlewRateLimiter m_turnLimiter = new SlewRateLimiter(2);
+  private final SlewRateLimiter m_forwardLimiter = new SlewRateLimiter(10);
+  private final SlewRateLimiter m_turnLimiter = new SlewRateLimiter(10);
 
   private final PIDController m_straightPid = new PIDController(0.5, 0, 0);
   private boolean m_justRanPid = false;
@@ -50,24 +50,24 @@ public class ArcadeDrive extends CommandBase {
 
     double turn = m_turnLimiter.calculate(m_turn.getAsDouble());
 
-    if(turn == 0) {
+    // if(turn == 0) {
 
-      SmartDashboard.putBoolean("Driving straight", true);
+    //   SmartDashboard.putBoolean("Driving straight", true);
 
-      // set new heading for driving straight if just starting, otherwise maintain heading
-      if(!m_justRanPid) {
-        m_angleSetpoint = m_drive.getHeading();
-      }
+    //   // set new heading for driving straight if just starting, otherwise maintain heading
+    //   if(!m_justRanPid) {
+    //     m_angleSetpoint = m_drive.getHeading();
+    //   }
 
-      turn = m_straightPid.calculate(m_drive.getHeading(), m_angleSetpoint);
+    //   turn = m_straightPid.calculate(m_drive.getHeading(), m_angleSetpoint);
 
-      m_justRanPid = true;
-    } else {
+    //   m_justRanPid = true;
+    // } else {
 
       SmartDashboard.putBoolean("Driving straight", false);
 
       m_justRanPid = false;
-    }
+    // }
 
     m_drive.arcadeDrive(
       m_forwardLimiter.calculate(m_forward.getAsDouble()), 

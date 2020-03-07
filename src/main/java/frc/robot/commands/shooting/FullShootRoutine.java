@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.indexing.ConveyorBelt;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.indexing.SideBelt;
 import frc.robot.subsystems.indexing.Gateway;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -23,7 +22,7 @@ public class FullShootRoutine extends SequentialCommandGroup {
   /**
    * Full shooting routine
    */
-  public FullShootRoutine(Shooter shooter, SideBelt sideBelt, ConveyorBelt conveyor, Gateway Gateway, DoubleSupplier rpm) {
+  public FullShootRoutine(Shooter shooter, ConveyorBelt conveyor, Gateway Gateway, DoubleSupplier rpm) {
 
     super(
       new SpinUpToSpeed(shooter, rpm),  // 1. spin up to the target RPM 

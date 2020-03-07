@@ -39,6 +39,10 @@ public class SideBelt extends SubsystemBase {
     m_sideways.set(ControlMode.PercentOutput, SideBeltConstants.kRunningPercentOutput);
   }
 
+  public void spin(double speed) {
+    m_sideways.set(ControlMode.PercentOutput, speed);
+  }
+
   public void stop() {
     m_sideways.set(ControlMode.PercentOutput, 0.0);
   }

@@ -5,38 +5,28 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooting;
+package frc.robot.commands;
+
+import frc.robot.subsystems.indexing.SideBelt;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.ShooterConstants;
-import frc.robot.subsystems.Shooter;
 
-public class SpinUpToSpeed extends CommandBase {
-  
-  private final Shooter m_shooter;
-  private final DoubleSupplier m_rpm;
-  private final boolean m_forever;
+public class ClearIndexer extends CommandBase {
+
+  private final SideBelt m_sidebelt;
+  private final DoubleSupplier m_speed;
 
   /**
-   * Creates a new ArmShooter.
+   * Creates a new ClearIndexer.
    */
-  public SpinUpToSpeed(Shooter shooter, DoubleSupplier rpm) {
+  public ClearIndexer(SideBelt sidebelt, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
-    
-    m_shooter = shooter;
-    m_rpm = rpm;
-    m_forever = false;
-  }
+    addRequirements(sidebelt);
 
-  public SpinUpToSpeed(Shooter shooter, DoubleSupplier rpm, boolean forever) {
-    addRequirements(shooter);
-    
-    m_shooter = shooter;
-    m_rpm = rpm;
-    m_forever = forever;
+    m_sidebelt = sidebelt;
+    m_speed = speed;
   }
 
   // Called when the command is initially scheduled.
@@ -47,22 +37,18 @@ public class SpinUpToSpeed extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    m_shooter.setRPM(m_rpm.getAsDouble());
+    m_sidebelt.spin(m_speed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_sidebelt.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(!m_forever) {
-      return Math.abs(m_shooter.getClosedLoopError()) <= 500;
-    }
-
     return false;
   }
 }

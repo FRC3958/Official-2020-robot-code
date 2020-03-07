@@ -57,8 +57,11 @@ public class SpinUntilShot extends CommandBase {
   public boolean isFinished() {
     
     // TODO: figure out a way to account for a changing target RPM...
-    if(m_shooter.isDippedPastShotThreshold()) {
+    if(Math.abs(m_shooter.getClosedLoopError()) > 1000) {
       m_timer.start();
+    } else {
+      m_timer.reset();
+      m_timer.stop();
     }
 
     return m_timer.get() > ShooterConstants.kTimeToShoot;

@@ -12,10 +12,12 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.LinearFilter;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Util;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.VisionConstants;
 
@@ -65,6 +67,9 @@ public class Limelight extends SubsystemBase {
 
   private double m_absoluteTargetAngleX = 0.0;
 
+  private final LinearFilter m_filter = LinearFilter.movingAverage(7);
+  private double m_lastFilterResult = 0;
+
   /**
    * Creates a new Limelight.
    */
@@ -91,7 +96,12 @@ public class Limelight extends SubsystemBase {
       m_absoluteTargetAngleX = m_ahrs.getYaw() + getAngleOffsetX();
     }
 
+    m_lastFilterResult = m_filter.calculate(getApproximateDistanceMetersRaw());
+    
     SmartDashboard.putNumber("Limelight horiz distance estimate", getApproximateDistanceMeters());
+    SmartDashboard.putNumber("Limelight rpm target", Util.calculateRPM(getApproximateDistanceMeters()));
+    SmartDashboard.putNumber("Limelight best offset x", getBestAngleOffsetX());
+    SmartDashboard.putNumber("Limelight offset x", getAngleOffsetX());
   }
 
 
@@ -132,13 +142,18 @@ public class Limelight extends SubsystemBase {
    * Gets the HORIZONTAL distance to the target from back of frame in meters
    * @return
    */
-  public double getApproximateDistanceMeters() {
+  public double getApproximateDistanceMetersRaw() {
 
     // https://docs.limelightvision.io/en/latest/cs_estimating_distance.html
     // d = (h2-h1) / tan(a1+a2)
 
-    return ((FieldConstants.kOuterPortCenterHeightMeters - VisionConstants.kLimelightMountHeightMeters)
-      / Math.tan(Units.degreesToRadians(VisionConstants.kLimelightMountAngleDeg + getAngleOffsetY())))
-        - VisionConstants.kLimelightMountDistanceFromBackMeters;
+    return Math.abs((FieldConstants.kOuterPortCenterHeightMeters - VisionConstants.kLimelightMountHeightMeters)
+      / Math.tan(Units.degreesToRadians(VisionConstants.kLimelightMountAngleDeg + getAngleOffsetY()))
+        - VisionConstants.kLimelightMountDistanceFromBackMeters);
+  }
+
+  public double getApproximateDistanceMeters() {
+
+    return m_lastFilterResult;
   }
 }

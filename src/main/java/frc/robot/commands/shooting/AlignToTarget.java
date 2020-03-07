@@ -10,6 +10,7 @@ package frc.robot.commands.shooting;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.constants.VisionConstants;
@@ -42,13 +43,15 @@ public class AlignToTarget extends PIDCommand {
         // This uses the output
         output -> {
           // Use the output here
+          SmartDashboard.putNumber("output", output);
           output = MathUtil.clamp(output, -1.0, 1.0);
-          output = convertToMovable(output);
-          drivetrain.arcadeDrive(forward.getAsDouble(), output);
+          drivetrain.arcadeDrive(forward.getAsDouble(), -output);
         });
         
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(limelight, drivetrain);
+
+    getController().enableContinuousInput(-180, 180);
 
     // Configure additional PID options by calling `getController` here.
     getController().setTolerance(
@@ -61,6 +64,8 @@ public class AlignToTarget extends PIDCommand {
 
     m_limelight.setLedMode(LedMode.kForceOn);
     m_limelight.setCamMode(CamMode.kVisionProcessor);
+    
+    SmartDashboard.putData(getController());
   }
 
   // Returns true when the command should end.
@@ -68,20 +73,5 @@ public class AlignToTarget extends PIDCommand {
   public boolean isFinished() {
 
     return m_forever ? false : getController().atSetpoint();
-  }
-
-  private static double convertToMovable(double in) {
-
-    if(Math.abs(in) >= 0.1) {
-      return in;
-    }
-
-    if(in < -0.05) {
-      return -0.1;
-    } else if(in > 0.05) {
-      return 0.1;
-    }
-
-    return in;
   }
 }

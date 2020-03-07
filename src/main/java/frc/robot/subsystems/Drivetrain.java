@@ -73,7 +73,7 @@ public class Drivetrain extends SubsystemBase {
     m_leftMaster.setInverted(InvertType.None);
     m_leftSlave.setInverted(InvertType.None);
     m_rightMaster.setInverted(InvertType.InvertMotorOutput);
-    m_rightSlave.setInverted(InvertType.FollowMaster);
+    m_rightSlave.setInverted(InvertType.None);
 
     // follow masters
     m_leftSlave.follow(m_leftMaster);
@@ -114,7 +114,7 @@ public class Drivetrain extends SubsystemBase {
    * @param turn -1.0 to +1.0 indicating left (neg) or right (pos)
    */
   public void arcadeDrive(double forward, double turn) {
-    m_drive.arcadeDrive(forward, turn);
+    m_drive.arcadeDrive(forward, turn, false);
   }
 
   public void tankDriveVolts(double leftVoltage, double rightVoltage) {

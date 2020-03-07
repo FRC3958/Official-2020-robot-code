@@ -20,6 +20,6 @@ public class Util {
     public static double calculateRPM(double targetDistanceMeters) {
         
         // 4297 + -433x + 175x^2
-        return 4297 + (-433 * targetDistanceMeters) + (175 * Math.pow(targetDistanceMeters, 2));
+        return 3912 + (71.5 * targetDistanceMeters) + (42.5 * Math.pow(targetDistanceMeters, 2));
     }
 }

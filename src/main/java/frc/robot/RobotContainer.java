@@ -23,15 +23,19 @@ import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConst
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.ClearIndexer;
 import frc.robot.commands.DropIntake;
 import frc.robot.commands.EatBalls;
 import frc.robot.commands.SwitchToDriverMode;
 import frc.robot.commands.EjectBalls;
 import frc.robot.commands.LiftDropIntake;
 import frc.robot.commands.LiftIntake;
+import frc.robot.commands.SeekTarget;
 import frc.robot.commands.climbing.ExtendShaft;
 import frc.robot.commands.climbing.LiftBot;
 import frc.robot.commands.climbing.LowerShaft;
@@ -161,6 +165,12 @@ public class RobotContainer {
 
     SmartDashboard.putData("Play music", new InstantCommand(() -> m_climber.playMusic()));
     SmartDashboard.putData("Pause music", new InstantCommand(() -> m_climber.stopMusic()));
+
+    SmartDashboard.putData("Test fire", new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
+      () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters())
+    ));
+
+    SmartDashboard.putData("Align to target", new AlignToTarget(m_limelight, m_drive, true, () -> 0.0));
   }
 
   /**
@@ -184,7 +194,7 @@ public class RobotContainer {
     
     // Drive with stick (note: it is automatically linearly limited)
     m_drive.setDefaultCommand(new ArcadeDrive(m_drive, 
-      () -> Util.deadband(controller.getRawAxis(ControlConstants.Driver.kForwardDrive), 0.1),
+      () -> Util.deadband(-controller.getRawAxis(ControlConstants.Driver.kForwardDrive), 0.1),
       () -> Util.deadband(controller.getRawAxis(ControlConstants.Driver.kTurnDrive), 0.1))
     );
 
@@ -221,28 +231,30 @@ public class RobotContainer {
 
     // Manual ramp up
     new Button(() -> controller.getRawAxis(ControlConstants.Operator.kManualRampUp) >= 0.5)
-      .whenHeld(new SpinUpToSpeed(
-        m_shooter,
-        () -> {
-          // manual ramp up rpm logic: if no target is present, go to 2k rpm, otherwise actual target rpm--
-          if(m_limelight.isValidTargetPresent()) {
-            return 2000;
-          }
-
-          return Util.calculateRPM(m_limelight.getApproximateDistanceMeters());
-        },
-        true
+      .whenPressed(new InstantCommand(
+        () -> m_shooter.setRPM(2000),
+        m_shooter
       )
-    );
+    ).whenReleased(new InstantCommand(
+      () -> m_shooter.setRPM(0),
+      m_shooter
+    ));
 
     // Run entire shooting routine, maintaining alignment when held, and shoot balls
     // over and over again at the same time
     new Button(
-      () -> -controller.getRawAxis(ControlConstants.Operator.kShoot) >= 0.5
+      () -> controller.getRawAxis(ControlConstants.Operator.kShoot) >= 0.5
       && driverController.getRawButton(ControlConstants.Driver.kAutoAlign)  // driver must also be autoaligning
     ).whileHeld(
-      new FullShootRoutine(m_shooter, m_sideBelt, m_conveyor, m_gateway,
+      new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
       () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters())
+      )
+    );
+
+    // spin sidebelt
+    new Button(() -> Math.abs(controller.getRawAxis(ControlConstants.Operator.kClearIndexer)) >= 0.2)
+      .whenHeld(new ClearIndexer(m_sideBelt, 
+        () -> controller.getRawAxis(ControlConstants.Operator.kClearIndexer) * .4
       )
     );
 
@@ -258,16 +270,16 @@ public class RobotContainer {
 
     // Extend shaft
     new JoystickButton(controller, ControlConstants.Operator.kExtendShaft)
-      .whenPressed(new ExtendShaft(m_climber)
+      .whenHeld(new ExtendShaft(m_climber)
     );
 
     // Retract shaft
     new JoystickButton(controller, ControlConstants.Operator.kRetractShaft)
-      .whenPressed(new RetractShaft(m_climber)
+      .whenHeld(new RetractShaft(m_climber)
     );
 
     // Lift (with winch)
-    new Button(() -> -controller.getRawAxis(ControlConstants.Operator.kLift) >= 0.2)
+    new Button(() -> Math.abs(controller.getRawAxis(ControlConstants.Operator.kLift)) >= 0.2)
       .whenPressed(new LiftBot(m_climber, () -> -controller.getRawAxis(ControlConstants.Operator.kLift))
     );
   }
@@ -279,53 +291,62 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     
-    // voltage constraint to not accelerate too fast
-    var voltageConstraint = new DifferentialDriveVoltageConstraint(
-      new SimpleMotorFeedforward(
-        DriveConstants.ksVolts, 
-        DriveConstants.kvVoltSecondsPerMeter, 
-        DriveConstants.kaVoltSecondsSquaredPerMeter
-      ),
-      DriveConstants.kKinematics,
-      10
+    // // voltage constraint to not accelerate too fast
+    // var voltageConstraint = new DifferentialDriveVoltageConstraint(
+    //   new SimpleMotorFeedforward(
+    //     DriveConstants.ksVolts, 
+    //     DriveConstants.kvVoltSecondsPerMeter, 
+    //     DriveConstants.kaVoltSecondsSquaredPerMeter
+    //   ),
+    //   DriveConstants.kKinematics,
+    //   10
+    // );
+
+    // // create trajectory config
+    // TrajectoryConfig config = new TrajectoryConfig(
+    //   DriveConstants.kMaxVelocityMetersPerSecond,
+    //   DriveConstants.kMaxAccelerationMetersPerSecondSq
+    // )
+    // .setKinematics(DriveConstants.kKinematics)
+    // .addConstraint(voltageConstraint);
+
+    // // trajectory to be followed
+    // Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+    //   // start at the "origin"
+    //   new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+    //   List.of(), 
+    //   // end 3 meters forward
+    //   new Pose2d(4, 0, Rotation2d.fromDegrees(180)), 
+    //   config
+    // );
+
+    // // create command to be scheduled
+    // RamseteCommand ramseteCommand = new RamseteCommand(
+    //   trajectory, 
+    //   m_drive::getPose, 
+    //   new RamseteController(DriveConstants.kRameseteB, DriveConstants.kRameseteZeta), 
+    //   new SimpleMotorFeedforward(
+    //     DriveConstants.ksVolts,
+    //     DriveConstants.kvVoltSecondsPerMeter,
+    //     DriveConstants.kaVoltSecondsSquaredPerMeter), 
+    //   DriveConstants.kKinematics, 
+    //   m_drive::getWheelSpeeds, 
+    //   new PIDController(DriveConstants.kPDriveVel, 0, 0), 
+    //   new PIDController(DriveConstants.kPDriveVel, 0, 0),
+    //   // output of controller 
+    //   m_drive::tankDriveVolts, 
+    //   m_drive
+    // );
+
+    SequentialCommandGroup queue = new SequentialCommandGroup(
+      new RunCommand(() -> m_drive.arcadeDrive(-.3, 0), m_drive).withTimeout(3), // drive forward then turn around
+      new SeekTarget(m_drive, m_limelight).withTimeout(5.0), // seek target if we cant see it
+      new AlignToTarget(m_limelight, m_drive, false, () -> 0.0) // align to target
     );
 
-    // create trajectory config
-    TrajectoryConfig config = new TrajectoryConfig(
-      DriveConstants.kMaxVelocityMetersPerSecond,
-      DriveConstants.kMaxAccelerationMetersPerSecondSq
-    )
-    .setKinematics(DriveConstants.kKinematics)
-    .addConstraint(voltageConstraint);
+    var shootRoutine = new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
+      () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()));
 
-    // trajectory to be followed
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      // start at the "origin"
-      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-      List.of(), 
-      // end 3 meters forward
-      new Pose2d(3, 0, Rotation2d.fromDegrees(0)), 
-      config
-    );
-
-    // create command to be scheduled
-    RamseteCommand ramseteCommand = new RamseteCommand(
-      trajectory, 
-      m_drive::getPose, 
-      new RamseteController(DriveConstants.kRameseteB, DriveConstants.kRameseteZeta), 
-      new SimpleMotorFeedforward(
-        DriveConstants.ksVolts,
-        DriveConstants.kvVoltSecondsPerMeter,
-        DriveConstants.kaVoltSecondsSquaredPerMeter), 
-      DriveConstants.kKinematics, 
-      m_drive::getWheelSpeeds, 
-      new PIDController(DriveConstants.kPDriveVel, 0, 0), 
-      new PIDController(DriveConstants.kPDriveVel, 0, 0),
-      // output of controller 
-      m_drive::tankDriveVolts, 
-      m_drive
-    );
-
-    return ramseteCommand.andThen(() -> m_drive.arcadeDrive(0, 0), m_drive);
+    return queue.andThen(shootRoutine, shootRoutine, shootRoutine);
   } 
 }

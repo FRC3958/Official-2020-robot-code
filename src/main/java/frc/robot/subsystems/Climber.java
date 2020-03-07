@@ -59,8 +59,8 @@ public class Climber extends SubsystemBase {
     winchConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
 
     // winch CANNOT turn backwards!!! zero any possible reverse values
-    winchConfig.peakOutputReverse = 0.0;
-    winchConfig.nominalOutputReverse = 0.0;
+    // winchConfig.peakOutputReverse = 0.0;
+    // winchConfig.nominalOutputReverse = 0.0;
 
     // apply config
     m_winch.configAllSettings(winchConfig);
@@ -107,27 +107,36 @@ public class Climber extends SubsystemBase {
    * Hook itself (which detaches)
    */
 
+  public void stopExtending() {
+
+    m_hooker.set(ControlMode.PercentOutput, 0.0);
+  }
+
   public void extendShaft() {
 
-    m_hooker.set(ControlMode.Position, ClimberConstants.kHookerDeployedPosition);
-    m_hasHookDeployed = true;
+    m_hooker.set(ControlMode.PercentOutput, 0.35);
   }
 
   public void retractShaft() {
 
-    m_hooker.set(ControlMode.Position, 0);
+    m_hooker.set(ControlMode.PercentOutput, -0.4);
+    m_hasHookDeployed = true;
   }
 
   public boolean isHookFullyExtended() {
 
-    return ((Math.abs(ClimberConstants.kHookerDeployedPosition - m_hooker.getSelectedSensorPosition())) 
-      / ClimberConstants.kHookerDeployedPosition) <= ClimberConstants.kHookerDeployedPercentTolerance;
+    // return ((Math.abs(ClimberConstants.kHookerDeployedPosition - m_hooker.getSelectedSensorPosition())) 
+    //   / ClimberConstants.kHookerDeployedPosition) <= ClimberConstants.kHookerDeployedPercentTolerance;
+
+    return false;
   }
 
   public boolean isHookFullyRetracted() {
 
-    return ((Math.abs(ClimberConstants.kHookerDeployedPosition - m_hooker.getSelectedSensorPosition())) 
-      / ClimberConstants.kHookerDeployedPosition) >= (1.0 - ClimberConstants.kHookerDeployedPercentTolerance);
+    // return ((Math.abs(ClimberConstants.kHookerDeployedPosition - m_hooker.getSelectedSensorPosition())) 
+    //   / ClimberConstants.kHookerDeployedPosition) >= (1.0 - ClimberConstants.kHookerDeployedPercentTolerance);
+
+    return false;
   }
 
   public void lift(double speed) {

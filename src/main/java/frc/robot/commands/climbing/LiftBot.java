@@ -38,9 +38,7 @@ public class LiftBot extends CommandBase {
   @Override
   public void execute() {
 
-    if(!m_climber.isHookFullyRetracted()
-      || m_climber.isShaftRaised()
-      || !m_climber.hasHookDeployedOnce()) {
+    if(!m_climber.hasHookDeployedOnce()) {
       return;
     }
 

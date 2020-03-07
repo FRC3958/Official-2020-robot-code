@@ -14,5 +14,5 @@ public final class GatewayConstants {
 
     public static final int kTalonPort = 10;
 
-    public static final double kRunningPercentOutput = 0.3;
+    public static final double kRunningPercentOutput = 0.4;
 }

@@ -50,8 +50,11 @@ public final class ControlConstants {
         // Trigger to shoot
         public static final int kShoot                  = Axis.kRightTrigger.value;
 
+        // Indexer
+        public static final int kClearIndexer           = Axis.kLeftX.value;
+
         // Raise/lower shaft
-        public static final int kToggleClimberPiston    = Button.kX.value;
+        public static final int kToggleClimberPiston    = Button.kBack.value;
 
         // Extand shaft
         public static final int kExtendShaft            = Button.kBumperRight.value;
@@ -63,7 +66,7 @@ public final class ControlConstants {
         public static final int kLift                   = Axis.kRightY.value;
 
         // Button to get the Limelight to switch between driver and vision mode
-        public static final int kLimelightModeSwitch    = 0;
+        public static final int kLimelightModeSwitch    = Button.kStart.value;
     }
 }
 
