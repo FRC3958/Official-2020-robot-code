@@ -28,5 +28,5 @@ public final class ClimberConstants {
     public static final int kHookerDeployedPosition = Constants.kQuadEncoderResolution * 50;
     public static final double kHookerDeployedPercentTolerance = 0.10;
 
-    public static final double kWinchOperationSpeed = 0.4;
+    public static final double kWinchOperationSpeed = 0.75;
 }

@@ -37,6 +37,9 @@ public class Shooter extends SubsystemBase {
     masterConfig.slot0.kI = ShooterConstants.kGains.kI;
     masterConfig.slot0.kD = ShooterConstants.kGains.kD;
 
+    masterConfig.nominalOutputReverse = 0.0;
+    masterConfig.peakOutputReverse = 0.0;
+
     // apply configs
     m_master.configAllSettings(masterConfig);
     m_slave.configFactoryDefault();
@@ -47,6 +50,12 @@ public class Shooter extends SubsystemBase {
     // slavery
     m_slave.follow(m_master);
     m_slave.setInverted(InvertType.OpposeMaster);
+
+    final int amps = 80;
+    m_master.configPeakCurrentLimit(amps);
+    m_master.enableCurrentLimit(true);    
+    m_slave.configPeakCurrentLimit(amps);
+    m_slave.enableCurrentLimit(true);    
   }
 
   @Override
@@ -77,7 +86,7 @@ public class Shooter extends SubsystemBase {
    */
   public double getClosedLoopError() {
     
-    return m_master.getClosedLoopError();
+    return ShooterConstants.getRPMFromNativeVelocity(m_master.getClosedLoopError());
   }
 
   public boolean isDippedPastShotThreshold() {

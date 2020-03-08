@@ -79,6 +79,30 @@ public class Drivetrain extends SubsystemBase {
     m_leftSlave.follow(m_leftMaster);
     m_rightSlave.follow(m_rightMaster);
 
+    // current limiting
+    final int peakAmps = 80;
+    m_leftMaster.configPeakCurrentLimit(peakAmps);
+    m_leftSlave.configPeakCurrentLimit(peakAmps);
+    m_rightMaster.configPeakCurrentLimit(peakAmps);
+    m_rightSlave.configPeakCurrentLimit(peakAmps);
+
+    final int peakTime = 0;
+    m_leftMaster.configPeakCurrentDuration(peakTime);
+    m_leftSlave.configPeakCurrentDuration(peakTime);
+    m_rightMaster.configPeakCurrentDuration(peakTime);
+    m_rightSlave.configPeakCurrentDuration(peakTime);
+
+    final int continousAmps = 60;
+    m_leftMaster.configContinuousCurrentLimit(continousAmps);
+    m_leftSlave.configContinuousCurrentLimit(continousAmps);
+    m_rightMaster.configContinuousCurrentLimit(continousAmps);
+    m_rightSlave.configContinuousCurrentLimit(continousAmps);
+
+    m_leftMaster.enableCurrentLimit(true);
+    m_leftSlave.enableCurrentLimit(true);
+    m_rightMaster.enableCurrentLimit(true);
+    m_rightSlave.enableCurrentLimit(true);
+
     // reset measurements
     resetEncoders();
     resetHeading();

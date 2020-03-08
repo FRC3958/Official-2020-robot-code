@@ -24,6 +24,9 @@ public class Gateway extends SubsystemBase {
   public Gateway() {
 
     m_wheel.configFactoryDefault();
+
+    m_wheel.configPeakCurrentLimit(20);
+    m_wheel.enableCurrentLimit(true);
     
     m_wheel.setNeutralMode(NeutralMode.Brake);
   }

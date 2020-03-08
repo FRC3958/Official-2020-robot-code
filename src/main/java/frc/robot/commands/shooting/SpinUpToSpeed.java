@@ -59,10 +59,7 @@ public class SpinUpToSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(!m_forever) {
-      return Math.abs(m_shooter.getClosedLoopError()) <= 500;
-    }
 
-    return false;
+    return Math.abs(m_shooter.getClosedLoopError()) <= 200;
   }
 }

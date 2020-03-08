@@ -53,6 +53,7 @@ public class ArcadeDrive extends CommandBase {
   public void execute() {
 
     double scale = m_half.getAsBoolean() ? 0.4 : 1.0;
+    double turnScale = m_half.getAsBoolean() ? .75 : 1.0;
 
     double turn = m_turnLimiter.calculate(m_turn.getAsDouble());
 
@@ -77,7 +78,7 @@ public class ArcadeDrive extends CommandBase {
 
     m_drive.arcadeDrive(
       scale * m_forwardLimiter.calculate(m_forward.getAsDouble()), 
-      scale * turn
+      turnScale * turn
     );
   }
 

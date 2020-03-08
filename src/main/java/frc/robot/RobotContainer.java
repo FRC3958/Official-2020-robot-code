@@ -156,8 +156,8 @@ public class RobotContainer {
      * Limelight
      */
 
-    SmartDashboard.putData("Turn lights on", new InstantCommand(() -> m_limelight.setLedMode(LedMode.kForceOff), m_limelight));
-    SmartDashboard.putData("Turn lights auto", new InstantCommand(() -> m_limelight.setLedMode(LedMode.kAuto), m_limelight));   
+    SmartDashboard.putData("Turn lights off", new InstantCommand(() -> m_limelight.setLedMode(LedMode.kForceOff), m_limelight));
+    SmartDashboard.putData("Turn lights on", new InstantCommand(() -> m_limelight.setLedMode(LedMode.kForceOn), m_limelight));   
 
     /**
      * Music
@@ -167,7 +167,7 @@ public class RobotContainer {
     SmartDashboard.putData("Pause music", new InstantCommand(() -> m_climber.stopMusic()));
 
     SmartDashboard.putData("Test fire", new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
-      () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters())
+      () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()) + 100
     ));
 
     SmartDashboard.putData("Align to target", new AlignToTarget(m_limelight, m_drive, true, () -> 0.0));
@@ -240,9 +240,8 @@ public class RobotContainer {
 
     // Manual ramp up
     new Button(() -> controller.getRawAxis(ControlConstants.Operator.kManualRampUp) >= 0.5)
-      .whenPressed(new InstantCommand(
-        () -> m_shooter.setRPM(2000),
-        m_shooter
+      .whenHeld(new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
+        () -> 4200
       )
     ).whenReleased(new InstantCommand(
       () -> m_shooter.setRPM(0),
@@ -288,7 +287,7 @@ public class RobotContainer {
     );
 
     // Lift (with winch)
-    new Button(() -> Math.abs(controller.getRawAxis(ControlConstants.Operator.kLift)) >= 0.2)
+    new Button(() -> Math.abs(controller.getRawAxis(ControlConstants.Operator.kLift)) >= 0.4)
       .whenPressed(new LiftBot(m_climber, () -> -controller.getRawAxis(ControlConstants.Operator.kLift))
     );
   }
@@ -347,17 +346,23 @@ public class RobotContainer {
     //   m_drive
     // );
 
-    SequentialCommandGroup queue = new SequentialCommandGroup(
-      new RunCommand(() -> m_drive.arcadeDrive(-.3, 0), m_drive).withTimeout(3)
-        .withInterrupt(() -> m_limelight.isValidTargetPresent()), // drive forward then turn around
-      new SeekTarget(m_drive, m_limelight).withTimeout(5.0), // seek target if we cant see it
-      new AlignToTarget(m_limelight, m_drive, false, () -> 0.0) // align to target
-    );
+  //   SequentialCommandGroup queue = new SequentialCommandGroup(
+  //     new RunCommand(() -> m_drive.arcadeDrive(-.3, 0), m_drive).withTimeout(3)
+  //       .withInterrupt(() -> m_limelight.isValidTargetPresent()), // drive forward then turn around
+  //     new SeekTarget(m_drive, m_limelight).withTimeout(5.0), // seek target if we cant see it
+  //     new AlignToTarget(m_limelight, m_drive, false, () -> 0.0) // align to target
+  //   );
+    
+  //   var shootRoutine = new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
+  //     () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()));
 
-    var shootRoutine = new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
-      () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()));
+  //   return queue.andThen(shootRoutine)
+  //     .andThen(() -> m_shooter.setRPM(0), m_shooter);
+  // } 
 
-    return queue.andThen(shootRoutine)
-      .andThen(() -> m_shooter.setRPM(0), m_shooter);
-  } 
+  // return new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
+  //   () -> 4200).andThen(() -> m_drive.arcadeDrive(-.5, 0.0), m_drive).withTimeout(1);
+
+  return new RunCommand(() -> m_drive.arcadeDrive(-.5, 0.0), m_drive).withTimeout(.6);
+  }
 }

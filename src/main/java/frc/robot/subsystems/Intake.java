@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -29,6 +30,11 @@ public class Intake extends SubsystemBase {
   public Intake() {
 
     m_wheels.configFactoryDefault();
+
+    m_wheels.setInverted(InvertType.InvertMotorOutput);
+
+    m_wheels.configPeakCurrentLimit(30);
+    m_wheels.enableCurrentLimit(true);
 
     m_wheels.setNeutralMode(NeutralMode.Brake);
   }
@@ -74,7 +80,7 @@ public class Intake extends SubsystemBase {
   
   public void eat(double speed) {
 
-    m_wheels.set(ControlMode.PercentOutput, speed * .7);
+    m_wheels.set(ControlMode.PercentOutput, speed);
   }
 
   public void eject(){

@@ -25,6 +25,9 @@ public class ConveyorBelt extends SubsystemBase {
 
     m_belt.configFactoryDefault();
 
+    m_belt.configPeakCurrentLimit(20);    
+    m_belt.enableCurrentLimit(true);    
+
     m_belt.setNeutralMode(NeutralMode.Brake);
   }
 

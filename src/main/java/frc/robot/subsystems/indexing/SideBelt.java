@@ -25,6 +25,9 @@ public class SideBelt extends SubsystemBase {
   public SideBelt() {
 
     m_sideways.configFactoryDefault();
+    
+    m_sideways.configPeakCurrentLimit(15);
+    m_sideways.enableCurrentLimit(true);    
 
     m_sideways.setInverted(InvertType.None);
     m_sideways.setNeutralMode(NeutralMode.Coast);

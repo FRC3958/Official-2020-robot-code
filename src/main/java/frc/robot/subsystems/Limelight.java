@@ -65,10 +65,14 @@ public class Limelight extends SubsystemBase {
 
   private final AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
 
-  private double m_absoluteTargetAngleX = 0.0;
+  private final LinearFilter m_yAngleFilter = LinearFilter.movingAverage(5);
+  private double m_lastYAngle = 0.0;
 
-  private final LinearFilter m_filter = LinearFilter.movingAverage(7);
-  private double m_lastFilterResult = 0;
+  private final LinearFilter m_distanceFilter = LinearFilter.movingAverage(7);
+  private double m_lastFilteredDistance = 0;
+
+  private double m_absoluteTargetAngleX = 0.0;
+  private double m_bestTargetAngleX = 0.0;
 
   /**
    * Creates a new Limelight.
@@ -91,23 +95,22 @@ public class Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(isValidTargetPresent()) {
-
-      m_absoluteTargetAngleX = m_ahrs.getYaw() + getAngleOffsetX();
-    }
-
-    m_lastFilterResult = m_filter.calculate(getApproximateDistanceMetersRaw());
     
+    updateAbsoluteAngle();
+    updateAngleoffsetY();
+    updateBestAngle();
+    updateFilteredDistance();
+    
+    SmartDashboard.putBoolean("Valid target present", isValidTargetPresent());
     SmartDashboard.putNumber("Limelight horiz distance estimate", getApproximateDistanceMeters());
     SmartDashboard.putNumber("Limelight rpm target", Util.calculateRPM(getApproximateDistanceMeters()));
     SmartDashboard.putNumber("Limelight best offset x", getBestAngleOffsetX());
     SmartDashboard.putNumber("Limelight offset x", getAngleOffsetX());
   }
 
-
   public boolean isValidTargetPresent() {
 
-    return m_tv.getBoolean(false);
+    return m_tv.getBoolean(false) || getAngleOffsetX() != 0.0;
   }
 
   /**
@@ -123,9 +126,29 @@ public class Limelight extends SubsystemBase {
    * Vertical angle offset to target
    * @return
    */
-  public double getAngleOffsetY() {
+  public double getAngleOffsetYRaw() {
 
     return m_ty.getDouble(0.0);
+  }
+
+  public void updateAngleoffsetY() {
+
+    m_lastYAngle = m_yAngleFilter.calculate(getAngleOffsetYRaw());
+  }
+ 
+  public double getAngleOffsetY() {
+
+    return m_lastYAngle;
+  }
+
+  public void updateBestAngle() {
+    m_bestTargetAngleX = isValidTargetPresent() ? getAngleOffsetX() : getAngleOffsetXFromMemory();
+  }
+
+  public void updateAbsoluteAngle() {
+
+    if(isValidTargetPresent())
+      m_absoluteTargetAngleX = m_ahrs.getYaw() + getAngleOffsetX();
   }
 
   public double getAngleOffsetXFromMemory() {
@@ -135,7 +158,7 @@ public class Limelight extends SubsystemBase {
 
   public double getBestAngleOffsetX() {
 
-    return isValidTargetPresent() ? getAngleOffsetX() : getAngleOffsetXFromMemory();
+    return m_bestTargetAngleX;
   }
 
   /**
@@ -152,8 +175,13 @@ public class Limelight extends SubsystemBase {
         - VisionConstants.kLimelightMountDistanceFromBackMeters);
   }
 
+  public void updateFilteredDistance() {
+
+    m_lastFilteredDistance = m_distanceFilter.calculate(getApproximateDistanceMetersRaw());
+  }
+
   public double getApproximateDistanceMeters() {
 
-    return m_lastFilterResult;
+    return m_lastFilteredDistance;
   }
 }
