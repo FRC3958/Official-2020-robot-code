@@ -7,14 +7,13 @@
 
 package frc.robot.constants;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
 /**
  * Add your docs here.
  */
-public final class ControlConstants {
+public final class Controls {
 
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
@@ -39,9 +38,6 @@ public final class ControlConstants {
 
         //Button used to take balls in
         public static final int kEat                    = Axis.kLeftY.value;
-        
-        // Button used to make the intake spin reverse
-        public static final int kEjectBalls             = Button.kY.value;
 
         // Lift or lower intake (toggle)
         public static final int kLiftLowerIntake        = Button.kA.value;
@@ -53,7 +49,7 @@ public final class ControlConstants {
         public static final int kShoot                  = Axis.kRightTrigger.value;
 
         // Indexer
-        public static final int kClearIndexer           = Axis.kLeftX.value;
+        public static final int kSpinSidebelt           = Axis.kLeftX.value;
 
         // Raise/lower shaft
         public static final int kToggleClimberPiston    = Button.kBack.value;

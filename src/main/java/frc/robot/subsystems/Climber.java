@@ -103,6 +103,15 @@ public class Climber extends SubsystemBase {
     return m_piston.get() == Value.kForward;
   }
 
+  public void toggleShaft() {
+
+    if(isShaftRaised()) {
+      lowerShaft();
+    } else {
+      raiseShaft();
+    }
+  }
+
   /**
    * Hook itself (which detaches)
    */
