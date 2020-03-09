@@ -7,8 +7,6 @@
 
 package frc.robot.constants;
 
-import frc.robot.Gains;
-
 /**
  * Add your docs here.
  */
@@ -19,14 +17,6 @@ public final class ClimberConstants {
 
     public static final int kPCMPistonForward = 3;
     public static final int kPCMPistonReverse = 2;
-
-    public static final int kPrimaryPIDLoopIdx = 0;
-
-    public static final Gains kHookerPositionGains = new Gains(0.0, 0.5, 0.0, 0.0);
-
-    // TODO: replace placeholder
-    public static final int kHookerDeployedPosition = Constants.kQuadEncoderResolution * 50;
-    public static final double kHookerDeployedPercentTolerance = 0.10;
 
     public static final double kWinchOperationSpeed = 0.75;
 }

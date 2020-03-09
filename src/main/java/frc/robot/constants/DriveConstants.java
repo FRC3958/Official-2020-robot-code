@@ -9,7 +9,6 @@ package frc.robot.constants;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.util.Units;
-import frc.robot.Gains;
 
 /**
  * Add your docs here.
@@ -26,18 +25,6 @@ public final class DriveConstants {
     public static final double kWheelCircumferenceMeters = Math.PI * kWheelDiameterMeters;
     
     public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(DriveConstants.kTrackWidth);
-
-    // TODO: characterize
-    public static final double ksVolts = 0.804;
-    public static final double kvVoltSecondsPerMeter = 2.39;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.352;
-    public static final double kPDriveVel = 4.13;
-
-    public static final double kMaxVelocityMetersPerSecond = 0.0;
-    public static final double kMaxAccelerationMetersPerSecondSq = 0.0;
-
-    public static final double kRameseteB = 2.0;
-    public static final double kRameseteZeta = 0.7;
 
     /**
      * Convert from meters to native untis

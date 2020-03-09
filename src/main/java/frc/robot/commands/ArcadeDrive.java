@@ -13,8 +13,6 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArcadeDrive extends CommandBase {
 
@@ -24,9 +22,6 @@ public class ArcadeDrive extends CommandBase {
   private final SlewRateLimiter m_forwardLimiter = new SlewRateLimiter(10);
   private final SlewRateLimiter m_turnLimiter = new SlewRateLimiter(10);
 
-  private final PIDController m_straightPid = new PIDController(0.5, 0, 0);
-  private boolean m_justRanPid = false;
-  private double m_angleSetpoint = 0.0;
   private BooleanSupplier m_half;
 
   /**
@@ -55,30 +50,9 @@ public class ArcadeDrive extends CommandBase {
     double scale = m_half.getAsBoolean() ? 0.4 : 1.0;
     double turnScale = m_half.getAsBoolean() ? .75 : 1.0;
 
-    double turn = m_turnLimiter.calculate(m_turn.getAsDouble());
-
-    // if(turn == 0) {
-
-    //   SmartDashboard.putBoolean("Driving straight", true);
-
-    //   // set new heading for driving straight if just starting, otherwise maintain heading
-    //   if(!m_justRanPid) {
-    //     m_angleSetpoint = m_drive.getHeading();
-    //   }
-
-    //   turn = m_straightPid.calculate(m_drive.getHeading(), m_angleSetpoint);
-
-    //   m_justRanPid = true;
-    // } else {
-
-      // SmartDashboard.putBoolean("Driving straight", false);
-
-      m_justRanPid = false;
-    // }
-
     m_drive.arcadeDrive(
       scale * m_forwardLimiter.calculate(m_forward.getAsDouble()), 
-      turnScale * turn
+      turnScale * m_turnLimiter.calculate(m_turn.getAsDouble())
     );
   }
 

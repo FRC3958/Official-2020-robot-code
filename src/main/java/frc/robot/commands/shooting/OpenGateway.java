@@ -7,21 +7,33 @@
 
 package frc.robot.commands.shooting;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.indexing.Gateway;
 
-public class LoadToConveyor extends CommandBase {
+public class OpenGateway extends CommandBase {
   
   private final Gateway m_gateway;
+  private final BooleanSupplier m_shouldSpin;
   
   /**
    * Loads ball into the conveyor
    */
-  public LoadToConveyor(Gateway gateway) {
+  public OpenGateway(Gateway gateway) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(gateway);
 
     m_gateway = gateway;
+    m_shouldSpin = () -> true;
+  }
+
+  public OpenGateway(Gateway gateway, BooleanSupplier shouldSpin) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(gateway);
+
+    m_gateway = gateway;
+    m_shouldSpin = shouldSpin;
   }
 
   // Called when the command is initially scheduled.
@@ -32,7 +44,10 @@ public class LoadToConveyor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_gateway.spin();
+
+    if(m_shouldSpin.getAsBoolean()) {
+      m_gateway.spin();
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -62,7 +62,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     
     SmartDashboard.putNumber("Shooter RPM", getRPM());
-    SmartDashboard.putNumber("Shooter percent error", getClosedLoopError());
+    SmartDashboard.putNumber("Shooter percent error", getClosedLoopErrorRPM());
   }
 
   public void setNative(int targetVelocity) {
@@ -80,19 +80,8 @@ public class Shooter extends SubsystemBase {
     return ShooterConstants.getRPMFromNativeVelocity(m_master.getSelectedSensorVelocity());
   }
 
-  /**
-   * NOT an absolute value. Negative indicated measurement is lower than setpoint!
-   * @return
-   */
-  public double getClosedLoopError() {
+  public double getClosedLoopErrorRPM() {
     
     return ShooterConstants.getRPMFromNativeVelocity(m_master.getClosedLoopError());
-  }
-
-  public boolean isDippedPastShotThreshold() {
-
-    // error percent is not absolute!!!
-    // return getClosedLoopError() <= -ShooterConstants.kShootDipPercent;
-    return false;
   }
 }
