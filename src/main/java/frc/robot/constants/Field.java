@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.util.Units;
 /**
  * Add your docs here.
  */
-public class FieldConstants {
+public class Field {
 
     public static final double kOuterPortCenterHeightMeters = Units.feetToMeters(98.25 / 12.0);
 }

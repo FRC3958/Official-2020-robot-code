@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Util;
-import frc.robot.constants.FieldConstants;
+import frc.robot.constants.Field;
 import frc.robot.constants.VisionConstants;
 
 public class Limelight extends SubsystemBase {
@@ -170,7 +170,7 @@ public class Limelight extends SubsystemBase {
     // https://docs.limelightvision.io/en/latest/cs_estimating_distance.html
     // d = (h2-h1) / tan(a1+a2)
 
-    return Math.abs((FieldConstants.kOuterPortCenterHeightMeters - VisionConstants.kLimelightMountHeightMeters)
+    return Math.abs((Field.kOuterPortCenterHeightMeters - VisionConstants.kLimelightMountHeightMeters)
       / Math.tan(Units.degreesToRadians(VisionConstants.kLimelightMountAngleDeg + getAngleOffsetY()))
         - VisionConstants.kLimelightMountDistanceFromBackMeters);
   }

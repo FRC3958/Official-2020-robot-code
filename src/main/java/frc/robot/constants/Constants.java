@@ -26,5 +26,5 @@ public final class Constants {
     public static final int kTimeout = 100;
 
     public static final int kQuadEncoderResolution = 4096; // same encoders are used everywhere, so this is ok
-    public static final int kFalconResolution = 2048; // same encoders are used everywhere, so this is ok
+    public static final int kFalconResolution = 2048;
 }

@@ -72,23 +72,13 @@ public class Intake extends SubsystemBase {
     else
       dropBar();
   }
-
-  public void eat() {
-
-    m_wheels.set(ControlMode.PercentOutput, IntakeConstants.kOperationSpeed);
-  }
   
-  public void eat(double speed) {
+  public void spin(double speed) {
 
     m_wheels.set(ControlMode.PercentOutput, speed);
   }
 
-  public void eject(){
-
-    m_wheels.set(ControlMode.PercentOutput, -IntakeConstants.kOperationSpeed);
-  }
-
-  public void stopEating() {
+  public void stopSpinning() {
 
     m_wheels.set(ControlMode.PercentOutput, 0.0);
   }
