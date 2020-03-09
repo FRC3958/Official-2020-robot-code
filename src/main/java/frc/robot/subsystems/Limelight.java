@@ -17,9 +17,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Util;
-import frc.robot.constants.Field;
-import frc.robot.constants.VisionConstants;
+import static frc.robot.constants.Field.*;
+import static frc.robot.constants.VisionConstants.*;
 
 public class Limelight extends SubsystemBase {
 
@@ -55,7 +54,7 @@ public class Limelight extends SubsystemBase {
     }
   }
   
-  public NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");;
+  private final NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");;
   
   private final NetworkTableEntry m_tv = m_table.getEntry("tv");
   private final NetworkTableEntry m_tx = m_table.getEntry("tx");
@@ -100,12 +99,11 @@ public class Limelight extends SubsystemBase {
     updateAngleoffsetY();
     updateBestAngle();
     updateFilteredDistance();
-    
-    SmartDashboard.putBoolean("Valid target present", isValidTargetPresent());
-    SmartDashboard.putNumber("Limelight horiz distance estimate", getApproximateDistanceMeters());
-    SmartDashboard.putNumber("Limelight rpm target", Util.calculateRPM(getApproximateDistanceMeters()));
-    SmartDashboard.putNumber("Limelight best offset x", getBestAngleOffsetX());
-    SmartDashboard.putNumber("Limelight offset x", getAngleOffsetX());
+
+    SmartDashboard.putBoolean("Valid target", isValidTargetPresent());
+    SmartDashboard.putNumber("Offset X deg (raw)", getAngleOffsetX());
+    SmartDashboard.putNumber("Offset X deg (interp)", getBestAngleOffsetX());
+    SmartDashboard.putNumber("Distance estimate", getApproximateDistanceMeters());
   }
 
   public boolean isValidTargetPresent() {
@@ -170,9 +168,9 @@ public class Limelight extends SubsystemBase {
     // https://docs.limelightvision.io/en/latest/cs_estimating_distance.html
     // d = (h2-h1) / tan(a1+a2)
 
-    return Math.abs((Field.kOuterPortCenterHeightMeters - VisionConstants.kLimelightMountHeightMeters)
-      / Math.tan(Units.degreesToRadians(VisionConstants.kLimelightMountAngleDeg + getAngleOffsetY()))
-        - VisionConstants.kLimelightMountDistanceFromBackMeters);
+    return Math.abs((kOuterPortCenterHeightMeters - kLimelightMountHeightMeters)
+      / Math.tan(Units.degreesToRadians(kLimelightMountAngleDeg + getAngleOffsetY()))
+        - kLimelightMountDistanceFromBackMeters);
   }
 
   public void updateFilteredDistance() {

@@ -24,7 +24,7 @@ public final class DriveConstants {
     public static final double kWheelDiameterMeters = Units.feetToMeters(8.0/12.0);
     public static final double kWheelCircumferenceMeters = Math.PI * kWheelDiameterMeters;
     
-    public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(DriveConstants.kTrackWidth);
+    public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(kTrackWidth);
 
     /**
      * Convert from meters to native untis

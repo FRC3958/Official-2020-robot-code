@@ -8,16 +8,16 @@
 package frc.robot.commands.shooting;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.indexing.ConveyorBelt;
+import frc.robot.subsystems.indexing.Conveyor;
 
 public class FeedToShooter extends CommandBase {
 
-  private final ConveyorBelt m_conveyor;
+  private final Conveyor m_conveyor;
 
   /**
    * Feeds ball to shooter
    */
-  public FeedToShooter(ConveyorBelt conveyor) {
+  public FeedToShooter(Conveyor conveyor) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(conveyor);
 

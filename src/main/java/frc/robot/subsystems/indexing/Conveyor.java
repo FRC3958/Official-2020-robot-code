@@ -12,16 +12,16 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.ConveyorBeltConstants;
+import static frc.robot.constants.ConveyorBeltConstants.*;
 
-public class ConveyorBelt extends SubsystemBase {
+public class Conveyor extends SubsystemBase {
 
-  private final WPI_TalonSRX m_belt = new WPI_TalonSRX(ConveyorBeltConstants.kTalonPort);
+  private final WPI_TalonSRX m_belt = new WPI_TalonSRX(kTalonPort);
 
   /**
    * Feeds into the shooter wheel.
    */
-  public ConveyorBelt() {
+  public Conveyor() {
 
     m_belt.configFactoryDefault();
 
@@ -39,7 +39,7 @@ public class ConveyorBelt extends SubsystemBase {
 
   public void spin() {
     
-    m_belt.set(ControlMode.PercentOutput, ConveyorBeltConstants.kRunningPercentOutput);
+    m_belt.set(ControlMode.PercentOutput, kRunningPercentOutput);
   }
 
   public void stop() {

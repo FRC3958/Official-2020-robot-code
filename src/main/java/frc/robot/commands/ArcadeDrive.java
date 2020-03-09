@@ -38,6 +38,16 @@ public class ArcadeDrive extends CommandBase {
     m_half = half;
   }
 
+  public ArcadeDrive(Drivetrain drive, DoubleSupplier forward, DoubleSupplier turn) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(drive);
+
+    m_drive = drive;
+    m_forward = forward;
+    m_turn = turn;
+    m_half = () -> false;
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {

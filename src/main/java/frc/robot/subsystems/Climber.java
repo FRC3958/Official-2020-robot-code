@@ -16,15 +16,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.ClimberConstants;
-import frc.robot.constants.Constants;
+import static frc.robot.constants.ClimberConstants.*;
 
 public class Climber extends SubsystemBase {
 
-  private final WPI_TalonSRX m_hooker = new WPI_TalonSRX(ClimberConstants.kTalonPortHooker);
-  private final WPI_TalonFX m_winch = new WPI_TalonFX(ClimberConstants.kTalonPortLifter);
+  private final WPI_TalonSRX m_hooker = new WPI_TalonSRX(kTalonPortHooker);
+  private final WPI_TalonFX m_winch = new WPI_TalonFX(kTalonPortLifter);
 
-  private final DoubleSolenoid m_piston = new DoubleSolenoid(ClimberConstants.kPCMPistonForward, ClimberConstants.kPCMPistonReverse);
+  private final DoubleSolenoid m_piston = new DoubleSolenoid(kPCMPistonForward, kPCMPistonReverse);
 
   /**
    * Creates a new Climber.
@@ -92,7 +91,7 @@ public class Climber extends SubsystemBase {
 
   public void lift(double speed) {
 
-    m_winch.set(ControlMode.PercentOutput, speed * ClimberConstants.kWinchOperationSpeed);
+    m_winch.set(ControlMode.PercentOutput, speed * kWinchOperationSpeed);
   }
 
   public void stopLifting() {

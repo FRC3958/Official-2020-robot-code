@@ -12,11 +12,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.GatewayConstants;
+import static frc.robot.constants.GatewayConstants.*;
 
 public class Gateway extends SubsystemBase {
 
-  private final WPI_TalonSRX m_wheel = new WPI_TalonSRX(GatewayConstants.kTalonPort);
+  private final WPI_TalonSRX m_wheel = new WPI_TalonSRX(kTalonPort);
 
   /**
    * Leads balls into the conveyor.
@@ -37,7 +37,7 @@ public class Gateway extends SubsystemBase {
   }
 
   public void spin() {
-    m_wheel.set(ControlMode.PercentOutput, GatewayConstants.kRunningPercentOutput);
+    m_wheel.set(ControlMode.PercentOutput, kRunningPercentOutput);
   }
 
   public void stop() {

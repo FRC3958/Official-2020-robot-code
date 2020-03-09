@@ -23,7 +23,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.indexing.ConveyorBelt;
+import frc.robot.subsystems.indexing.Conveyor;
 import frc.robot.subsystems.indexing.Gateway;
 import frc.robot.subsystems.indexing.SideBelt;
 
@@ -52,7 +52,7 @@ public class RobotContainer {
   private final Climber m_climber = new Climber();
 
   private final SideBelt m_sideBelt = new SideBelt();
-  private final ConveyorBelt m_conveyor = new ConveyorBelt();
+  private final Conveyor m_conveyor = new Conveyor();
   private final Gateway m_gateway = new Gateway();
 
   /**
@@ -140,10 +140,7 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by instantiating a {@link GenericHID} or one of its subclasses
-   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Configures button bindings (duh)
    */
   private void configureButtonBindings() {
 
@@ -153,8 +150,9 @@ public class RobotContainer {
   }
 
   /**
-   * Configure all driver controls on the given controller
+   * Configures given controller for driver controls
    * @param controller
+   * @param operatorController
    */
   private void configureDriverControls(XboxController controller, XboxController operatorController) {
     
@@ -175,6 +173,7 @@ public class RobotContainer {
   /**
    * Configure all operator controls on the given controller
    * @param controller
+   * @param driverController
    */
   private void configureOperatorControls(XboxController controller, XboxController driverController) {
 

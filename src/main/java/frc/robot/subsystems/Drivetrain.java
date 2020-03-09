@@ -20,17 +20,16 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-import frc.robot.constants.DriveConstants;
+import static frc.robot.constants.DriveConstants.*;
 
 public class Drivetrain extends SubsystemBase {
   
-  private final WPI_TalonSRX m_leftMaster = new WPI_TalonSRX(DriveConstants.kTalonPortBackLeft);
-  private final WPI_TalonSRX m_leftSlave = new WPI_TalonSRX(DriveConstants.kTalonPortFrontLeft);
-  private final WPI_TalonSRX m_rightMaster = new WPI_TalonSRX(DriveConstants.kTalonPortBackRight);
-  private final WPI_TalonSRX m_rightSlave = new WPI_TalonSRX(DriveConstants.kTalonPortFrontRight);
+  private final WPI_TalonSRX m_leftMaster = new WPI_TalonSRX(kTalonPortBackLeft);
+  private final WPI_TalonSRX m_leftSlave = new WPI_TalonSRX(kTalonPortFrontLeft);
+  private final WPI_TalonSRX m_rightMaster = new WPI_TalonSRX(kTalonPortBackRight);
+  private final WPI_TalonSRX m_rightSlave = new WPI_TalonSRX(kTalonPortFrontRight);
 
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMaster, m_rightMaster);
 
@@ -123,15 +122,7 @@ public class Drivetrain extends SubsystemBase {
     updateSmartDashboard();
   }
 
-  private void updateSmartDashboard() {
-
-    var speeds = getWheelSpeeds();
-
-    SmartDashboard.putNumber("DT Left m/s", speeds.leftMetersPerSecond);
-    SmartDashboard.putNumber("DT Right m/s", speeds.rightMetersPerSecond);
-    SmartDashboard.putNumber("DT velocity m/s", (speeds.leftMetersPerSecond + speeds.rightMetersPerSecond) * .5);
-    SmartDashboard.putNumber("Distance left", getLeftDistanceMeters());
-    SmartDashboard.putNumber("Distance right", getRightDistanceMeters());    
+  private void updateSmartDashboard() {   
   }
 
   /**
@@ -157,11 +148,11 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getLeftDistanceMeters() {
-    return DriveConstants.getMetersFromNative(m_leftMaster.getSelectedSensorPosition());
+    return getMetersFromNative(m_leftMaster.getSelectedSensorPosition());
   }
 
   public double getRightDistanceMeters() {
-    return DriveConstants.getMetersFromNative(m_rightMaster.getSelectedSensorPosition());
+    return getMetersFromNative(m_rightMaster.getSelectedSensorPosition());
   }
 
   public void resetEncoders() {
@@ -172,8 +163,8 @@ public class Drivetrain extends SubsystemBase {
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
 
     return new DifferentialDriveWheelSpeeds(
-      DriveConstants.getVelocityMPSFromNative(m_leftMaster.getSelectedSensorVelocity()),
-      DriveConstants.getVelocityMPSFromNative(m_rightMaster.getSelectedSensorVelocity())
+      getVelocityMPSFromNative(m_leftMaster.getSelectedSensorVelocity()),
+      getVelocityMPSFromNative(m_rightMaster.getSelectedSensorVelocity())
     );
   }
 

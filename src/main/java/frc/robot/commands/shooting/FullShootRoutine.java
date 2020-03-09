@@ -10,7 +10,7 @@ package frc.robot.commands.shooting;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.subsystems.indexing.ConveyorBelt;
+import frc.robot.subsystems.indexing.Conveyor;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.indexing.Gateway;
 import frc.robot.commands.shooting.Spin;
@@ -22,7 +22,7 @@ public class FullShootRoutine extends ParallelCommandGroup {
   /**
    * Full shooting routine
    */
-  public FullShootRoutine(Shooter shooter, ConveyorBelt conveyor, Gateway gateway, DoubleSupplier rpm) {
+  public FullShootRoutine(Shooter shooter, Conveyor conveyor, Gateway gateway, DoubleSupplier rpm) {
 
     super(
       new Spin(shooter, rpm, true), // spin to target rpm (but when done, stop the shooter)

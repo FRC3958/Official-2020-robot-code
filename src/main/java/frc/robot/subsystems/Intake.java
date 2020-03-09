@@ -16,13 +16,13 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.IntakeConstants;
+import static frc.robot.constants.IntakeConstants.*;
 
 public class Intake extends SubsystemBase {
 
-  private final WPI_TalonSRX m_wheels = new WPI_TalonSRX(IntakeConstants.kTalonPort);
+  private final WPI_TalonSRX m_wheels = new WPI_TalonSRX(kTalonPort);
   private final DoubleSolenoid m_solenoid 
-    = new DoubleSolenoid(IntakeConstants.kSolenoidForwardChannel, IntakeConstants.kSolenoidReverseChannel);
+    = new DoubleSolenoid(kSolenoidForwardChannel, kSolenoidReverseChannel);
 
   /**
    * Creates a new Intake.

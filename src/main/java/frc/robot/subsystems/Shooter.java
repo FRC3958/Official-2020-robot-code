@@ -12,14 +12,15 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.ShooterConstants;
+import static frc.robot.constants.ShooterConstants.*;
 
 public class Shooter extends SubsystemBase {
 
-  private final WPI_TalonSRX m_master = new WPI_TalonSRX(ShooterConstants.kTalonPortRight);
-  private final WPI_TalonSRX m_slave = new WPI_TalonSRX(ShooterConstants.kTalonPortLeft); 
+  private final WPI_TalonSRX m_master = new WPI_TalonSRX(kTalonPortRight);
+  private final WPI_TalonSRX m_slave = new WPI_TalonSRX(kTalonPortLeft); 
 
   /**
    * Creates a new SideShooter.
@@ -32,10 +33,10 @@ public class Shooter extends SubsystemBase {
     masterConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
 
     // config gains
-    masterConfig.slot0.kF = ShooterConstants.kGains.kF;
-    masterConfig.slot0.kP = ShooterConstants.kGains.kP;
-    masterConfig.slot0.kI = ShooterConstants.kGains.kI;
-    masterConfig.slot0.kD = ShooterConstants.kGains.kD;
+    masterConfig.slot0.kF = kGains.kF;
+    masterConfig.slot0.kP = kGains.kP;
+    masterConfig.slot0.kI = kGains.kI;
+    masterConfig.slot0.kD = kGains.kD;
 
     masterConfig.nominalOutputReverse = 0.0;
     masterConfig.peakOutputReverse = 0.0;
@@ -62,7 +63,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     
     SmartDashboard.putNumber("Shooter RPM", getRPM());
-    SmartDashboard.putNumber("Shooter percent error", getClosedLoopErrorRPM());
+    SmartDashboard.putNumber("Shooter error", getClosedLoopErrorRPM());
   }
 
   public void setNative(int targetVelocity) {
@@ -72,16 +73,16 @@ public class Shooter extends SubsystemBase {
 
   public void setRPM(double rpm) {
 
-    setNative(ShooterConstants.getVelocityNativeFromRPM(rpm));
+    setNative(getVelocityNativeFromRPM(rpm));
   }
 
   public double getRPM() {
     
-    return ShooterConstants.getRPMFromNativeVelocity(m_master.getSelectedSensorVelocity());
+    return getRPMFromNativeVelocity(m_master.getSelectedSensorVelocity());
   }
 
   public double getClosedLoopErrorRPM() {
     
-    return ShooterConstants.getRPMFromNativeVelocity(m_master.getClosedLoopError());
+    return getRPMFromNativeVelocity(m_master.getClosedLoopError());
   }
 }
