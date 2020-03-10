@@ -185,7 +185,8 @@ public class RobotContainer {
     // Intake control
     new Button(() -> Math.abs(controller.getRawAxis(Controls.Operator.kEat)) >= 0.2)
       .whenPressed(() -> m_intake.spin(controller.getRawAxis(Controls.Operator.kEat)), m_intake)
-      .whenReleased(() -> m_intake.stopSpinning(), m_intake);
+      .whenReleased(() -> m_intake.stopSpinning(), m_intake
+    );
 
     // Toggle intake piston
     new JoystickButton(controller, Controls.Operator.kLiftLowerIntake)

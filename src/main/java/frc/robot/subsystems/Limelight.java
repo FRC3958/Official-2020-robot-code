@@ -64,10 +64,10 @@ public class Limelight extends SubsystemBase {
 
   private final AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
 
-  private final LinearFilter m_yAngleFilter = LinearFilter.movingAverage(5);
+  private final LinearFilter m_yAngleFilter = LinearFilter.movingAverage(3);
   private double m_lastYAngle = 0.0;
 
-  private final LinearFilter m_distanceFilter = LinearFilter.movingAverage(7);
+  private final LinearFilter m_distanceFilter = LinearFilter.movingAverage(3);
   private double m_lastFilteredDistance = 0;
 
   private double m_absoluteTargetAngleX = 0.0;
@@ -96,7 +96,7 @@ public class Limelight extends SubsystemBase {
     // This method will be called once per scheduler run
     
     updateAbsoluteAngle();
-    updateAngleoffsetY();
+    updateAngleOffsetY();
     updateBestAngle();
     updateFilteredDistance();
 
@@ -129,9 +129,9 @@ public class Limelight extends SubsystemBase {
     return m_ty.getDouble(0.0);
   }
 
-  public void updateAngleoffsetY() {
+  public void updateAngleOffsetY() {
 
-    m_lastYAngle = m_yAngleFilter.calculate(getAngleOffsetYRaw());
+    m_lastYAngle = isValidTargetPresent() ? m_yAngleFilter.calculate(getAngleOffsetYRaw()) : m_lastYAngle;
   }
  
   public double getAngleOffsetY() {
