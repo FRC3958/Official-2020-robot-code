@@ -19,6 +19,11 @@ import frc.robot.commands.shooting.Spin;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class FullShootRoutine extends ParallelCommandGroup {
+
+  private final Shooter m_shooter;
+  private int m_ballsToShoot = Integer.MAX_VALUE;
+  private int m_ballsShot = 0;
+
   /**
    * Full shooting routine
    */
@@ -28,7 +33,15 @@ public class FullShootRoutine extends ParallelCommandGroup {
       new Spin(shooter, rpm, true), // spin to target rpm (but when done, stop the shooter)
       new FeedToShooter(conveyor),  // and spin conveyor
       new OpenGateway(gateway, () -> shooter.getClosedLoopErrorRPM() <= 100)
-        // load balls to conveyo for shooting when the shooter is at the speed desired
+        // load balls to conveyor for shooting when the shooter is at the speed desired
     );
+
+    m_shooter = shooter;
+  }
+
+  public FullShootRoutine(Shooter shooter, Conveyor conveyor, Gateway gateway, DoubleSupplier rpm, int ballsToShoot) {
+    this(shooter, conveyor, gateway, rpm);
+
+    m_ballsToShoot = ballsToShoot;
   }
 }

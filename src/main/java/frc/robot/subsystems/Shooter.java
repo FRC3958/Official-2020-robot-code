@@ -85,4 +85,8 @@ public class Shooter extends SubsystemBase {
     
     return getRPMFromNativeVelocity(m_master.getClosedLoopError());
   }
+
+  public int getBallsShot() {
+    return 0;
+  }
 }

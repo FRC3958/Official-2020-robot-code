@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.AutonomousRoutine;
 import frc.robot.commands.SwitchToDriverMode;
 import frc.robot.commands.shooting.AlignToTarget;
 import frc.robot.commands.shooting.FullShootRoutine;
@@ -252,6 +253,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     
-    return new RunCommand(() -> m_drive.arcadeDrive(-.5, 0.0), m_drive).withTimeout(.6);
+    return new AutonomousRoutine(m_drive, m_limelight, m_shooter, m_conveyor, m_gateway, m_intake)
+      .andThen(() -> m_drive.arcadeDrive(0, 0), m_drive); // make sure we are stopped at end of auton
   }
 }

@@ -22,7 +22,7 @@ public class ArcadeDrive extends CommandBase {
   private final SlewRateLimiter m_forwardLimiter = new SlewRateLimiter(10);
   private final SlewRateLimiter m_turnLimiter = new SlewRateLimiter(10);
 
-  private BooleanSupplier m_half;
+  private BooleanSupplier m_half; // use with instead of setMaxOutput for custom control of turn vs forward
 
   /**
    * Creates a new StickDrive.

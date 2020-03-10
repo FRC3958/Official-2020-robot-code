@@ -25,43 +25,52 @@ import frc.robot.commands.shooting.FullShootRoutine;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class AutonomousRoutine extends SequentialCommandGroup {
+  
   /**
    * Creates a new AutonomousRoutine.
    */
   public AutonomousRoutine(Drivetrain drive, Limelight limelight, Shooter shooter, Conveyor conveyor, Gateway gateway, Intake intake) {
     // SequentialCommandGroup
-    super(
-      
+    // note: I avoid using super() because it just calls addCommands and doesnt
+    // allow me to reference member variables
+    super();
+
+    int alreadyShot = shooter.getBallsShot();
+
+    addCommands(
       // drop intake
       new InstantCommand(() -> intake.dropBar(), intake),
 
       // back up a lil bit (really doesnt have to be THAT precise, this is fine...)
       new ArcadeDrive(drive, /*fwd/back*/() -> -0.5, /*turn*/() -> 0).withTimeout(1.5),
 
-      // ensure we see vision target
       new ConditionalCommand(
-        /*true: nothing... blank command*/ new InstantCommand(),
-        
-        /*false: seek target*/
+        // if no target is present: seek a target
         new SequentialCommandGroup(
           new ArcadeDrive(drive, /*fwd/back*/() -> 0, /*turn*/() -> .5).withTimeout(2),
           new ArcadeDrive(drive, /*fwd/back*/() -> 0, /*turn*/() -> -.5).withTimeout(4)
         ).withInterrupt(() -> limelight.isValidTargetPresent()),
 
-        () -> limelight.isValidTargetPresent()
+        // else, do nothing
+        new InstantCommand(),
+
+        () -> !limelight.isValidTargetPresent()
       ),
 
-      // if vision target is present, shoot at it
       new ConditionalCommand(
-        /*true: auto align, shoot to target*/
+        // if target present: auto align, shoot at target
         new SequentialCommandGroup(
-          new AlignToTarget(limelight, drive, false, () -> 0).withTimeout(5), // if its not good after 5 seconds, yolo it!
+          new AlignToTarget(limelight, drive, false, () -> 0).withTimeout(4), // if its not good after 5 seconds, yolo it!
           new FullShootRoutine(shooter, conveyor, gateway, () -> Util.calculateRPM(limelight.getApproximateDistanceMeters()))
-            .withTimeout(10) // full trust in big man xuru
+            .withTimeout(10)
+            .withInterrupt(() -> shooter.getBallsShot() - alreadyShot >= 3) // full trust in big man xuru
         ),
-        /*false: we hath failed! do nothing and be sad*/ new InstantCommand(),
+
+        // else, do nothing
+        new InstantCommand(),
         
-        () -> limelight.isValidTargetPresent())
+        () -> limelight.isValidTargetPresent()
+      )
     );
   }
 }
