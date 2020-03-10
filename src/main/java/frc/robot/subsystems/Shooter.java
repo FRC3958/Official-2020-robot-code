@@ -84,8 +84,11 @@ public class Shooter extends SubsystemBase {
     int proximity = m_colorSensor.getProximity();
 
     // TODO: find appropriate values
-    if(m_lastProximity < 500 && proximity > 1700) {
+   if(m_lastProximity < 500 && proximity > 1700) {
       ++m_ballsShot;
+    }
+    else if (getRPM() == 0){
+      m_ballsShot = 0;
     }
 
     m_lastProximity = proximity;
