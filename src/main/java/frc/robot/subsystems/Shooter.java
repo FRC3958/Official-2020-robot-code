@@ -12,7 +12,9 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.constants.ShooterConstants.*;
@@ -21,6 +23,10 @@ public class Shooter extends SubsystemBase {
 
   private final WPI_TalonSRX m_master = new WPI_TalonSRX(kTalonPortRight);
   private final WPI_TalonSRX m_slave = new WPI_TalonSRX(kTalonPortLeft); 
+
+  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+  private int m_lastProximity = 0;
+  private int m_ballsShot = 0;
 
   /**
    * Creates a new SideShooter.
@@ -62,8 +68,27 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     
+    updateBallCount();
+
     SmartDashboard.putNumber("Shooter RPM", getRPM());
     SmartDashboard.putNumber("Shooter error", getClosedLoopErrorRPM());
+    SmartDashboard.putNumber("Balls shot", getBallsShot());
+    SmartDashboard.putNumber("Proximity reading", m_colorSensor.getProximity());
+  }
+
+  private void updateBallCount() {
+
+    // Proximity measurement value, ranging from 0 to 2047
+    // This value is largest when an object is close to the sensor and smallest when far away.
+
+    int proximity = m_colorSensor.getProximity();
+
+    // TODO: find appropriate values
+    if(m_lastProximity < 500 && proximity > 1700) {
+      ++m_ballsShot;
+    }
+
+    m_lastProximity = proximity;
   }
 
   public void setNative(int targetVelocity) {
@@ -77,7 +102,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getRPM() {
-    
+
     return getRPMFromNativeVelocity(m_master.getSelectedSensorVelocity());
   }
 
@@ -87,6 +112,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public int getBallsShot() {
-    return 0;
+
+    return m_ballsShot;
   }
 }
