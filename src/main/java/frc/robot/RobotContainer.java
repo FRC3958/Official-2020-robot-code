@@ -16,8 +16,6 @@ import frc.robot.commands.AutonomousRoutine;
 import frc.robot.commands.shooting.AlignToTarget;
 import frc.robot.commands.shooting.FullShootRoutine;
 import frc.robot.constants.Controls;
-import frc.robot.constants.VisionConstants.CamMode;
-import frc.robot.constants.VisionConstants.LedMode;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -68,6 +66,8 @@ public class RobotContainer {
    * Puts all information to SmartDashboard. Putting anything general
    */
   private void setupSmartDashboard() {
+
+    // SmartDashboard.putData(new PowerDistributionPanel());
 
     // /**
     //  * Intake testing
@@ -204,7 +204,8 @@ public class RobotContainer {
     // Run entire shooting routine using xuru (PRAISE BE)
     new Button(() -> controller.getRawAxis(Controls.Operator.kShoot) >= 0.5)
       .whenHeld(new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
-        () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()))
+        () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters())))
+      .whileHeld(() -> m_limelight.resetLedTimer()
     );
 
     /**
@@ -239,12 +240,22 @@ public class RobotContainer {
      */
     
     // Switch camera mode on limelight (for use as a normal camera)
-    new JoystickButton(controller, Controls.Operator.kLimelightModeSwitch)
-      .whenPressed(() -> { 
-        m_limelight.setCamMode(m_limelight.getCamMode() == CamMode.kVisionProcessor ? CamMode.kDriver : CamMode.kVisionProcessor);
-        m_limelight.setLedMode(m_limelight.getLedMode() == LedMode.kPipeline ? LedMode.kForceOff : LedMode.kPipeline);
-      }, m_limelight
-    );
+    // new JoystickButton(controller, Controls.Operator.kLimelightModeSwitch)
+    //   .whenPressed(() -> { 
+
+    //     int camMode, ledMode;
+
+    //     if(m_limelight.getCamMode() == CamMode.kVisionProcessor) {
+    //       camMode = CamMode.kDriver;
+    //       ledMode = LedMode.kForceOff; 
+    //     } else {
+    //       camMode = CamMode.kVisionProcessor;
+    //       ledMode = LedMode.kPipeline;
+    //     }
+    //     m_limelight.setCamMode(camMode);
+    //     m_limelight.setLedMode(ledMode);
+    //   }, m_limelight
+    // );
   }
 
   /**

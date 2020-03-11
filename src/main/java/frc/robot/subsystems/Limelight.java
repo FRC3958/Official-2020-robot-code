@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Timer;
 import static frc.robot.constants.Field.*;
 import static frc.robot.constants.VisionConstants.*;
 
@@ -41,31 +42,14 @@ public class Limelight extends SubsystemBase {
   private double m_absoluteTargetAngleX = 0.0;
   private double m_bestTargetAngleX = 0.0;
 
+  private final Timer m_accessTimer = new Timer();
+
   /**
    * Creates a new Limelight.
    */
   public Limelight() {
 
-  }
-
-  public int getCamMode() {
-
-    return (int)m_camMode.getDouble(0);
-  }
-
-  public int getLedMode() {
-
-    return (int)m_ledMode.getDouble(0);
-  }
-
-  public void setCamMode(int mode){
-
-    m_camMode.setDouble(mode);
-  }
-
-  public void setLedMode(int mode){
-
-    m_ledMode.setDouble(mode);
+    m_accessTimer.start();
   }
 
   @Override
@@ -76,11 +60,47 @@ public class Limelight extends SubsystemBase {
     updateFilteredOffsetY();
     updateBestAngle();
     updateFilteredDistance();
+    updateLights();
 
+    SmartDashboard.putNumber("LED Timer", m_accessTimer.get());
     SmartDashboard.putBoolean("Valid target", isValidTargetPresent());
     SmartDashboard.putNumber("Offset X deg (raw)", getAngleOffsetX());
     SmartDashboard.putNumber("Offset X deg (interp)", getBestAngleOffsetX());
     SmartDashboard.putNumber("Distance estimate", getApproximateDistanceMeters());
+  }
+
+  public void resetLedTimer() {
+
+    m_accessTimer.reset();
+  }
+  
+  private void updateLights() {
+
+    if(m_accessTimer.get() > 0.5) {
+      setLedMode(LedMode.kForceOff);
+    } else {
+      setLedMode(LedMode.kForceOn);
+    }
+  }
+
+  private int getCamMode() {
+
+    return (int)m_camMode.getDouble(0);
+  }
+
+  private int getLedMode() {
+
+    return (int)m_ledMode.getDouble(0);
+  }
+
+  private void setCamMode(int mode){
+
+    m_camMode.setDouble(mode);
+  }
+
+  private void setLedMode(int mode){
+
+    m_ledMode.setDouble(mode);
   }
 
   public boolean isValidTargetPresent() {
@@ -108,7 +128,8 @@ public class Limelight extends SubsystemBase {
 
   public void updateFilteredOffsetY() {
 
-    m_lastFilteredYOffset = m_yAngleFilter.calculate(getAngleOffsetYRaw());
+    if(isValidTargetPresent())
+      m_lastFilteredYOffset = m_yAngleFilter.calculate(getAngleOffsetYRaw());
   }
  
   public double getAngleOffsetY() {
@@ -152,7 +173,8 @@ public class Limelight extends SubsystemBase {
 
   public void updateFilteredDistance() {
 
-    m_lastFilteredDistance = m_distanceFilter.calculate(getApproximateDistanceMetersRaw());
+    if(isValidTargetPresent())
+      m_lastFilteredDistance = m_distanceFilter.calculate(getApproximateDistanceMetersRaw());
   }
 
   public double getApproximateDistanceMeters() {

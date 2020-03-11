@@ -59,9 +59,6 @@ public class AlignToTarget extends PIDCommand {
 
     m_forever = forever;
     m_limelight = limelight;
-
-    m_limelight.setLedMode(LedMode.kForceOn);
-    m_limelight.setCamMode(CamMode.kVisionProcessor);
   }
 
   // Returns true when the command should end.
@@ -69,5 +66,13 @@ public class AlignToTarget extends PIDCommand {
   public boolean isFinished() {
 
     return m_forever ? false : getController().atSetpoint();
+  }
+
+  @Override
+  public void execute() {
+    
+    m_limelight.resetLedTimer();
+
+    super.execute();
   }
 }
