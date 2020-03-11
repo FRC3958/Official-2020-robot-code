@@ -7,18 +7,17 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutonomousRoutine;
-import frc.robot.commands.SwitchToDriverMode;
 import frc.robot.commands.shooting.AlignToTarget;
 import frc.robot.commands.shooting.FullShootRoutine;
 import frc.robot.constants.Controls;
+import frc.robot.constants.VisionConstants.CamMode;
+import frc.robot.constants.VisionConstants.LedMode;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -202,11 +201,10 @@ public class RobotContainer {
      * Shooting
      */
 
-    // Run entire shooting routine using xuru
+    // Run entire shooting routine using xuru (PRAISE BE)
     new Button(() -> controller.getRawAxis(Controls.Operator.kShoot) >= 0.5)
       .whenHeld(new FullShootRoutine(m_shooter, m_conveyor, m_gateway,
-        () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters())))
-      .whenReleased(() -> m_shooter.setRPM(0), m_shooter
+        () -> Util.calculateRPM(m_limelight.getApproximateDistanceMeters()))
     );
 
     /**
@@ -242,7 +240,10 @@ public class RobotContainer {
     
     // Switch camera mode on limelight (for use as a normal camera)
     new JoystickButton(controller, Controls.Operator.kLimelightModeSwitch)
-      .toggleWhenPressed(new SwitchToDriverMode(m_limelight)
+      .whenPressed(() -> { 
+        m_limelight.setCamMode(m_limelight.getCamMode() == CamMode.kVisionProcessor ? CamMode.kDriver : CamMode.kVisionProcessor);
+        m_limelight.setLedMode(m_limelight.getLedMode() == LedMode.kPipeline ? LedMode.kForceOff : LedMode.kPipeline);
+      }, m_limelight
     );
   }
 

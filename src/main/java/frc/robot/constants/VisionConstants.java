@@ -24,4 +24,27 @@ public final class VisionConstants {
     public static final Gains kAlignToTargetGains = new Gains(0.0, 0.15, 0.33, 0.05);
     public static final double kAlignToTargetTolerancePosition = 0.05;
     public static final double kAlignToTargetToleranceVelocity = 0.05;
+
+    // from limelight wiki
+    public static class LedMode {
+
+        public static final int kPipeline = 0;
+        public static final int kForceOff = 1;
+        public static final int kForceBlink = 2;
+        public static final int kForceOn = 3;
+    }
+
+    // from limelight wiki
+    public static class CamMode {
+
+        public static final int kVisionProcessor = 0;
+        public static final int kDriver = 1;
+    }
+
+    // custom
+    public static class Pipeline {
+
+        public static final int kTargetPipeline = 0;
+        public static final int kDriverPipeline = 1;
+    }
 }

@@ -22,38 +22,6 @@ import static frc.robot.constants.VisionConstants.*;
 
 public class Limelight extends SubsystemBase {
 
-  public enum LedMode {
-
-    kAuto(0),
-    kForceOff(1),
-    kBlink(2),
-    kForceOn(3);
-
-    private final int value;
-    private LedMode(int value) {
-      this.value = value;
-    }
-
-    public int getInt() {
-      return value;
-    }
-  }
-
-   public enum CamMode {
-
-    kVisionProcessor(0),
-    kDriver(1);
-
-    private final int value;
-    private CamMode(int value) {
-      this.value = value;
-    }
-
-    public int getInt() {
-      return value;
-    }
-  }
-  
   private final NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");;
   
   private final NetworkTableEntry m_tv = m_table.getEntry("tv");
@@ -65,7 +33,7 @@ public class Limelight extends SubsystemBase {
   private final AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
 
   private final LinearFilter m_yAngleFilter = LinearFilter.movingAverage(5);
-  private double m_lastYAngle = 0.0;
+  private double m_lastFilteredYOffset = 0.0;
 
   private final LinearFilter m_distanceFilter = LinearFilter.movingAverage(7);
   private double m_lastFilteredDistance = 0;
@@ -80,15 +48,24 @@ public class Limelight extends SubsystemBase {
 
   }
 
-  public void setCamMode(CamMode mode){
+  public int getCamMode() {
 
-    m_camMode.setDouble(mode.getInt());
+    return (int)m_camMode.getDouble(0);
   }
 
-  //led mode 1 meaning its off, 2 meaning its blinking, and 3 meaning its on
-  public void setLedMode(LedMode mode){
+  public int getLedMode() {
 
-    m_ledMode.setDouble(mode.getInt());
+    return (int)m_ledMode.getDouble(0);
+  }
+
+  public void setCamMode(int mode){
+
+    m_camMode.setDouble(mode);
+  }
+
+  public void setLedMode(int mode){
+
+    m_ledMode.setDouble(mode);
   }
 
   @Override
@@ -96,7 +73,7 @@ public class Limelight extends SubsystemBase {
     // This method will be called once per scheduler run
     
     updateAbsoluteAngle();
-    updateAngleoffsetY();
+    updateFilteredOffsetY();
     updateBestAngle();
     updateFilteredDistance();
 
@@ -108,7 +85,7 @@ public class Limelight extends SubsystemBase {
 
   public boolean isValidTargetPresent() {
 
-    return m_tv.getBoolean(false) || getAngleOffsetX() != 0.0;
+    return m_tv.getDouble(0) < 1.0 || getAngleOffsetX() != 0.0;
   }
 
   /**
@@ -129,18 +106,14 @@ public class Limelight extends SubsystemBase {
     return m_ty.getDouble(0.0);
   }
 
-  public void updateAngleoffsetY() {
+  public void updateFilteredOffsetY() {
 
-    m_lastYAngle = m_yAngleFilter.calculate(getAngleOffsetYRaw());
+    m_lastFilteredYOffset = m_yAngleFilter.calculate(getAngleOffsetYRaw());
   }
  
   public double getAngleOffsetY() {
 
-    return m_lastYAngle;
-  }
-
-  public void updateBestAngle() {
-    m_bestTargetAngleX = isValidTargetPresent() ? getAngleOffsetX() : getAngleOffsetXFromMemory();
+    return m_lastFilteredYOffset;
   }
 
   public void updateAbsoluteAngle() {
@@ -152,6 +125,10 @@ public class Limelight extends SubsystemBase {
   public double getAngleOffsetXFromMemory() {
 
     return m_absoluteTargetAngleX - m_ahrs.getYaw();
+  }
+
+  public void updateBestAngle() {
+    m_bestTargetAngleX = isValidTargetPresent() ? getAngleOffsetX() : getAngleOffsetXFromMemory();
   }
 
   public double getBestAngleOffsetX() {

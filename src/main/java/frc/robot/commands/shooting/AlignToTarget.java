@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.constants.VisionConstants;
+import frc.robot.constants.VisionConstants.CamMode;
+import frc.robot.constants.VisionConstants.LedMode;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Limelight.CamMode;
-import frc.robot.subsystems.Limelight.LedMode;
 
 public class AlignToTarget extends PIDCommand {
 
