@@ -48,7 +48,7 @@ public class Drivetrain extends SubsystemBase {
     // config sensor for right, will be used as remote sensor
     leftConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
     rightConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
-
+    
     // apply configs
     m_leftMaster.configAllSettings(leftConfig);
     m_rightMaster.configAllSettings(rightConfig);
