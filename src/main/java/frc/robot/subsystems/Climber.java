@@ -74,7 +74,7 @@ public class Climber extends SubsystemBase {
    * Hook itself (which detaches)
    */
 
-  public void stopExtending() {
+  public void stopExtensionMotor() {
 
     m_hooker.set(ControlMode.PercentOutput, 0.0);
   }
@@ -96,6 +96,6 @@ public class Climber extends SubsystemBase {
 
   public void stopLifting() {
 
-    m_winch.set(ControlMode.Velocity, 0.0);
+    m_winch.set(ControlMode.PercentOutput, 0.0);
   }
 }

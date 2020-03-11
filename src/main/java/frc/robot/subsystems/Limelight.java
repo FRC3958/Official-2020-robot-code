@@ -36,7 +36,7 @@ public class Limelight extends SubsystemBase {
   private final LinearFilter m_yAngleFilter = LinearFilter.movingAverage(5);
   private double m_lastFilteredYOffset = 0.0;
 
-  private final LinearFilter m_distanceFilter = LinearFilter.movingAverage(7);
+  private final LinearFilter m_distanceFilter = LinearFilter.movingAverage(3);
   private double m_lastFilteredDistance = 0;
 
   private double m_absoluteTargetAngleX = 0.0;

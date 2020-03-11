@@ -184,7 +184,8 @@ public class RobotContainer {
     // Intake control
     new Button(() -> Math.abs(controller.getRawAxis(Controls.Operator.kEat)) >= 0.2)
       .whenPressed(() -> m_intake.spin(controller.getRawAxis(Controls.Operator.kEat)), m_intake)
-      .whenReleased(() -> m_intake.stopSpinning(), m_intake);
+      .whenReleased(() -> m_intake.stopSpinning(), m_intake
+    );
 
     // Toggle intake piston
     new JoystickButton(controller, Controls.Operator.kLiftLowerIntake)
@@ -220,13 +221,13 @@ public class RobotContainer {
     // Extend shaft
     new JoystickButton(controller, Controls.Operator.kExtendShaft)
       .whenPressed(() -> m_climber.extendShaft(), m_climber)
-      .whenReleased(() -> m_climber.stopExtending(), m_climber
+      .whenReleased(() -> m_climber.stopExtensionMotor(), m_climber
     );
 
     // Retract shaft
     new JoystickButton(controller, Controls.Operator.kRetractShaft)
       .whenPressed(() -> m_climber.retractShaft(), m_climber)
-      .whenReleased(() -> m_climber.stopExtending(), m_climber
+      .whenReleased(() -> m_climber.stopExtensionMotor(), m_climber
     );
 
     // Lift (with winch)
